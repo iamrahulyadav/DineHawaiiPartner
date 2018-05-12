@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#1e1e1e"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/_15sdp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/mUserImage"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:src="@drawable/default_picture"
+        app:civ_border_color="#d7d7d7"
+        app:civ_border_overlay="false"
+        app:civ_border_width="2dp"/>
+
+    <com.dinehawaiipartner.CustomViews.CustomTextView
+        android:id="@+id/customerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="NA"
+        android:textAlignment="center"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        app:edittextfont="Raleway-Bold.ttf"/>
+
+
+</LinearLayout>
+

@@ -1,0 +1,51 @@
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    android:elevation="2dp"
+    app:elevation="2dp"
+    app:contentInsetStartWithNavigation="0dp"
+    app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:src="@drawable/back_arrow" />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/back"
+            android:id="@+id/toolbar_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"/>
+
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            android:id="@+id/headet_text"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/toolbar_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:singleLine="true"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:textAllCaps="false"
+            android:text="Dine Hawaii Partner"
+            app:edittextfont="@string/raleway_bold"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.Toolbar>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomEditText">
+        <attr name="edittextfont" format="string" />
+        <attr name="edittextfontHint" format="string" />
+        <attr name="edittextpwd" format="string" />
+        <attr name="editcharpwd" format="string" />
+
+    </declare-styleable>
+
+    <declare-styleable name="TooltipOverlay">
+        <attr name="android:color" />
+        <attr name="android:alpha" />
+        <attr name="ttlm_repeatCount" format="integer" />
+        <attr name="ttlm_duration" format="integer" />
+        <attr name="android:layout_margin" />
+    </declare-styleable>
+
+
+    <!-- default style -->
+    <declare-styleable name="TooltipLayout">
+        <attr name="ttlm_padding" format="dimension" />
+        <attr name="ttlm_strokeColor" format="color" />
+        <attr name="ttlm_backgroundColor" format="color" />
+        <attr name="ttlm_strokeWeight" format="dimension" />
+        <attr name="ttlm_cornerRadius" format="dimension" />
+        <attr name="ttlm_arrowRatio" format="float" />
+        <attr name="android:textAppearance" />
+        <attr name="ttlm_overlayStyle" format="reference" />
+        <attr name="ttlm_elevation" format="dimension" />
+
+        <!-- font file path inside your assets folder -->
+        <attr name="ttlm_font" format="string" />
+
+        <!-- textview text gravity -->
+        <attr name="android:gravity" />
+    </declare-styleable>
+
+
+
+
+
+        <declare-styleable name="CountryCodePicker">
+            <attr name="defaultCode" format="integer"/>
+            <attr name="contentColor" format="color"/>
+            <attr name="textSize" format="dimension"/>
+            <attr name="arrowSize" format="dimension"/>
+            <attr name="countryPreference" format="string"/>
+            <attr name="defaultNameCode" format="string"/>
+            <attr name="hideNameCode" format="boolean"/>
+            <attr name="ccpLanguage" format="enum">
+                <enum name="ARABIC" value="1"/>
+                <enum name="BENGALI" value="2"/>
+                <enum name="CHINESE_SIMPLIFIED" value="3"/>
+                <enum name="ENGLISH" value="4"/>
+                <enum name="FRENCH" value="5"/>
+                <enum name="GERMAN" value="6"/>
+                <enum name="GUJARATI" value="7"/>
+                <enum name="HINDI" value="8"/>
+                <enum name="JAPANESE" value="9"/>
+                <enum name="JAVANESE" value="10"/>
+                <enum name="PORTUGUESE" value="11"/>
+                <enum name="RUSSIAN" value="12"/>
+                <enum name="SPANISH" value="13"/>
+                <enum name="HEBREW" value="14"/>
+                <enum name="CHINESE_TRADITIONAL" value="15"/>
+                <enum name="KOREAN" value="16"/>
+            </attr>
+            <attr name="keyboardAutoPopOnSearch" format="boolean"/>
+            <attr name="customMasterCountries" format="string"/>
+            <attr name="showFlag" format="boolean"/>
+            <attr name="showFullName" format="boolean"/>
+            <attr name="selectionDialogShowSearch" format="boolean"/>
+            <attr name="ccpClickable" format="boolean"/>
+            <attr name="ccp_showPhoneCode" format="boolean"/>
+            <attr name="ccpSearchBox_showPhoneCode" format="boolean"/>
+        </declare-styleable>
+    </resources>
+
+

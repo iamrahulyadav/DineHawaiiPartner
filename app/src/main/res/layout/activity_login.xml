@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_background"
+    android:orientation="vertical"
+    tools:context=".Activity.LoginActivity">
+
+    <include
+        android:id="@+id/toolbar_bar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/activity_business__login_"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_bar"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:orientation="vertical">
+
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            android:id="@+id/text_heading"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="@string/login"
+            android:textColor="@color/offwhite"
+            app:edittextfont="Raleway-Regular.ttf" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:orientation="horizontal">
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:id="@+id/text_id"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/drawable_green_dot"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="center_vertical"
+                    android:text="Username/Email"
+                    android:textColor="#4ac87a"
+                    app:edittextfont="Raleway-Bold.ttf" />
+                
+            </LinearLayout>
+
+            <com.dinehawaiipartner.CustomViews.CustomEditText
+                android:id="@+id/edittext_id"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:background="@null"
+                android:hint="Enter Email-Id"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/offwhite"
+                app:edittextfont="Raleway-Regular.ttf" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/offwhite"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:id="@+id/text_pass"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/drawable_green_dot"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="center_vertical"
+                    android:text="Password"
+                    android:textColor="#4ac87a"
+                    app:edittextfont="Raleway-Bold.ttf" />
+                
+            </LinearLayout>
+
+            <com.dinehawaiipartner.CustomViews.CustomEditText
+                android:id="@+id/edittext_pass"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:background="@null"
+                android:hint="Enter Password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/offwhite"
+                app:edittextfont="Raleway-Regular.ttf" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/offwhite"/>
+
+        <com.dinehawaiipartner.CustomViews.CustomCheckBox
+            android:buttonTint="@color/colorPrimary"
+            android:textColor="@color/offwhite"
+            android:id="@+id/rememberme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/save_pwd_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <com.dinehawaiipartner.CustomViews.CustomButton
+                android:id="@+id/loginBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_20sdp"
+                android:background="@drawable/greenborder"
+                android:drawableLeft="@drawable/tickicon"
+                android:drawablePadding="@dimen/_5sdp"
+                android:gravity="left|center"
+                android:paddingLeft="@dimen/_5sdp"
+                android:paddingRight="@dimen/_15sdp"
+                android:text="LOGIN"
+                android:textAlignment="gravity"
+                android:textColor="#fff"
+                app:edittextfont="Raleway-Bold.ttf" />
+        </LinearLayout>
+
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            android:id="@+id/forgetPass"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="FORGOT PASSWORD"
+            android:textAlignment="center"
+            android:textColor="@color/offwhite"
+            android:textStyle="bold"
+            app:edittextfont="Raleway-Bold.ttf" />
+    </LinearLayout>
+</RelativeLayout>
+
