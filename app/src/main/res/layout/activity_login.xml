@@ -8,15 +8,22 @@
     android:orientation="vertical"
     tools:context=".Activity.LoginActivity">
 
-    <include
-        android:id="@+id/toolbar_bar"
-        layout="@layout/toolbar" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="0dp"
+            app:elevation="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
 
     <LinearLayout
         android:id="@+id/activity_business__login_"
         android:layout_width="match_parent"
+        android:layout_below="@id/toolbar"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar_bar"
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp"
         android:orientation="vertical">

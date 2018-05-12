@@ -10,6 +10,7 @@ public class AppConstants {
     public static String KEY_METHOD="method";
     public static String KEY_USER_ID="user_id";
 
+
     public interface BASEURL {
         String URL = "http://take007.co.in/Projects-Work/Hawaii/APP/Partner_App/";
     }
@@ -27,7 +28,7 @@ public class AppConstants {
     public interface VENDOR_METHODS{
         String ALLDRIVERS = "All_Drivers";
         String ADD_DRIVER = "Add_New_Driver";
-        String EIT_DRIVER = "Edit_New_Driver";
+        String EDIT_DRIVER = "Edit_New_Driver";
     }
 
 

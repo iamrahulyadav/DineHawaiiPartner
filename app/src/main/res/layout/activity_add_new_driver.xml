@@ -1,8 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:orientation="vertical"
     tools:context=".Activity.AddNewDriverActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="0dp"
+        app:elevation="0dp"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSelectService"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Driver Name"
+            android:textColor="@color/colorPrimary"
+            app:edittextfont="Raleway-Bold.ttf" />
 
-</android.support.constraint.ConstraintLayout>
+        <com.dinehawaiipartner.CustomViews.CustomEditText
+            android:id="@+id/etDrName"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@null"
+            android:hint="Enter driver name"
+            android:padding="@dimen/_5sdp"
+            android:singleLine="true"
+
+            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/colorDivider"></View>
+
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSelectService"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Driver Contact No"
+            android:textColor="@color/colorPrimary"
+            app:edittextfont="Raleway-Bold.ttf" />
+
+        <com.dinehawaiipartner.CustomViews.CustomEditText
+            android:id="@+id/etDrContact"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@null"
+            android:hint="Enter driver contact"
+            android:inputType="number"
+            android:padding="@dimen/_5sdp"
+            android:singleLine="true"
+            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/colorDivider"></View>
+
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSelectService"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Driver Email"
+            android:textColor="@color/colorPrimary"
+            app:edittextfont="Raleway-Bold.ttf" />
+
+        <com.dinehawaiipartner.CustomViews.CustomEditText
+            android:id="@+id/etDrEmail"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@null"
+            android:hint="Enter driver email"
+            android:padding="@dimen/_5sdp"
+            android:singleLine="true"
+
+            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/colorDivider"></View>
+
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSelectService"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Password"
+            android:textColor="@color/colorPrimary"
+            app:edittextfont="Raleway-Bold.ttf" />
+
+        <com.dinehawaiipartner.CustomViews.CustomEditText
+            android:id="@+id/etDrPass"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@null"
+            android:hint="Enter password"
+            android:inputType="textPassword"
+            android:padding="@dimen/_5sdp"
+            android:singleLine="true"
+            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/colorDivider"></View>
+    </LinearLayout>
+
+</LinearLayout>

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,9 +51,25 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_drivers);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Manage Drivers");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
         getAllDrivers();
         setAdapter();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.home:
+                finish();
+                break;
+                default:
+                    break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setAdapter() {
@@ -108,6 +125,8 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         driverslist.clear();
                         nodriver.setVisibility(View.VISIBLE);
+                    }else{
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
@@ -142,7 +161,9 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnAddDriver:
-                startActivity(new Intent(context,AddNewDriverActivity.class));
+                Intent intent = new Intent(context,AddNewDriverActivity.class);
+                intent.setAction("AddDriver");
+                startActivity(intent);
                 break;
                 default:
                     break;

@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.CustomViews.CustomButton;
+import com.dinehawaiipartner.CustomViews.CustomCheckBox;
 import com.dinehawaiipartner.CustomViews.CustomEditText;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
@@ -20,6 +23,7 @@ import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.Functions;
 import com.dinehawaiipartner.Util.ProgressHUD;
+import com.dinehawaiipartner.Util.SaveDataPreference;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 
@@ -36,12 +40,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     CustomButton btnlogin;
     private String TAG = "LoginActivity";
     private CustomEditText edpass, edemail;
+    private CustomCheckBox rememberMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Login");
+        setSupportActionBar(toolbar);
+        setPrefData();
         init();
+    }
+
+    private void setPrefData() {
+        if (!SaveDataPreference.getSaveid(mContext).equalsIgnoreCase("")) {
+            edemail.setText(SaveDataPreference.getSaveid(mContext));
+            edemail.setSelection(edemail.getText().toString().length());
+        }
+        if (!SaveDataPreference.getSavepass(mContext).equalsIgnoreCase("")) {
+            edpass.setText(SaveDataPreference.getSavepass(mContext));
+            edpass.setSelection(edpass.getText().toString().length());
+        }
     }
 
     private void init() {
@@ -49,7 +69,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edemail = (CustomEditText) findViewById(R.id.edittext_id);
         edpass = (CustomEditText) findViewById(R.id.edittext_pass);
         btnlogin = (CustomButton) findViewById(R.id.loginBtn);
+        rememberMe = (CustomCheckBox) findViewById(R.id.rememberme);
         btnlogin.setOnClickListener(this);
+        rememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    SaveDataPreference.setSaveIdPass(mContext, edemail.getText().toString(), edpass.getText().toString());
+                } else {
+                    SaveDataPreference.setSaveIdPass(mContext, "", "");
+                }
+            }
+        });
+
     }
 
     private void loginApi() {
@@ -86,8 +118,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String s = response.body().toString();
                 try {
                     JSONObject jsonObject = new JSONObject(s);
-                    JSONArray jsonArray = jsonObject.getJSONArray("result");
+
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
                         JSONObject jsonObject1 = jsonArray.getJSONObject(0);
                         AppPreference.setUserid(mContext, jsonObject1.getString("user_id"));
                         AppPreference.setUseremail(mContext, jsonObject1.getString("email"));
@@ -112,6 +145,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
                         JSONObject jsonObj = jsonArray.getJSONObject(0);
                         Toast.makeText(LoginActivity.this, jsonObj.getString("msg"), Toast.LENGTH_SHORT).show();
                     } else {
@@ -153,7 +187,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             edemail.setError("Enter valid email");
         else if (TextUtils.isEmpty(edpass.getText().toString()))
             edpass.setError("Enter password");
-        else {
+        else if (!rememberMe.isChecked()) {
+            SaveDataPreference.setSaveIdPass(mContext, "", "");
+            loginApi();
+        } else {
             if (Functions.isNetworkAvailable(mContext)) {
                 loginApi();
             } else {

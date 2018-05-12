@@ -17,8 +17,6 @@ public class AppPreference {
     public static final String BUSADDRESS = "business_address";
     public static final String BUSINESSID = "business_id";
     public static final String CUSTOMER_PIC = "customerpic";
-    public static final String SAVEID = "saveid";
-    public static final String SAVEPASS = "savepass";
     public static final String USER_TYPE = "userType";
     public static final String CUR_LAT = "cur_lat";
     public static final String CUR_LONG = "cur_long";
@@ -74,29 +72,7 @@ public class AppPreference {
         editor.putString(CUSTOMER_PIC, id);
         editor.commit();
     }
-
-
-    public static void setSaveIdPass(Context context, String id, String pass) {
-        SharedPreferences preferences = context.getSharedPreferences(
-                MBPREFERENCES, 0);
-        Editor editor = preferences.edit();
-        editor.putString(SAVEID, id);
-        editor.putString(SAVEPASS, pass);
-        editor.commit();
-    }
-
-    public static String getSaveid(Context context) {
-        SharedPreferences pereference = context.getSharedPreferences(
-                MBPREFERENCES, 0);
-        return pereference.getString(SAVEID, "");
-    }
-
-
-    public static String getSavepass(Context context) {
-        SharedPreferences pereference = context.getSharedPreferences(
-                MBPREFERENCES, 0);
-        return pereference.getString(SAVEPASS, "");
-    }
+    
 
     public static String getUsername(Context context) {
         SharedPreferences pereference = context.getSharedPreferences(
