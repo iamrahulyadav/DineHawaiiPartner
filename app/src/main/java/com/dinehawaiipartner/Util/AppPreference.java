@@ -20,6 +20,9 @@ public class AppPreference {
     public static final String SAVEID = "saveid";
     public static final String SAVEPASS = "savepass";
     public static final String USER_TYPE = "userType";
+    public static final String CUR_LAT = "cur_lat";
+    public static final String CUR_LONG = "cur_long";
+
 
     private final SharedPreferences sharedPreferences;
     private final Editor editor;
@@ -226,6 +229,34 @@ public class AppPreference {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.commit();
+    }
+
+    public static void setCurLat(Context context, String id) {
+        SharedPreferences preferences = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        Editor editor = preferences.edit();
+        editor.putString(CUR_LAT, id);
+        editor.commit();
+    }
+
+    public static String getCurLat(Context context) {
+        SharedPreferences pereference = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        return pereference.getString(CUR_LAT, "0.0");
+    }
+
+    public static void setCurLong(Context context, String id) {
+        SharedPreferences preferences = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        Editor editor = preferences.edit();
+        editor.putString(CUR_LONG, id);
+        editor.commit();
+    }
+
+    public static String getCurLong(Context context) {
+        SharedPreferences pereference = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        return pereference.getString(CUR_LONG, "0.0");
     }
 
 

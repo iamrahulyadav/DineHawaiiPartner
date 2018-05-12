@@ -7,4 +7,5 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="activityBackground">#ededed</color>
+    <color name="dividerDark">#e7e7e7</color>
 </resources>

@@ -18,11 +18,11 @@ import java.io.ByteArrayOutputStream;
 public class Functions {
 
 
-    public static Context context;
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+    public static Context context;
     private static EditText EditTextPointer;
 
 
@@ -51,6 +51,7 @@ public class Functions {
             return str;
         }
     }
+
     public static boolean isEmailNotValid(EditText tv) {
         //add your own logic
         if (TextUtils.isEmpty(tv.getText())) {
@@ -129,7 +130,7 @@ public class Functions {
 
     //Given the bitmap size and View size calculate a subsampling size (powers of 2)
     static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        int inSampleSize = 1;	//Default subsampling size
+        int inSampleSize = 1;    //Default subsampling size
         // See if image raw height and width is bigger than that of required view
         if (options.outHeight > reqHeight || options.outWidth > reqWidth) {
             //bigger
@@ -144,6 +145,6 @@ public class Functions {
         }
         return inSampleSize;
     }
-    
+
 }
 
