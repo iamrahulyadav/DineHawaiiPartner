@@ -29,7 +29,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private static final String TAG = "DriverHomeActivity";
     private GoogleMap map;
     private Marker markerCurrent;
-    private double cur_lat = 0.0, cur_long = 0.0;
+    private double cur_lat = 22.718358, cur_long = 75.875529;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
