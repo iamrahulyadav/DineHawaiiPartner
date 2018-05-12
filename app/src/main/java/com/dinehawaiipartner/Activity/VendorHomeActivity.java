@@ -1,12 +1,14 @@
 package com.dinehawaiipartner.Activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,11 +19,14 @@ import android.widget.TextView;
 
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Util.AppPreference;
 
 public class VendorHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     Context context;
     CustomTextView tvDriver;
+    private View headerView;
+    private CustomTextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,9 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        headerView = navigationView.getHeaderView(0);
+        userName = (CustomTextView) headerView.findViewById(R.id.customerName);
+        userName.setText(AppPreference.getUsername(VendorHomeActivity.this));
     }
 
     @Override
@@ -59,8 +67,51 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                alertDialog.setTitle("Dine Hawaii Partner");
+                alertDialog.setIcon(R.mipmap.ic_launcher);
+                alertDialog.setMessage("Do you want to exit?");
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finishAffinity();
+
+                    }
+                });
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                alertDialog.show();
+            }
         }
+    private void showLogoutAlert() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Dine Hawaii Partner");
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int id) {
+                        AppPreference.clearPreference(context);
+                        startActivity(new Intent(context, LoginActivity.class));
+                        finish();
+
+                    }
+                })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                            }
+                        });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -80,9 +131,11 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-
+        switch (item.getItemId()) {
+            case R.id.nav_vendor_logout:
+                showLogoutAlert();
+                break;
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

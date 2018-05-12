@@ -8,18 +8,31 @@
     android:focusable="true"
     android:orientation="vertical"
     tools:context=".Activity.AddNewDriverActivity">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar"
         android:elevation="0dp"
-        app:elevation="0dp"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="0dp"
+            app:elevation="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_margin="@dimen/_5sdp"
-        android:layout_height="wrap_content"
+       android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:id="@+id/ll_addDriver"
+        android:layout_height="match_parent"
         android:orientation="vertical">
         <com.dinehawaiipartner.CustomViews.CustomTextView
             style="@style/TextAppearance.AppCompat.Subhead"
@@ -27,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSelectService"
             android:layout_marginTop="@dimen/_9sdp"
-            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawableStart="@drawable/drawable_green_dot"
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
             android:text="Driver Name"
@@ -46,14 +59,14 @@
             android:padding="@dimen/_5sdp"
             android:singleLine="true"
 
-            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+            app:edittextfont="Raleway-Regular.ttf"/>
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"></View>
+            android:background="@color/colorDivider"/>
 
         <com.dinehawaiipartner.CustomViews.CustomTextView
             style="@style/TextAppearance.AppCompat.Subhead"
@@ -61,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSelectService"
             android:layout_marginTop="@dimen/_9sdp"
-            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawableStart="@drawable/drawable_green_dot"
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
             android:text="Driver Contact No"
@@ -80,14 +93,14 @@
             android:inputType="number"
             android:padding="@dimen/_5sdp"
             android:singleLine="true"
-            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+            app:edittextfont="Raleway-Regular.ttf"/>
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"></View>
+            android:background="@color/colorDivider"/>
 
         <com.dinehawaiipartner.CustomViews.CustomTextView
             style="@style/TextAppearance.AppCompat.Subhead"
@@ -95,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSelectService"
             android:layout_marginTop="@dimen/_9sdp"
-            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawableStart="@drawable/drawable_green_dot"
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
             android:text="Driver Email"
@@ -114,14 +127,14 @@
             android:padding="@dimen/_5sdp"
             android:singleLine="true"
 
-            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+            app:edittextfont="Raleway-Regular.ttf"/>
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"></View>
+            android:background="@color/colorDivider"/>
 
         <com.dinehawaiipartner.CustomViews.CustomTextView
             style="@style/TextAppearance.AppCompat.Subhead"
@@ -129,7 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSelectService"
             android:layout_marginTop="@dimen/_9sdp"
-            android:drawableLeft="@drawable/drawable_green_dot"
+            android:drawableStart="@drawable/drawable_green_dot"
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
             android:text="Password"
@@ -148,14 +161,14 @@
             android:inputType="textPassword"
             android:padding="@dimen/_5sdp"
             android:singleLine="true"
-            app:edittextfont="Raleway-Regular.ttf"></com.dinehawaiipartner.CustomViews.CustomEditText>
+            app:edittextfont="Raleway-Regular.ttf"/>
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"></View>
+            android:background="@color/colorDivider"/>
     </LinearLayout>
 
 </LinearLayout>

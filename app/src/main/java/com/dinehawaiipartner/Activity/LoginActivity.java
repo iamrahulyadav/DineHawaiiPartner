@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.CustomViews.CustomButton;
@@ -41,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String TAG = "LoginActivity";
     private CustomEditText edpass, edemail;
     private CustomCheckBox rememberMe;
-
+    LinearLayout ll_login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +52,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Login");
         setSupportActionBar(toolbar);
-        setPrefData();
         init();
+        setPrefData();
+
     }
 
     private void setPrefData() {
@@ -66,10 +70,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void init() {
         mContext = this;
-        edemail = (CustomEditText) findViewById(R.id.edittext_id);
-        edpass = (CustomEditText) findViewById(R.id.edittext_pass);
-        btnlogin = (CustomButton) findViewById(R.id.loginBtn);
-        rememberMe = (CustomCheckBox) findViewById(R.id.rememberme);
+        edemail =  findViewById(R.id.edittext_id);
+        edpass =  findViewById(R.id.edittext_pass);
+        btnlogin = findViewById(R.id.loginBtn);
+        rememberMe =  findViewById(R.id.rememberme);
+        ll_login = findViewById(R.id.ll_login);
         btnlogin.setOnClickListener(this);
         rememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -79,6 +84,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     SaveDataPreference.setSaveIdPass(mContext, "", "");
                 }
+            }
+        });
+        ll_login.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v = getCurrentFocus();
+                if (v!=null)
+                    hideKeyboard();
+
+                return false;
             }
         });
 
@@ -167,6 +182,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(LoginActivity.this, getResources().getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

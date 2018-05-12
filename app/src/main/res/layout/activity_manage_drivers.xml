@@ -6,15 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.ManageDriversActivity">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar"
         android:elevation="0dp"
-        app:elevation="0dp"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="0dp"
+            app:elevation="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
     <com.dinehawaiipartner.CustomViews.CustomTextView
         android:id="@+id/nodrivers"
         android:layout_width="wrap_content"
@@ -22,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="No Drivers"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/appbar"
         android:paddingLeft="@dimen/_10sdp"
         android:paddingRight="@dimen/_10sdp"
         android:paddingTop="@dimen/_5sdp"
@@ -36,7 +45,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/appbar"
         android:layout_marginBottom="@dimen/_40sdp" />
 
     <com.dinehawaiipartner.CustomViews.CustomButton

@@ -12,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.ManageDriverAdapter;
@@ -26,6 +24,7 @@ import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.ProgressHUD;
+import com.dinehawaiipartner.Util.RecyclerItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -39,13 +38,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ManageDriversActivity extends AppCompatActivity implements View.OnClickListener{
+public class ManageDriversActivity extends AppCompatActivity implements View.OnClickListener {
     String TAG = "ManageDrivers";
     ArrayList<DriverListModel> driverslist;
-    private RecyclerView recycler_view;
-    private ManageDriverAdapter adapter;
     CustomTextView nodriver;
     Context context;
+    private RecyclerView recycler_view;
+    private ManageDriverAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,31 +61,45 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.home:
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 finish();
+                return true;
+            default:
                 break;
-                default:
-                    break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        driverslist.clear();
+        getAllDrivers();
     }
 
     private void setAdapter() {
         recycler_view.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ManageDriverAdapter(context, driverslist);
         recycler_view.setAdapter(adapter);
-      /*  recycler_view.addOnItemTouchListener(new RecyclerItemClickListener(context, recycler_view, new RecyclerItemClickListener.OnItemClickListener() {
+        recycler_view.addOnItemTouchListener(new RecyclerItemClickListener(context, recycler_view, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                DriverListModel listModel = driverslist.get(position);
+                Intent intent = new Intent(context, AddNewDriverActivity.class);
+                intent.putExtra("dName", listModel.getDriverName());
+                intent.putExtra("dEmail", listModel.getDriverEmail());
+                intent.putExtra("dContact", listModel.getDriverNumber());
+                intent.putExtra("dId", listModel.getDriverId());
+                intent.setAction("EditDriver");
+                startActivity(intent);
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
 
             }
-        }));*/
+        }));
     }
 
     private void getAllDrivers() {
@@ -125,7 +138,7 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         driverslist.clear();
                         nodriver.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                     adapter.notifyDataSetChanged();
@@ -151,22 +164,22 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
         context = this;
         driverslist = new ArrayList<DriverListModel>();
         ((CustomButton) findViewById(R.id.btnAddDriver)).setOnClickListener(this);
-        recycler_view = (RecyclerView)findViewById(R.id.recycler_view);
-        nodriver = (CustomTextView) findViewById(R.id.nodrivers);
-    }
+        recycler_view = findViewById(R.id.recycler_view);
+        nodriver =  findViewById(R.id.nodrivers);
 
+    }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnAddDriver:
-                Intent intent = new Intent(context,AddNewDriverActivity.class);
+                Intent intent = new Intent(context, AddNewDriverActivity.class);
                 intent.setAction("AddDriver");
                 startActivity(intent);
                 break;
-                default:
-                    break;
+            default:
+                break;
 
         }
     }

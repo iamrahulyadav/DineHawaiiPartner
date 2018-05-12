@@ -10,6 +10,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.CustomViews.CustomEditText;
@@ -35,21 +39,35 @@ public class AddNewDriverActivity extends AppCompatActivity {
     CustomEditText edname, edEmail, edContact, edPass;
     Context context;
     boolean editStatus = false;
+    LinearLayout ll_addDriver;
+    private String driver_id = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_driver);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Manage Drivers");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (getIntent().getAction().equalsIgnoreCase("AddDriver")) {
+            toolbar.setTitle("Add Driver");
             editStatus = false;
         } else if (getIntent().getAction().equalsIgnoreCase("EditDriver")) {
+            toolbar.setTitle("Update Driver");
             editStatus = true;
+            driver_id = getIntent().getStringExtra("dId");
+            edname.setText(getIntent().getStringExtra("dName"));
+            edContact.setText(getIntent().getStringExtra("dContact"));
+            edEmail.setText(getIntent().getStringExtra("dEmail"));
         }
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void initView() {
@@ -58,6 +76,16 @@ public class AddNewDriverActivity extends AppCompatActivity {
         edEmail = findViewById(R.id.etDrEmail);
         edContact = findViewById(R.id.etDrContact);
         edPass = findViewById(R.id.etDrPass);
+        ll_addDriver = (LinearLayout) findViewById(R.id.ll_addDriver);
+        ll_addDriver.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v = getCurrentFocus();
+                if (v != null)
+                    hideKeyboard();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -78,9 +106,9 @@ public class AddNewDriverActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home:
+            case android.R.id.home:
                 finish();
-                break;
+                return true;
             case R.id.action_submit:
                 checkData();
                 break;
@@ -146,10 +174,13 @@ public class AddNewDriverActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
 
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        Toast.makeText(context, "Driver Added Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
-
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject jsonObj = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, jsonObj.getString("msg"), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
@@ -187,6 +218,7 @@ public class AddNewDriverActivity extends AppCompatActivity {
         jsonObject.addProperty("driver_email", edEmail.getText().toString());
         jsonObject.addProperty("driver_number", edContact.getText().toString());
         jsonObject.addProperty("password", edPass.getText().toString());
+        jsonObject.addProperty("driver_id", driver_id);
         Log.e(TAG, "EditDriver: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
@@ -202,11 +234,14 @@ public class AddNewDriverActivity extends AppCompatActivity {
 
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
-
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        Toast.makeText(context, "Details Updated Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
-
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject jsonObj = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, jsonObj.getString("msg"), Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
                         Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }

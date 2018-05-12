@@ -9,6 +9,14 @@
     tools:context=".Activity.LoginActivity">
 
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar"
+        android:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -18,11 +26,13 @@
             app:elevation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+    </android.support.design.widget.AppBarLayout>
+
 
     <LinearLayout
-        android:id="@+id/activity_business__login_"
+        android:id="@+id/ll_login"
         android:layout_width="match_parent"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/appbar"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp"
@@ -30,14 +40,14 @@
 
         <com.dinehawaiipartner.CustomViews.CustomTextView
             android:id="@+id/text_heading"
-            style="@style/TextAppearance.AppCompat.Subhead"
+            style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_30sdp"
             android:gravity="center"
             android:padding="@dimen/_5sdp"
             android:text="@string/login"
-            android:textColor="@color/offwhite"
+            android:textColor="@color/white"
             app:edittextfont="Raleway-Regular.ttf" />
 
         <LinearLayout
@@ -86,6 +96,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:background="@color/offwhite"/>
 
 
@@ -136,6 +147,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:background="@color/offwhite"/>
 
         <com.dinehawaiipartner.CustomViews.CustomCheckBox
@@ -177,7 +189,6 @@
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:text="FORGOT PASSWORD"
             android:textAlignment="center"
             android:textColor="@color/offwhite"

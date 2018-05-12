@@ -1,6 +1,8 @@
 package com.dinehawaiipartner.Activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,13 +11,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Util.AppPreference;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,22 +36,27 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private GoogleMap map;
     private Marker markerCurrent;
     private double cur_lat = 22.718358, cur_long = 75.875529;
+    private View headerView;
+    private CustomTextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        headerView = navigationView.getHeaderView(0);
+        userName = (CustomTextView) headerView.findViewById(R.id.customerName);
+        userName.setText(AppPreference.getUsername(DriverHomeActivity.this));
         checkLocationPermission();
 
         setUpMap();
@@ -70,11 +81,30 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(DriverHomeActivity.this);
+            alertDialog.setTitle("Dine Hawaii Partner");
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+            alertDialog.setMessage("Do you want to exit?");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finishAffinity();
+
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            alertDialog.show();
         }
     }
 
@@ -86,13 +116,47 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+
+            default:
+                break;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showLogoutAlert() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DriverHomeActivity.this);
+        builder.setTitle("Dine Hawaii Partner");
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int id) {
+                        AppPreference.clearPreference(DriverHomeActivity.this);
+                        startActivity(new Intent(DriverHomeActivity.this, LoginActivity.class));
+                        finish();
+
+                    }
+                })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                            }
+                        });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_driver_logout:
+                showLogoutAlert();
+                break;
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -146,4 +210,5 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private void zoomIn(LatLng latLngZoom) {
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngZoom, 18));
     }
+
 }
