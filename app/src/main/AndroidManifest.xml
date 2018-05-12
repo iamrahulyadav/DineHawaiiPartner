@@ -25,7 +25,8 @@
             android:name=".Activity.DriverHomeActivity"
             android:label="@string/title_activity_driver_home"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activity.ManageDriversActivity"></activity>
+        <activity android:name=".Activity.ManageDriversActivity" />
+        <activity android:name=".Activity.AddNewDriverActivity"></activity>
     </application>
 
 </manifest>

@@ -5,26 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_margin="@dimen/_5sdp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activity.DriverHomeActivity"
-    tools:showIn="@layout/app_bar_driver_home">
+    tools:showIn="@layout/app_bar_vendor_home">
 
-    <include
-        android:id="@+id/toolbar_bar"
-        layout="@layout/toolbar"></include>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_bar1"
-        android:overScrollMode="never"
-        android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/_5sdp"
-            android:orientation="vertical">
 
             <com.dinehawaiipartner.CustomViews.CustomTextView
                 android:id="@+id/tvManageDriver"
@@ -42,8 +29,7 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_1sdp"
-                android:background="@drawable/bootomline_green_back_trans"></View>
+                android:background="@drawable/bootomline_green_back_trans"/>
 
-        </LinearLayout>
-    </ScrollView>
+
 </LinearLayout>

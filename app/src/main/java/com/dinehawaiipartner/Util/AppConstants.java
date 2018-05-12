@@ -7,17 +7,27 @@ package com.dinehawaiipartner.Util;
 public class AppConstants {
 
 
+    public static String KEY_METHOD="method";
+    public static String KEY_USER_ID="user_id";
+
     public interface BASEURL {
         String URL = "http://take007.co.in/Projects-Work/Hawaii/APP/Partner_App/";
     }
 
     public interface ENDPOINT {
-        public static final String LOGINURL = "Register_Vendor_Log.php";
+         String LOGINURL = "Register_Vendor_Log.php";
+         String GETALLDRIVERURL = "Vendor_Partner_Driver_Api.php";
     }
 
     public interface REGISTRATION {
 
-        public static final String USERLOGIN = "Partner_Vendor_login";
+      String USERLOGIN = "Partner_Vendor_login";
+
+    }
+    public interface VENDOR_METHODS{
+        String ALLDRIVERS = "All_Drivers";
+        String ADD_DRIVER = "Add_New_Driver";
+        String EIT_DRIVER = "Edit_New_Driver";
     }
 
 

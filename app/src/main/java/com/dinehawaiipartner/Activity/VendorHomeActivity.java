@@ -1,6 +1,7 @@
 package com.dinehawaiipartner.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,22 +33,16 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     private void init() {
         context = this;
-        tvDriver = (CustomTextView) findViewById(R.id.tvManageDriver);
+        tvDriver = findViewById(R.id.tvManageDriver);
         tvDriver.setOnClickListener(this);
     }
 
     private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_bar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ((TextView) findViewById(R.id.headet_text)).setText(getString(R.string.title_activity_vendor_home));
-        ImageView back = (ImageView) findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setTitle("Home");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -97,6 +92,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvManageDriver:
+                startActivity(new Intent(context,ManageDriversActivity.class));
                 break;
             default:
                 break;

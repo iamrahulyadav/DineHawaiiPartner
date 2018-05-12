@@ -1,33 +1,152 @@
 package com.dinehawaiipartner.Activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dinehawaiipartner.Adapter.ManageDriverAdapter;
+import com.dinehawaiipartner.CustomViews.CustomButton;
+import com.dinehawaiipartner.CustomViews.CustomTextView;
+import com.dinehawaiipartner.Model.DriverListModel;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Retrofit.ApiClient;
+import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Util.AppConstants;
+import com.dinehawaiipartner.Util.AppPreference;
+import com.dinehawaiipartner.Util.ProgressHUD;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
-public class ManageDriversActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ManageDriversActivity extends AppCompatActivity implements View.OnClickListener{
+    String TAG = "ManageDrivers";
+    ArrayList<DriverListModel> driverslist;
+    private RecyclerView recycler_view;
+    private ManageDriverAdapter adapter;
+    CustomTextView nodriver;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_drivers);
+        initViews();
+        getAllDrivers();
+        setAdapter();
     }
-    private void setToolbar() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_bar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ((TextView) findViewById(R.id.headet_text)).setText("");
-        ImageView back = (ImageView) findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
+
+    private void setAdapter() {
+        recycler_view.setLayoutManager(new LinearLayoutManager(context));
+        adapter = new ManageDriverAdapter(context, driverslist);
+        recycler_view.setAdapter(adapter);
+      /*  recycler_view.addOnItemTouchListener(new RecyclerItemClickListener(context, recycler_view, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
+            public void onItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        }));*/
+    }
+
+    private void getAllDrivers() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+
+            }
+        });
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.ALLDRIVERS);
+        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        Log.e(TAG, "getAllDrivers: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.get_all_drivers_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "getAllDrivers: Response >> " + resp);
+                try {
+                    driverslist.clear();
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        nodriver.setVisibility(View.GONE);
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Gson gson = new Gson();
+                            DriverListModel model = gson.fromJson(jsonArray.getJSONObject(i).toString(), DriverListModel.class);
+                            driverslist.add(model);
+                        }
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        driverslist.clear();
+                        nodriver.setVisibility(View.VISIBLE);
+                    }
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    nodriver.setVisibility(View.VISIBLE);
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "error :- " + Log.getStackTraceString(t));
+                progressHD.dismiss();
+                nodriver.setVisibility(View.VISIBLE);
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    private void initViews() {
+        context = this;
+        driverslist = new ArrayList<DriverListModel>();
+        ((CustomButton) findViewById(R.id.btnAddDriver)).setOnClickListener(this);
+        recycler_view = (RecyclerView)findViewById(R.id.recycler_view);
+        nodriver = (CustomTextView) findViewById(R.id.nodrivers);
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnAddDriver:
+                startActivity(new Intent(context,AddNewDriverActivity.class));
+                break;
+                default:
+                    break;
+
+        }
+    }
 }
