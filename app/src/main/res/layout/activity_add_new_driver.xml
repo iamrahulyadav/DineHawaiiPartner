@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:focusable="true"
     android:orientation="vertical"
-    tools:context=".Activity.AddNewDriverActivity">
+    tools:context=".Activity.Manager.AddNewDriverActivity">
     <LinearLayout
         android:layout_width="match_parent"
        android:layout_marginLeft="@dimen/_8sdp"

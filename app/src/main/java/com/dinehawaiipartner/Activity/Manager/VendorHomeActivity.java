@@ -1,4 +1,4 @@
-package com.dinehawaiipartner.Activity;
+package com.dinehawaiipartner.Activity.Manager;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,10 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppPreference;

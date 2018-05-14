@@ -1,4 +1,4 @@
-package com.dinehawaiipartner.Activity;
+package com.dinehawaiipartner.Activity.Manager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -30,17 +30,17 @@
         </activity>
         <activity android:name=".Activity.LoginActivity" />
         <activity
-            android:name=".Activity.VendorHomeActivity"
+            android:name=".Activity.Manager.VendorHomeActivity"
             android:label="@string/title_activity_vendor_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Driver.DriverHomeActivity"
             android:label="@string/title_activity_driver_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.ManageDriversActivity" />
-        <activity android:name=".Activity.AddNewDriverActivity" />
-        <activity android:name=".Activity.ManageOrderActivity" />
-        <activity android:name=".Activity.OrderDetailActivity"></activity>
+        <activity android:name=".Activity.Manager.ManageDriversActivity" />
+        <activity android:name=".Activity.Manager.AddNewDriverActivity" />
+        <activity android:name=".Activity.Manager.ManageOrderActivity" />
+        <activity android:name=".Activity.Manager.OrderDetailActivity"></activity>
 
         <service
             android:name=".Services.LocationService"

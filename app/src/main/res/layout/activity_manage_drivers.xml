@@ -5,7 +5,7 @@
     android:background="@color/activityBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.ManageDriversActivity">
+    tools:context=".Activity.Manager.ManageDriversActivity">
     <com.dinehawaiipartner.CustomViews.CustomTextView
         android:id="@+id/nodrivers"
         android:layout_width="wrap_content"

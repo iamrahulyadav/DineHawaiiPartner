@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
+import com.dinehawaiipartner.Activity.Manager.VendorHomeActivity;
 import com.dinehawaiipartner.CustomViews.CustomButton;
 import com.dinehawaiipartner.CustomViews.CustomCheckBox;
 import com.dinehawaiipartner.CustomViews.CustomEditText;

@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
+import com.dinehawaiipartner.Activity.Manager.VendorHomeActivity;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;

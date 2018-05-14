@@ -1,4 +1,4 @@
-package com.dinehawaiipartner.Activity;
+package com.dinehawaiipartner.Activity.Manager;
 
 import android.content.Context;
 import android.support.design.widget.TabLayout;
