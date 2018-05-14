@@ -4,11 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/_5sdp"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Activity.Driver.DriverHomeActivity"
+    tools:context=".Activity.Manager.VendorHomeActivity"
     tools:showIn="@layout/app_bar_vendor_home">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
+    <com.dinehawaiipartner.CustomViews.CustomTextView
+        android:id="@+id/noOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_20sdp"
+        android:background="@drawable/text_background"
+        android:paddingBottom="@dimen/_5sdp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:text="No Orders"
+        android:visibility="gone"
+        app:edittextfont="Raleway-Regular.ttf" />
 </LinearLayout>

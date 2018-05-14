@@ -10,22 +10,33 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
+import com.dinehawaiipartner.Adapter.VendorHomeAdapter;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
+import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppPreference;
 
+import java.util.ArrayList;
+
 public class VendorHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    public static ArrayList<DeliveryModel> ordersList;
     Context context;
+    String TAG = "VendorHomeActivity";
+    CustomTextView noOrders;
     private View headerView;
     private CustomTextView userName;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private VendorHomeAdapter vendorHomeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +48,48 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     private void init() {
         context = this;
+        ordersList = new ArrayList<DeliveryModel>();
+        setStaticData();
 
+
+        mRecyclerView = findViewById(R.id.recycler_view);
+        noOrders = findViewById(R.id.noOrder);
+        mLayoutManager = new LinearLayoutManager(context);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(vendorHomeAdapter);
+        vendorHomeAdapter = new VendorHomeAdapter(context, ordersList);
+        mRecyclerView.setAdapter(vendorHomeAdapter);
+        vendorHomeAdapter.notifyDataSetChanged();
+    }
+
+    private void setStaticData() {
+        DeliveryModel delivery1 = new DeliveryModel();
+        delivery1.setOrderId("1");
+        delivery1.setOrderAmount("500");
+        delivery1.setCustName("Kirti");
+        delivery1.setCustPhone("8959848545");
+        delivery1.setCustDeliveryAddress("Vijay nagar");
+        delivery1.setBusinessName("Marriott");
+        delivery1.setBusPhone("98546512145");
+        delivery1.setBusAddress("Scheme no 54");
+        ordersList.add(delivery1);
+
+        DeliveryModel delivery2= new DeliveryModel();
+        delivery2.setOrderId("2");
+        delivery2.setOrderAmount("800");
+        delivery2.setCustName("Rajkumar");
+        delivery2.setCustPhone("9854648122");
+        delivery2.setCustDeliveryAddress("South tukoganj");
+        delivery2.setBusinessName("Shreemaya");
+        delivery2.setBusPhone("89874455545");
+        delivery2.setBusAddress("vijay nagar");
+        ordersList.add(delivery2);
     }
 
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Home");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -52,7 +98,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
         userName = headerView.findViewById(R.id.customerName);
@@ -61,7 +107,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -143,7 +189,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
             default:
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
