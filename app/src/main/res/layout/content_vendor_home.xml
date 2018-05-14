@@ -10,37 +10,93 @@
     tools:context=".Activity.DriverHomeActivity"
     tools:showIn="@layout/app_bar_vendor_home">
 
-
-    <com.dinehawaiipartner.CustomViews.CustomTextView
-        android:id="@+id/tvManageOrder"
-        style="@style/TextAppearance.AppCompat.Subhead"
+    <LinearLayout
+        android:id="@+id/llManageOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/drawable_green_dot"
-        android:drawablePadding="@dimen/_5sdp"
-        android:gravity="center_vertical"
-        android:padding="@dimen/_10sdp"
-        android:text="Manage Orders"
-        android:textColor="@color/colorPrimary"
-        app:edittextfont="Raleway-Bold.ttf" />
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.8">
+
+            <com.dinehawaiipartner.CustomViews.CustomTextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/drawable_green_dot"
+                android:drawablePadding="@dimen/_5sdp"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                android:text="Manage Orders"
+                android:textColor="@color/colorPrimary"
+                app:edittextfont="Raleway-Bold.ttf" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_keyboard_arrow_right_green" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_1sdp"
         android:background="@drawable/bootomline_green_back_trans" />
-
-    <com.dinehawaiipartner.CustomViews.CustomTextView
-        android:id="@+id/tvManageDriver"
-        style="@style/TextAppearance.AppCompat.Subhead"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/drawable_green_dot"
-        android:drawablePadding="@dimen/_5sdp"
-        android:gravity="center_vertical"
-        android:padding="@dimen/_10sdp"
-        android:text="Manage Drivers"
-        android:textColor="@color/colorPrimary"
-        app:edittextfont="Raleway-Bold.ttf" />
+        android:id="@+id/llManageDriver"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.8">
+
+            <com.dinehawaiipartner.CustomViews.CustomTextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/drawable_green_dot"
+                android:drawablePadding="@dimen/_5sdp"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10sdp"
+                android:text="Manage Drivers"
+                android:textColor="@color/colorPrimary"
+                app:edittextfont="Raleway-Bold.ttf" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_keyboard_arrow_right_green" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
 
     <View
         android:layout_width="wrap_content"

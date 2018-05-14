@@ -50,9 +50,7 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_drivers);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Manage Drivers");
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Manage Drivers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
         getAllDrivers();

@@ -47,19 +47,17 @@ public class AddNewDriverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_driver);
         initView();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (getIntent().getAction().equalsIgnoreCase("AddDriver")) {
-            toolbar.setTitle("Add Driver");
+            getSupportActionBar().setTitle("Add Driver");
             editStatus = false;
         } else if (getIntent().getAction().equalsIgnoreCase("EditDriver")) {
-            toolbar.setTitle("Update Driver");
+            getSupportActionBar().setTitle("Update Driver");
             editStatus = true;
             driver_id = getIntent().getStringExtra("dId");
             edname.setText(getIntent().getStringExtra("dName"));
             edContact.setText(getIntent().getStringExtra("dContact"));
             edEmail.setText(getIntent().getStringExtra("dEmail"));
         }
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

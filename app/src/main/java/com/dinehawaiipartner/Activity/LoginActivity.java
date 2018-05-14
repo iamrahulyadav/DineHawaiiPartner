@@ -50,9 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Login");
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Login");
         init();
         setPrefData();
     }
@@ -61,11 +59,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!SaveDataPreference.getSaveid(mContext).equalsIgnoreCase("")) {
             edemail.setText(SaveDataPreference.getSaveid(mContext));
             edemail.setSelection(edemail.getText().toString().length());
+
         }
         if (!SaveDataPreference.getSavepass(mContext).equalsIgnoreCase("")) {
             edpass.setText(SaveDataPreference.getSavepass(mContext));
             edpass.setSelection(edpass.getText().toString().length());
         }
+        if (!SaveDataPreference.getSavepass(mContext).equalsIgnoreCase("")&&!SaveDataPreference.getSaveid(mContext).equalsIgnoreCase(""))
+            rememberMe.setChecked(true);
     }
 
     private void init() {

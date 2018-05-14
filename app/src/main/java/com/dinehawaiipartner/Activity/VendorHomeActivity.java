@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dinehawaiipartner.CustomViews.CustomTextView;
@@ -24,7 +25,7 @@ import com.dinehawaiipartner.Util.AppPreference;
 public class VendorHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     Context context;
-    CustomTextView tvDriver;
+    LinearLayout llDriver,llManageOrder;
     private View headerView;
     private CustomTextView userName;
 
@@ -38,8 +39,10 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     private void init() {
         context = this;
-        tvDriver = findViewById(R.id.tvManageDriver);
-        tvDriver.setOnClickListener(this);
+        llDriver = findViewById(R.id.llManageDriver);
+        llManageOrder = findViewById(R.id.llManageOrder);
+        llDriver.setOnClickListener(this);
+        llManageOrder.setOnClickListener(this);
     }
 
     private void setToolbar() {
@@ -48,7 +51,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         toolbar.setTitle("Home");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -57,7 +60,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
-        userName = (CustomTextView) headerView.findViewById(R.id.customerName);
+        userName =  headerView.findViewById(R.id.customerName);
         userName.setText(AppPreference.getUsername(VendorHomeActivity.this));
     }
 
@@ -144,8 +147,11 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvManageDriver:
+            case R.id.llManageDriver:
                 startActivity(new Intent(context,ManageDriversActivity.class));
+                break;
+            case R.id.llManageOrder:
+                startActivity(new Intent(context,ManageOrderActivity.class));
                 break;
             default:
                 break;

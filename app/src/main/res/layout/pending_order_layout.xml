@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewOrder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_2sdp"
+    android:layout_marginLeft="@dimen/_8sdp"
+    android:layout_marginRight="@dimen/_8sdp"
+    android:layout_marginTop="@dimen/_6sdp"
+    android:elevation="1dp"
+    android:clickable="true"
+    app:cardElevation="1dp">
+
+    <RelativeLayout
+        android:id="@+id/itemsMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_8sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/llOrder1"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="#00"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/tvorder_id"
+                    android:singleLine="true"
+                    app:edittextfont="Raleway-Bold.ttf" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:layout_weight="1">
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="#00"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/tvorder_status"
+                    android:singleLine="true"
+                    app:edittextfont="Raleway-Bold.ttf" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llOrder2"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_below="@id/llOrder1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="Name : "
+                    android:singleLine="true"
+                    app:edittextfont="Raleway-Bold.ttf" />
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:id="@+id/tvcustName"
+                    android:singleLine="true"
+                    android:layout_width="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    app:edittextfont="Raleway-Regular.ttf" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_height="wrap_content">
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="Address : "
+                    app:edittextfont="Raleway-Bold.ttf" />
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="wrap_content"
+                    android:maxLines="2"
+                    android:singleLine="true"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    app:edittextfont="Raleway-Regular.ttf" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_height="wrap_content">
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="Contact No : "
+                    app:edittextfont="Raleway-Bold.ttf" />
+
+                <com.dinehawaiipartner.CustomViews.CustomTextView
+                    android:id="@+id/tvContact"
+                    android:layout_width="wrap_content"
+                    android:singleLine="true"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    app:edittextfont="Raleway-Regular.ttf" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
