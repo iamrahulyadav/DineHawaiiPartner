@@ -41,20 +41,20 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     Context mContext;
     CustomButton btnlogin;
+    LinearLayout ll_login;
     private String TAG = "LoginActivity";
     private CustomEditText edpass, edemail;
     private CustomCheckBox rememberMe;
-    LinearLayout ll_login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Login");
         setSupportActionBar(toolbar);
         init();
         setPrefData();
-
     }
 
     private void setPrefData() {
@@ -70,10 +70,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void init() {
         mContext = this;
-        edemail =  findViewById(R.id.edittext_id);
-        edpass =  findViewById(R.id.edittext_pass);
+        edemail = findViewById(R.id.edittext_id);
+        edpass = findViewById(R.id.edittext_pass);
         btnlogin = findViewById(R.id.loginBtn);
-        rememberMe =  findViewById(R.id.rememberme);
+        rememberMe = findViewById(R.id.rememberme);
         ll_login = findViewById(R.id.ll_login);
         btnlogin.setOnClickListener(this);
         rememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v = getCurrentFocus();
-                if (v!=null)
+                if (v != null)
                     hideKeyboard();
 
                 return false;
@@ -183,10 +183,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
     private void hideKeyboard() {
         View view = getCurrentFocus();
-        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
     }
 
     @Override
