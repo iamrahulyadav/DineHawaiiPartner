@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.dinehawaiipartner.Fragment.CompletedOrderFragment;
 import com.dinehawaiipartner.Fragment.PendingOrderFragment;
@@ -22,6 +23,8 @@ public class ManageOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_order);
+        getSupportActionBar().setTitle("Manage Orders");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
     }
 
@@ -37,6 +40,18 @@ public class ManageOrderActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setText("PENDING");
         tabLayout.getTabAt(1).setText("COMPLETED");
         viewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+                default:
+                    break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     class PagerAdapter extends android.support.v4.app.FragmentStatePagerAdapter {
