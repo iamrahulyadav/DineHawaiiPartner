@@ -274,59 +274,6 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.3">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text="Customer"
-                                    app:edittextfont="@string/raleway_regular" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.1">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text=":"
-                                    android:textStyle="bold"
-                                    app:edittextfont="Raleway-Regular.ttf" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    android:id="@+id/tvCustomerName"
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text="NA"
-
-                                    app:edittextfont="Raleway-Regular.ttf" />
-                            </RelativeLayout>
-
-
-                        </LinearLayout>
 
 
                     </LinearLayout>
@@ -400,38 +347,6 @@
                                     app:edittextfont="@string/raleway_regular" />
                             </RelativeLayout>
 
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.4">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    android:id="@+id/tvCustomization"
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:singleLine="true"
-                                    android:text="Customization"
-                                    app:edittextfont="@string/raleway_regular" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.2">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    android:id="@+id/tvPrice"
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentEnd="true"
-                                    android:layout_alignParentRight="true"
-                                    android:singleLine="true"
-                                    android:text="Price"
-                                    app:edittextfont="@string/raleway_regular" />
-                            </RelativeLayout>
-
                         </LinearLayout>
 
                         <View
@@ -449,156 +364,6 @@
                             android:layout_height="1dp"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@color/colorDivider"></View>
-
-                        <LinearLayout
-                            android:id="@+id/llloyaltypt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_weight="2"
-                            android:visibility="gone">
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:text="Loyalty points"
-                                app:edittextfont="@string/raleway_regular" />
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                android:id="@+id/tvLoyaltyPoints"
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|end"
-                                android:text="0"
-                                app:edittextfont="@string/raleway_regular" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llcoupon"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:layout_weight="2"
-                            android:visibility="gone">
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:text="Coupon Code"
-                                app:edittextfont="@string/raleway_regular" />
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                android:id="@+id/tvcouponcode"
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|end"
-                                android:text="NA"
-                                app:edittextfont="@string/raleway_regular" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llcouponamt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:visibility="gone">
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:text="Coupon Amount"
-                                app:edittextfont="@string/raleway_regular" />
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                android:id="@+id/tvcouponamt"
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|end"
-                                android:text="0"
-                                app:edittextfont="@string/raleway_regular" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llegift"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:visibility="gone">
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:text="E-Gift Cards"
-                                app:edittextfont="@string/raleway_regular" />
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                android:id="@+id/tvegiftcode"
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|end"
-                                android:text="NA"
-                                app:edittextfont="@string/raleway_regular" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llegiftamt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:visibility="gone">
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:text="E-Gift Amount"
-                                app:edittextfont="@string/raleway_regular" />
-
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
-                                android:id="@+id/tvegiftamt"
-                                style="@style/TextAppearance.AppCompat.Subhead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|end"
-                                android:text="0"
-                                app:edittextfont="@string/raleway_regular" />
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/view_total"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:background="@color/colorDivider"
-                            android:visibility="gone"></View>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -642,7 +407,7 @@
                 android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:elevation="1dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardCornerRadius="3dp"
                 app:cardElevation="1dp">
 
@@ -847,156 +612,6 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/cardTakeout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:elevation="1dp"
-                android:visibility="gone"
-                app:cardCornerRadius="3dp"
-                app:cardElevation="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:orientation="vertical">
-
-                    <com.dinehawaiipartner.CustomViews.CustomTextView
-                        android:id="@+id/others"
-                        style="@style/TextAppearance.AppCompat.Subhead"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/linear3"
-                        android:layout_gravity="center_vertical"
-                        android:drawableRight="@drawable/ic_keyboard_arrow_down_gray_24dp"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/_5sdp"
-                        android:text="Pick-up &amp; Catering Details"
-                        android:textAllCaps="true"
-                        app:edittextfont="Raleway-Bold.ttf" />
-
-                    <LinearLayout
-                        android:id="@+id/llOthers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/takeout"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginRight="0dp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.4">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text="Pick-up Person Name"
-                                    app:edittextfont="@string/raleway_regular" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.1">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    android:id="@+id/tvPickupName"
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
-                            </RelativeLayout>
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.4">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text="Pick-up Time : "
-
-                                    app:edittextfont="@string/raleway_regular" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.1">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5">
-
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
-                                    android:id="@+id/tvPickUpTime"
-                                    style="@style/TextAppearance.AppCompat.Subhead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_5sdp"
-
-                                    android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
-                            </RelativeLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
         </LinearLayout>
 
     </ScrollView>
@@ -1033,6 +648,17 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimary"
                 android:text="Reject Order"
+                android:textColor="@color/white"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                app:edittextfont="@string/raleway_regular" />
+            <com.dinehawaiipartner.CustomViews.CustomButton
+                android:id="@+id/alot_driver"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:text="Alot Driver"
                 android:textColor="@color/white"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 app:edittextfont="@string/raleway_regular" />

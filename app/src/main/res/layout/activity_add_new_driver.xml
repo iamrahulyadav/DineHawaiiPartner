@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:drawableStart="@drawable/drawable_green_dot"
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
-            android:text="Driver Name"
+            android:text="Name"
             android:textColor="@color/colorPrimary"
             app:edittextfont="Raleway-Bold.ttf" />
 
@@ -59,7 +59,7 @@
             android:drawableStart="@drawable/drawable_green_dot"
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
-            android:text="Driver Contact No"
+            android:text="Contact No"
             android:textColor="@color/colorPrimary"
             app:edittextfont="Raleway-Bold.ttf" />
 
@@ -93,7 +93,7 @@
             android:drawableStart="@drawable/drawable_green_dot"
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
-            android:text="Driver Email"
+            android:text="Email"
             android:textColor="@color/colorPrimary"
             app:edittextfont="Raleway-Bold.ttf" />
 
@@ -105,6 +105,7 @@
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
             android:background="@null"
+            android:inputType="textEmailAddress"
             android:hint="Enter driver email"
             android:padding="@dimen/_5sdp"
             android:singleLine="true"
@@ -151,6 +152,74 @@
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
             android:background="@color/colorDivider"/>
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSelectService"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:drawableStart="@drawable/drawable_green_dot"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Vehicle Registration No"
+            android:textColor="@color/colorPrimary"
+            app:edittextfont="Raleway-Bold.ttf" />
+
+        <com.dinehawaiipartner.CustomViews.CustomEditText
+            android:id="@+id/etRegNo"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@null"
+            android:hint="Enter registration no"
+            android:padding="@dimen/_5sdp"
+            android:singleLine="true"
+
+            app:edittextfont="Raleway-Regular.ttf"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/colorDivider"/>
+
+        <com.dinehawaiipartner.CustomViews.CustomTextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSelectService"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:drawableStart="@drawable/drawable_green_dot"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Vehicle Type"
+            android:textColor="@color/colorPrimary"
+            app:edittextfont="Raleway-Bold.ttf" />
+
+        <com.dinehawaiipartner.CustomViews.CustomEditText
+            android:id="@+id/etVehicleType"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@null"
+            android:hint="Enter vehicle type"
+            android:padding="@dimen/_5sdp"
+            android:singleLine="true"
+
+            app:edittextfont="Raleway-Regular.ttf"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/colorDivider"/>
+
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

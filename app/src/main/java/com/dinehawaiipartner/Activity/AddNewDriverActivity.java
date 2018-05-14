@@ -36,7 +36,7 @@ import retrofit2.Response;
 
 public class AddNewDriverActivity extends AppCompatActivity {
     String TAG = "AddDriver";
-    CustomEditText edname, edEmail, edContact, edPass;
+    CustomEditText edname, edEmail, edContact, edPass,edVehicleNo,edVehicleType;
     Context context;
     boolean editStatus = false;
     LinearLayout ll_addDriver;
@@ -74,6 +74,8 @@ public class AddNewDriverActivity extends AppCompatActivity {
         edEmail = findViewById(R.id.etDrEmail);
         edContact = findViewById(R.id.etDrContact);
         edPass = findViewById(R.id.etDrPass);
+        edVehicleType = findViewById(R.id.etVehicleType);
+        edVehicleNo = findViewById(R.id.etRegNo);
         ll_addDriver = (LinearLayout) findViewById(R.id.ll_addDriver);
         ll_addDriver.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -129,7 +131,11 @@ public class AddNewDriverActivity extends AppCompatActivity {
         else if (Functions.isEmailNotValid(edEmail))
             edEmail.setError("Enter valid email");
         else if (TextUtils.isEmpty(edPass.getText().toString()))
-            edEmail.setError("Enter password");
+            edPass.setError("Enter password");
+        else if (TextUtils.isEmpty(edVehicleNo.getText().toString()))
+            edVehicleNo.setError("Enter vehicle no");
+        else if (TextUtils.isEmpty(edVehicleType.getText().toString()))
+            edVehicleType.setError("Enter vehicle type");
         else {
             if (Functions.isNetworkAvailable(context)) {
                 if (editStatus)
@@ -156,6 +162,8 @@ public class AddNewDriverActivity extends AppCompatActivity {
         jsonObject.addProperty("driver_email", edEmail.getText().toString());
         jsonObject.addProperty("driver_number", edContact.getText().toString());
         jsonObject.addProperty("password", edPass.getText().toString());
+       /* jsonObject.addProperty("password", edVehicleNo.getText().toString());
+        jsonObject.addProperty("password", edVehicleType.getText().toString());*/
         Log.e(TAG, "AddDriver: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
