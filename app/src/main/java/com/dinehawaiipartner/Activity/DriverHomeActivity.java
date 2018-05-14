@@ -35,7 +35,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private static final String TAG = "DriverHomeActivity";
     private GoogleMap map;
     private Marker markerCurrent;
-    private double cur_lat = 22.718358, cur_long = 75.875529;
+    private double cur_lat=22.718608, cur_long=75.875798;
     private View headerView;
     private CustomTextView userName;
 
@@ -45,7 +45,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_driver_home);
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -55,13 +54,14 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
-        userName = (CustomTextView) headerView.findViewById(R.id.customerName);
+        userName =  headerView.findViewById(R.id.customerName);
         userName.setText(AppPreference.getUsername(DriverHomeActivity.this));
         checkLocationPermission();
-
         setUpMap();
 
     }
+
+
 
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(DriverHomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
