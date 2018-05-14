@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
 import com.dinehawaiipartner.CustomViews.CustomButton;
 import com.dinehawaiipartner.CustomViews.CustomCheckBox;
 import com.dinehawaiipartner.CustomViews.CustomEditText;

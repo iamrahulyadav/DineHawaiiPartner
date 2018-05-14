@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_deliveries"
         android:orderInCategory="100"
-        android:title="Deliveries"
+        android:title="New"
         app:showAsAction="always">
 
     </item>
