@@ -24,7 +24,6 @@ import com.dinehawaiipartner.Util.AppPreference;
 public class VendorHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     Context context;
-    LinearLayout llDriver,llManageOrder;
     private View headerView;
     private CustomTextView userName;
 
@@ -38,10 +37,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     private void init() {
         context = this;
-        llDriver = findViewById(R.id.llManageDriver);
-        llManageOrder = findViewById(R.id.llManageOrder);
-        llDriver.setOnClickListener(this);
-        llManageOrder.setOnClickListener(this);
+
     }
 
     private void setToolbar() {
@@ -59,7 +55,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
-        userName =  headerView.findViewById(R.id.customerName);
+        userName = headerView.findViewById(R.id.customerName);
         userName.setText(AppPreference.getUsername(VendorHomeActivity.this));
     }
 
@@ -69,28 +65,29 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
-                alertDialog.setIcon(R.mipmap.ic_launcher);
-                alertDialog.setMessage("Do you want to exit?");
-                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_HOME);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finishAffinity();
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+            alertDialog.setMessage("Do you want to exit?");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finishAffinity();
 
-                    }
-                });
-                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                alertDialog.show();
-            }
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            alertDialog.show();
         }
+    }
+
     private void showLogoutAlert() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Dine Hawaii Partner");
@@ -137,6 +134,14 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_vendor_logout:
                 showLogoutAlert();
                 break;
+            case R.id.nav_vendor_orders:
+                startActivity(new Intent(context, ManageOrderActivity.class));
+                break;
+            case R.id.nav_vendor_drivers:
+                startActivity(new Intent(context, ManageDriversActivity.class));
+                break;
+            default:
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -146,14 +151,8 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.llManageDriver:
-                startActivity(new Intent(context,ManageDriversActivity.class));
-                break;
-            case R.id.llManageOrder:
-                startActivity(new Intent(context,ManageOrderActivity.class));
-                break;
-            default:
-                break;
+
+
         }
     }
 }
