@@ -71,7 +71,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
             drawer.closeDrawer(GravityCompat.START);
         } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-                alertDialog.setTitle("Dine Hawaii Partner");
+
                 alertDialog.setIcon(R.mipmap.ic_launcher);
                 alertDialog.setMessage("Do you want to exit?");
                 alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {

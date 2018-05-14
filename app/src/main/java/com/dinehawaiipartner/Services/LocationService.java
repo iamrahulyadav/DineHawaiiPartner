@@ -29,8 +29,8 @@ public class LocationService extends Service implements
         GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "LocationService";
-    private static final long INTERVAL = 10 * 1000;
-    private static final long FASTEST_INTERVAL = 5 * 1000;
+    private static final long INTERVAL = 1 * 1000;
+    private static final long FASTEST_INTERVAL = 1 * 1000;
     public static Location mCurrentLocation;
     Context mContext;
     LocationRequest mLocationRequest;
@@ -58,11 +58,12 @@ public class LocationService extends Service implements
             mGoogleApiClient.connect();
         }
 
-        Log.d(TAG, "Location start: ");
+        Log.e(TAG, "Location start: ");
     }
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
@@ -76,12 +77,12 @@ public class LocationService extends Service implements
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            Log.d(TAG, "Location Permission: ");
+            Log.e(TAG, "Location Permission: ");
             return;
         }
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
-        Log.d(TAG, "Location update started ..............: ");
+        Log.e(TAG, "Location update started ..............: ");
     }
 
     @Override
@@ -105,7 +106,7 @@ public class LocationService extends Service implements
         AppPreference.setCurLat(mContext, String.valueOf(location.getLatitude()));
         AppPreference.setCurLong(mContext, String.valueOf(location.getLongitude()));
 //        sendLocation();//api call
-        Log.d(TAG, "onChange >> Lat: " + location.getLatitude() + ", Long: " + location.getLongitude());
+        Log.e(TAG, "onChange >> Lat: " + location.getLatitude() + ", Long: " + location.getLongitude());
     }
 
 

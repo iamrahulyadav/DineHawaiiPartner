@@ -14,7 +14,7 @@ import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 
 public class SplashScreenActivity extends AppCompatActivity {
-    int SPLASHTIMEOUT = 2000;
+    int SPLASHTIMEOUT = 3000;
     Context context;
 
     @Override
@@ -28,9 +28,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.DRIVER)) {
-                    new LocationService(SplashScreenActivity.this);
-                    //startActivity(new Intent(context, DriverHomeActivity.class));
-                } else if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.VENDOR_USER))
+                    startActivity(new Intent(context, DriverHomeActivity.class));
+                } else if (
+                        AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.VENDOR_USER))
                     startActivity(new Intent(context, VendorHomeActivity.class));
                 else
                     startActivity(new Intent(context, LoginActivity.class));
