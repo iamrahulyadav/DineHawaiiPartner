@@ -36,6 +36,7 @@
         <activity
             android:name=".Activity.Driver.DriverHomeActivity"
             android:label="@string/title_activity_driver_home"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.Manager.ManageDriversActivity" />
         <activity android:name=".Activity.Manager.AddNewDriverActivity" />

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -36,7 +35,7 @@ import retrofit2.Response;
 
 public class AddNewDriverActivity extends AppCompatActivity {
     String TAG = "AddDriver";
-    CustomEditText edname, edEmail, edContact, edPass,edVehicleNo,edVehicleType;
+    CustomEditText edname, edEmail, edContact, edPass, edVehicleNo, edVehicleType;
     Context context;
     boolean editStatus = false;
     LinearLayout ll_addDriver;

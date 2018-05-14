@@ -3,7 +3,9 @@ package com.dinehawaiipartner.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DeliveryModel {
+import java.io.Serializable;
+
+public class DeliveryModel implements Serializable {
 
     @SerializedName("order_id")
     @Expose
@@ -149,4 +151,22 @@ public class DeliveryModel {
         this.busPhone = busPhone;
     }
 
+    @Override
+    public String toString() {
+        return "DeliveryModel{" +
+                "orderId='" + orderId + '\'' +
+                ", custName='" + custName + '\'' +
+                ", custPhone='" + custPhone + '\'' +
+                ", custDeliveryAddress='" + custDeliveryAddress + '\'' +
+                ", isPaid='" + isPaid + '\'' +
+                ", orderAmount='" + orderAmount + '\'' +
+                ", custLatitude='" + custLatitude + '\'' +
+                ", custLongitude='" + custLongitude + '\'' +
+                ", businessName='" + businessName + '\'' +
+                ", busLatitude='" + busLatitude + '\'' +
+                ", busLongitude='" + busLongitude + '\'' +
+                ", busAddress='" + busAddress + '\'' +
+                ", busPhone='" + busPhone + '\'' +
+                '}';
+    }
 }

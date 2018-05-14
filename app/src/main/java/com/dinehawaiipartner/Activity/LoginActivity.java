@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         if (jsonObject1.getString("userType").equalsIgnoreCase("Driver")) {
                             AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.DRIVER);
-                            startActivity(new Intent(mContext, DriverHomeActivity.class));
+                            startActivity(new Intent(mContext, DriverHomeActivity.class).setAction(""));
                             finish();
                         } else if (jsonObject1.getString("userType").equalsIgnoreCase("Partner Vendor")) {
                             AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.VENDOR_USER);

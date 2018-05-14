@@ -8,6 +8,5 @@
         android:orderInCategory="100"
         android:title="New"
         app:showAsAction="always">
-
     </item>
 </menu>

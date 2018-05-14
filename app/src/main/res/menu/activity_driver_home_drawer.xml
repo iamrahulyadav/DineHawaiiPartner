@@ -8,9 +8,15 @@
         android:icon="@drawable/drawer_icon"
         android:title="Profile" />
     <item
+        android:id="@+id/nav_driver_deliveries"
+        android:icon="@drawable/drawer_icon"
+        android:title="New Deliveries" />
+    <item
+        android:id="@+id/nav_driver_help"
+        android:icon="@drawable/drawer_icon"
+        android:title="Help" />
+    <item
         android:id="@+id/nav_driver_logout"
         android:icon="@drawable/drawer_icon"
         android:title="Logout" />
-
-
 </menu>

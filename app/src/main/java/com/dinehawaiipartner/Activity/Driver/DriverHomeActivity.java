@@ -1,6 +1,7 @@
 package com.dinehawaiipartner.Activity.Driver;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -25,6 +27,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,9 +35,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
+import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.google.android.gms.common.ConnectionResult;
@@ -57,24 +64,29 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DriverHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
     private static final String TAG = "DriverHomeActivity";
     private static final long INTERVAL = 1000 * 1;
     private static final long FASTEST_INTERVAL = 1000 * 1;
+    TextView tvDeliveryId, tvName, tvPhoneNo, tvAddress;
     private GoogleMap map;
     private Marker markerCurrent;
-    //private double cur_lat = 22.718608, cur_long = 75.875798;
     private View headerView;
     private CustomTextView userName;
-    //    private LatLng currentLatLng;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private Context context;
+    private CardView delivery_view;
+    private TextView tvHideShow;
+    private LinearLayout llCustDetails;
+    private DeliveryModel data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_home);
+        context = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -87,14 +99,36 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
         userName = headerView.findViewById(R.id.customerName);
-        userName.setText(AppPreference.getUsername(DriverHomeActivity.this));
+        userName.setText(AppPreference.getUsername(context));
         checkLocationPermission();
-        // new LocationService(DriverHomeActivity.this);
+        // new LocationService(context);
 
         setUpMap();
         setUpFused();
 
+        if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
+            initDeliveryView();
+            data = (DeliveryModel) getIntent().getSerializableExtra("data");
+            Log.e(TAG, "onCreate: data " + data);
+            tvDeliveryId.setText("#" + data.getOrderId());
+            tvName.setText(data.getCustName());
+            tvPhoneNo.setText(data.getCustPhone());
+            tvAddress.setText(data.getCustDeliveryAddress());
+        }
     }
+
+    private void initDeliveryView() {
+        delivery_view = findViewById(R.id.delivery_view);
+        llCustDetails = findViewById(R.id.llCustDetails);
+        tvHideShow = findViewById(R.id.tvHideShow);
+        tvDeliveryId = findViewById(R.id.tvDeliveryId);
+        tvName = findViewById(R.id.tvName);
+        tvPhoneNo = findViewById(R.id.tvPhoneNo);
+        tvAddress = findViewById(R.id.tvAddress);
+        delivery_view.setVisibility(View.VISIBLE);
+        delivery_view.setOnClickListener(this);
+    }
+
 
     private void setUpFused() {
         createLocationRequest();
@@ -107,6 +141,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         MapsInitializer.initialize(this);
     }
 
+    @SuppressLint("RestrictedApi")
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(INTERVAL);
@@ -116,10 +151,10 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(DriverHomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(DriverHomeActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 10);
         }
-        if (ContextCompat.checkSelfPermission(DriverHomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(DriverHomeActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 10);
         }
     }
@@ -136,27 +171,25 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(DriverHomeActivity.this);
-
-            alertDialog.setIcon(R.mipmap.ic_launcher);
-            alertDialog.setMessage("Do you want to exit?");
-            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finishAffinity();
-
-                }
-            });
-            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                }
-            });
-            alertDialog.show();
+            showExitAlert();
         }
+    }
+
+    private void showExitAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setIcon(R.mipmap.ic_launcher);
+        alertDialog.setMessage("Do you want to exit?");
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                finishAffinity();
+            }
+        });
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        alertDialog.show();
     }
 
     @Override
@@ -176,15 +209,15 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showLogoutAlert() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(DriverHomeActivity.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Dine Hawaii Partner");
         builder.setIcon(R.mipmap.ic_launcher);
         builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int id) {
-                        AppPreference.clearPreference(DriverHomeActivity.this);
-                        startActivity(new Intent(DriverHomeActivity.this, LoginActivity.class));
+                        AppPreference.clearPreference(context);
+                        startActivity(new Intent(context, LoginActivity.class));
                         finish();
 
                     }
@@ -207,20 +240,34 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_driver_logout:
                 showLogoutAlert();
                 break;
+            case R.id.nav_driver_deliveries:
+                startActivity(new Intent(context, NewDeliveryActivity.class));
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-
     @Override
     public void onMapReady(final GoogleMap maps) {
         map = maps;
-        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        map.setMyLocationEnabled(true);
+        setCurrentLocationMarker();
+      /*  map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                if (ActivityCompat.checkSelfPermission(DriverHomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DriverHomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -238,9 +285,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
             }
-        });
+        });*/
     }
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -255,18 +301,13 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         Log.e(TAG, "startLocationUpdates: Started");
     }
 
-
     private void setCurrentLocationMarker() {
-        LatLng currentLatLng = new LatLng(new Double(AppPreference.getCurLat(DriverHomeActivity.this)).doubleValue(),
-                new Double(AppPreference.getCurLong(DriverHomeActivity.this)).doubleValue());
+        LatLng currentLatLng = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(AppPreference.getCurLong(context)).doubleValue());
         Log.e(TAG, "setCurrentLocationMarker >> " + currentLatLng.latitude + "::" + currentLatLng.longitude);
-
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
-
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(currentLatLng);
-//        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.mar));
-        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView()));
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_scooter_icon)));
         markerCurrent = map.addMarker(markerOptions);
     }
 
@@ -287,8 +328,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        Log.e(TAG, "stopLocationUpdates: Stopped");
+//        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//        Log.e(TAG, "stopLocationUpdates: Stopped");
     }
 
     @Override
@@ -299,22 +340,23 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
         AppPreference.setCurLat(this, String.valueOf(location.getLatitude()));
         AppPreference.setCurLong(this, String.valueOf(location.getLongitude()));
         try {
-            //currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             Log.e(TAG, "onLocationChanged : " + location.getLatitude() + " : " + location.getLongitude());
-            if (markerCurrent == null) {
+            if (markerCurrent != null) {
+                animateMarker(markerCurrent, new LatLng(location.getLatitude(), location.getLongitude()), false);
+            }
+            /*if (markerCurrent == null) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
                 markerOptions.title("I am here");
                 markerCurrent = map.addMarker(markerOptions);
             } else {
                 animateMarker(markerCurrent, new LatLng(location.getLatitude(), location.getLongitude()), false);
-            }
+            }*/
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
         } catch (Exception e) {
             e.printStackTrace();
@@ -360,11 +402,10 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         mGoogleApiClient.connect();
     }
 
-
-    private Bitmap getMarkerBitmapFromView() {
-
+    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
         View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
-//        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
+        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.marker_icon);
+        markerImageView.setImageResource(resId);
         customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
         customMarkerView.buildDrawingCache();
@@ -378,4 +419,26 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         customMarkerView.draw(canvas);
         return returnedBitmap;
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.delivery_view:
+                hideShowDeliveryView();
+                break;
+
+        }
+    }
+
+    private void hideShowDeliveryView() {
+        if (llCustDetails.getVisibility() == View.VISIBLE) {
+            llCustDetails.setVisibility(View.GONE);
+            tvHideShow.setText("Show Details");
+        } else {
+            llCustDetails.setVisibility(View.VISIBLE);
+            tvHideShow.setText("Hide Details");
+        }
+
+    }
+
 }
