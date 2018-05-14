@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Services.LocationService;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 
@@ -26,12 +27,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.DRIVER))
-                    startActivity(new Intent(context, DriverHomeActivity.class));
-                else if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.VENDOR_USER))
+                if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.DRIVER)) {
+                    new LocationService(SplashScreenActivity.this);
+                    //startActivity(new Intent(context, DriverHomeActivity.class));
+                } else if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.VENDOR_USER))
                     startActivity(new Intent(context, VendorHomeActivity.class));
                 else
                     startActivity(new Intent(context, LoginActivity.class));
+                finish();
             }
         }, SPLASHTIMEOUT);
     }
