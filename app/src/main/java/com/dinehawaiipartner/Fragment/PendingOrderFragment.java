@@ -1,9 +1,7 @@
 package com.dinehawaiipartner.Fragment;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,34 +16,22 @@ import com.dinehawaiipartner.Adapter.PendingOrderAdapter;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.OrdersModel;
 import com.dinehawaiipartner.R;
-import com.dinehawaiipartner.Retrofit.ApiClient;
-import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
-import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.Functions;
-import com.dinehawaiipartner.Util.ProgressHUD;
 import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PendingOrderFragment extends Fragment {
+    public static ArrayList<OrdersModel> ordersList = new ArrayList<OrdersModel>();
     String TAG = "Pending Order";
     Context context;
     CustomTextView noOrders;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private PendingOrderAdapter pendingAdapter;
-    public static ArrayList<OrdersModel> ordersList = new ArrayList<OrdersModel>();
 
     public PendingOrderFragment() {
         // Required empty public constructor
@@ -56,7 +42,7 @@ public class PendingOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_pending_order, container, false) ;
+        View view = inflater.inflate(R.layout.fragment_pending_order, container, false);
         context = getActivity();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         noOrders = (CustomTextView) view.findViewById(R.id.noOrder);
@@ -67,15 +53,16 @@ public class PendingOrderFragment extends Fragment {
         pendingAdapter = new PendingOrderAdapter(context, ordersList);
         mRecyclerView.setAdapter(pendingAdapter);
         pendingAdapter.notifyDataSetChanged();
-        return view ;
+        return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();
         if (ordersList != null)
             ordersList.clear();
         noOrders.setVisibility(View.VISIBLE);
-      //  getAllOrders();
+        //  getAllOrders();
     }
 
     private void getAllOrders() {
@@ -85,7 +72,7 @@ public class PendingOrderFragment extends Fragment {
             /*jsonObject.addProperty("business_id", AppPreferencesBuss.getBussiId(getActivity()));
             jsonObject.addProperty("user_id", AppPreferencesBuss.getUserId(getActivity()));*/
             Log.e(TAG, "tables Request json :- " + jsonObject.toString());
-           // getOrdersApi(jsonObject);
+            // getOrdersApi(jsonObject);
         } else {
             Toast.makeText(getActivity(), context.getResources().getString(R.string.internet_error), Toast.LENGTH_LONG).show();
         }
