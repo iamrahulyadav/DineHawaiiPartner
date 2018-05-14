@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -38,12 +39,15 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppPreference;
+import com.dinehawaiipartner.Util.DirectionsJSONParser;
+import com.dinehawaiipartner.Util.Functions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -60,8 +64,22 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class DriverHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
@@ -70,6 +88,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private static final long INTERVAL = 1000 * 1;
     private static final long FASTEST_INTERVAL = 1000 * 1;
     TextView tvDeliveryId, tvName, tvPhoneNo, tvAddress;
+    List<String> waypoints = new ArrayList<>();
+    List<String> waypoints1 = new ArrayList<>();
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
@@ -114,6 +134,44 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             tvName.setText(data.getCustName());
             tvPhoneNo.setText(data.getCustPhone());
             tvAddress.setText(data.getCustDeliveryAddress());
+
+            //route();
+            LatLng restaurant, source, customer;
+            if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
+                restaurant = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
+            } else {
+                Toast.makeText(context, "Can't fetch route, restaurant address is not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!AppPreference.getCurLat(context).equalsIgnoreCase("0") && !AppPreference.getCurLat(context).equalsIgnoreCase("")) {
+                source = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(new Double(AppPreference.getCurLong(context)).doubleValue()));
+            } else {
+                Toast.makeText(context, "Can't fetch route, current location is not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
+                customer = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
+            } else {
+                Toast.makeText(context, "Can't fetch route, customer address is not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            //driver to restaurant
+            waypoints.add(restaurant.latitude + "," + restaurant.longitude);
+            String url = Functions.getDirectionsUrlWaypont(source, restaurant, waypoints);
+            RoutesDownloadTask downloadTask = new RoutesDownloadTask(DriverHomeActivity.this);
+            downloadTask.execute(url);
+
+
+            //restaurant to customer
+            waypoints1.add(customer.latitude + "," + customer.longitude);
+            String url1 = Functions.getDirectionsUrlWaypont(restaurant, customer, waypoints);
+            RoutesDownloadTask1 downloadTask1 = new RoutesDownloadTask1(DriverHomeActivity.this);
+            downloadTask1.execute(url1);
+
+
         }
     }
 
@@ -308,6 +366,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(currentLatLng);
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_scooter_icon)));
+        markerOptions.title("Current Location");
+        markerOptions.snippet("This is your current location");
         markerCurrent = map.addMarker(markerOptions);
     }
 
@@ -357,7 +417,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             } else {
                 animateMarker(markerCurrent, new LatLng(location.getLatitude(), location.getLongitude()), false);
             }*/
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+//            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -441,4 +501,378 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     }
 
+    public class RoutesDownloadTask extends AsyncTask<String, Void, String> {
+
+        Context context;
+        String distanceTime;
+
+        public RoutesDownloadTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            String data = "";
+
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            parserTask.execute(result);
+        }
+
+        private String downloadUrl(String strUrl) throws IOException {
+            String data = "";
+            InputStream iStream = null;
+            HttpURLConnection urlConnection = null;
+            try {
+                URL url = new URL(strUrl);
+
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                urlConnection.connect();
+
+                iStream = urlConnection.getInputStream();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+                StringBuffer sb = new StringBuffer();
+
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                data = sb.toString();
+
+                br.close();
+
+            } catch (Exception e) {
+                //Log.d("Exception while downloading url", e.toString());
+            } finally {
+                iStream.close();
+                urlConnection.disconnect();
+            }
+            return data;
+        }
+
+        public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+            // Parsing the data in non-ui thread
+            @Override
+            protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+                JSONObject jObject;
+                List<List<HashMap<String, String>>> routes = null;
+                Log.d("routes", "111");
+
+                try {
+
+                    jObject = new JSONObject(jsonData[0]);
+                    DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                    // Starts parsing data
+                    routes = parser.parse(jObject);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
+                }
+                return routes;
+            }
+
+            // Executes in UI thread, after the parsing process
+            @Override
+            protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+                PolylineOptions lineOptions = null;
+                ArrayList<LatLng> points = null;
+                String distance = "";
+                String duration = "1";
+                String durationValue = "1";
+                String distanceValue = "0";
+
+                try {
+                    if (result.size() < 1) {
+                        //Toast.makeText(ParserTask.this, "No Points", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NullPointerException e) {
+                    return;
+                }
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                // Traversing through all the routes
+                for (int i = 0; i < result.size(); i++) {
+                    if (i == 1) {
+                        lineOptions = new PolylineOptions();
+                        points = new ArrayList<LatLng>();
+                        // Fetching i-th route
+                        List<HashMap<String, String>> path = result.get(i);
+                        // Fetching all the points in i-th route
+                        for (int j = 0; j < path.size(); j++) {
+                            HashMap<String, String> point = path.get(j);
+
+                            if (j == 0) {    // Get distance from the list
+                                distance = point.get("distance");
+                                distanceValue = point.get("distance");
+                                continue;
+                            } else if (j == 1) { // Get duration from the list
+                                duration = point.get("duration");
+                                durationValue = point.get("value");
+                                Log.d("duration ss", duration + "::" + durationValue);
+                                continue;
+                            } else if (j == 2) { // Get duration from the list
+
+                                continue;
+                            }
+
+                            double lat = Double.parseDouble(point.get("lat"));
+                            double lng = Double.parseDouble(point.get("lng"));
+                            LatLng position = new LatLng(lat, lng);
+                            //Log.d("routes",position.toString());
+                            points.add(position);
+                            com.google.android.gms.maps.model.LatLng mapPoint =
+                                    new com.google.android.gms.maps.model.LatLng(lat, lng);
+                            builder.include(mapPoint);
+
+                        }
+                        lineOptions.addAll(points);
+
+                        lineOptions.width(6);
+
+                        lineOptions.color(Color.RED);
+                        lineOptions.geodesic(true);
+
+                        // if(polylineFinal.isGeodesic())
+                        //  polylineFinal.remove();
+                        map.addPolyline(lineOptions);
+                        //mMap.setPadding(0, measuredHeight/2, 0, 0);
+
+                        map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
+
+                        // mMap.setPadding(0, cardView.getHeight(), 0, 0);
+                    }
+                }
+
+               /* // Start marker
+                MarkerOptions options = new MarkerOptions();
+                options.position(resturantLatlong);
+                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_m));
+                map.addMarker(options);*/
+
+                //        // End marker
+
+                /* MarkerOptions options2 = new MarkerOptions();
+                options2.position(points.get(points.size() - 1));
+                options2.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_c));
+                map.addMarker(options2);*/
+
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(points.get(points.size() - 1));
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_rest_icon)));
+                markerOptions.title("Restaurant's Location");
+                markerOptions.snippet("This is restaurant's Location");
+                map.addMarker(markerOptions);
+
+            }
+        }
+
+    }
+
+    public class RoutesDownloadTask1 extends AsyncTask<String, Void, String> {
+
+        Context context;
+        String distanceTime;
+
+        public RoutesDownloadTask1(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            String data = "";
+
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            parserTask.execute(result);
+        }
+
+        private String downloadUrl(String strUrl) throws IOException {
+            String data = "";
+            InputStream iStream = null;
+            HttpURLConnection urlConnection = null;
+            try {
+                URL url = new URL(strUrl);
+
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                urlConnection.connect();
+
+                iStream = urlConnection.getInputStream();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+                StringBuffer sb = new StringBuffer();
+
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                data = sb.toString();
+
+                br.close();
+
+            } catch (Exception e) {
+                //Log.d("Exception while downloading url", e.toString());
+            } finally {
+                iStream.close();
+                urlConnection.disconnect();
+            }
+            return data;
+        }
+
+        public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+            // Parsing the data in non-ui thread
+            @Override
+            protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+                JSONObject jObject;
+                List<List<HashMap<String, String>>> routes = null;
+                Log.d("routes", "111");
+
+                try {
+
+                    jObject = new JSONObject(jsonData[0]);
+                    DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                    // Starts parsing data
+                    routes = parser.parse(jObject);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
+                }
+                return routes;
+            }
+
+            // Executes in UI thread, after the parsing process
+            @Override
+            protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+                PolylineOptions lineOptions = null;
+                ArrayList<LatLng> points = null;
+                String distance = "";
+                String duration = "1";
+                String durationValue = "1";
+                String distanceValue = "0";
+
+                try {
+                    if (result.size() < 1) {
+                        //Toast.makeText(ParserTask.this, "No Points", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NullPointerException e) {
+                    return;
+                }
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                // Traversing through all the routes
+                for (int i = 0; i < result.size(); i++) {
+                    if (i == 1) {
+                        lineOptions = new PolylineOptions();
+                        points = new ArrayList<LatLng>();
+                        // Fetching i-th route
+                        List<HashMap<String, String>> path = result.get(i);
+                        // Fetching all the points in i-th route
+                        for (int j = 0; j < path.size(); j++) {
+                            HashMap<String, String> point = path.get(j);
+
+                            if (j == 0) {    // Get distance from the list
+                                distance = point.get("distance");
+                                distanceValue = point.get("distance");
+                                continue;
+                            } else if (j == 1) { // Get duration from the list
+                                duration = point.get("duration");
+                                durationValue = point.get("value");
+                                Log.d("duration ss", duration + "::" + durationValue);
+                                continue;
+                            } else if (j == 2) { // Get duration from the list
+
+                                continue;
+                            }
+
+                            double lat = Double.parseDouble(point.get("lat"));
+                            double lng = Double.parseDouble(point.get("lng"));
+                            LatLng position = new LatLng(lat, lng);
+                            //Log.d("routes",position.toString());
+                            points.add(position);
+                            com.google.android.gms.maps.model.LatLng mapPoint =
+                                    new com.google.android.gms.maps.model.LatLng(lat, lng);
+                            builder.include(mapPoint);
+
+                        }
+                        lineOptions.addAll(points);
+
+                        lineOptions.width(6);
+
+                        lineOptions.color(Color.BLUE);
+                        lineOptions.geodesic(true);
+
+                        // if(polylineFinal.isGeodesic())
+                        //  polylineFinal.remove();
+                        map.addPolyline(lineOptions);
+                        //mMap.setPadding(0, measuredHeight/2, 0, 0);
+
+                        map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
+
+                        // mMap.setPadding(0, cardView.getHeight(), 0, 0);
+                    }
+                }
+
+               /* // Start marker
+                MarkerOptions options = new MarkerOptions();
+                options.position(resturantLatlong);
+                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_m));
+                map.addMarker(options);*/
+
+                //        // End marker
+
+                /* MarkerOptions options2 = new MarkerOptions();
+                options2.position(points.get(points.size() - 1));
+                options2.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_c));
+                map.addMarker(options2);*/
+
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(points.get(points.size() - 1));
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_cust_icon)));
+                markerOptions.title("Customer's Location");
+                markerOptions.snippet("This is customer's location");
+                map.addMarker(markerOptions);
+
+            }
+        }
+    }
 }

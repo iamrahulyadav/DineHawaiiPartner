@@ -16,13 +16,28 @@
                             <entry key="actionbar">
                               <value>
                                 <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="paddingPercent" value="10" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Hvantage\Downloads\custom_map_scooter_icon.png" />
-                                      <entry key="outputName" value="custom_map_scooter_icon" />
+                                      <entry key="imageAsset" value="C:\Users\Hvantage\Downloads\custom_map_customer_icon.png" />
+                                      <entry key="outputName" value="custom_map_cust_icon" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="49c174" />
+                                      <entry key="themeColor" value="4ac779" />
                                     </map>
                                   </option>
                                 </PersistentState>

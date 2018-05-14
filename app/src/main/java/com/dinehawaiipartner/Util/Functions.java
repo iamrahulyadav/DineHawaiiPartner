@@ -12,7 +12,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 
 public class Functions {
@@ -145,6 +148,48 @@ public class Functions {
         }
         return inSampleSize;
     }
+
+    public static String getDirectionsUrlWaypont(LatLng origin, LatLng dest, List<String> waypoints){
+
+        String key = "key=AIzaSyDJhqncRtd0xZjv4dzx57q46dpV2CE0Bhw";
+
+        // Origin of route
+        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+
+        // String mode = "mode=\"DRIVING\"";
+
+        String alternatives = "alternatives=true";
+
+        String traffic_model = "traffic_model=pessimistic";
+
+        String waypoint="";
+
+        for(int i=0; i<waypoints.size(); i++){
+            if(i==0){
+                waypoint = "via:"+waypoints.get(i);
+            }else {
+                waypoint = waypoint + "|via:" + waypoints.get(i);
+            }
+        }
+        // Building the parameters to the web service
+        String parameters = key+"&"+str_origin+"&"+str_dest+"&"+sensor+"&"+alternatives+"&waypoints="+waypoint;
+
+        // Output format
+        String output = "json";
+
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+        Log.d("routeUrl", url);
+        return url;
+    }
+
+
 
 }
 
