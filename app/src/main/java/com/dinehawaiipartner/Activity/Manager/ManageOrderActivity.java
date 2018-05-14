@@ -23,7 +23,7 @@ public class ManageOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_order);
-        getSupportActionBar().setTitle("Manage Orders");
+        getSupportActionBar().setTitle("Orders");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
     }

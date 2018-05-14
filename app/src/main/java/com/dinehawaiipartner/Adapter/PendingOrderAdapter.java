@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.OrdersModel;
@@ -43,14 +44,13 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        CustomTextView tvCustName,tvCustAddress,tvCustContact,orderId,orderStatus;
+        TextView tvCustName,tvCustAddress,tvCustContact,orderId,orderStatus;
         public ViewHolder(View itemView) {
             super(itemView);
-            tvCustName = itemView.findViewById(R.id.tvcustName);
+            tvCustName = itemView.findViewById(R.id.tvName);
             tvCustAddress = itemView.findViewById(R.id.tvAddress);
-            tvCustContact = itemView.findViewById(R.id.tvContact);
+            tvCustContact = itemView.findViewById(R.id.tvPhoneNo);
             orderId = itemView.findViewById(R.id.tvorder_id);
-            orderStatus = itemView.findViewById(R.id.tvorder_status);
         }
     }
 }

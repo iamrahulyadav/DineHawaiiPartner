@@ -1,142 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardViewOrder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/_2sdp"
     android:layout_marginLeft="@dimen/_8sdp"
     android:layout_marginRight="@dimen/_8sdp"
-    android:layout_marginTop="@dimen/_6sdp"
-    android:elevation="1dp"
-    android:clickable="true"
-    app:cardElevation="1dp">
+    app:cardCornerRadius="@dimen/_5sdp"
+    android:elevation="@dimen/_2sdp"
+    app:cardElevation="@dimen/_2sdp"
+    android:layout_marginTop="@dimen/_5sdp"
+    app:contentPadding="@dimen/_8sdp">
 
-    <RelativeLayout
-        android:id="@+id/itemsMenu"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_8sdp">
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/llOrder1"
             android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:text="#00"
-                    android:textColor="@color/colorPrimary"
-                    android:id="@+id/tvorder_id"
-                    android:singleLine="true"
-                    app:edittextfont="Raleway-Bold.ttf" />
+            <TextView
+                android:id="@+id/tvorder_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:text="#1024"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
                 android:gravity="right"
-                android:layout_weight="1">
-
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:text="#00"
-                    android:textColor="@color/colorPrimary"
-                    android:id="@+id/tvorder_status"
-                    android:singleLine="true"
-                    app:edittextfont="Raleway-Bold.ttf" />
-
-            </LinearLayout>
-
+                android:text="Assign Driver"
+                android:id="@+id/assignDriver"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/subhead" />
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/llOrder2"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:layout_below="@id/llOrder1"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="horizontal">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="Customer :"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/subhead" />
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:text="Name : "
-                    android:singleLine="true"
-                    app:edittextfont="Raleway-Bold.ttf" />
-
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:id="@+id/tvcustName"
-                    android:singleLine="true"
-                    android:layout_width="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_height="wrap_content"
-                    android:text="NA"
-                    app:edittextfont="Raleway-Regular.ttf" />
-            </LinearLayout>
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:fontFamily="@font/roboto"
+                android:text="Raj Kumar Vishwakarma"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/mainhead" />
+        </LinearLayout>
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:text="Address : "
-                    app:edittextfont="Raleway-Bold.ttf" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="wrap_content"
-                    android:maxLines="2"
-                    android:singleLine="true"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_height="wrap_content"
-                    android:text="NA"
-                    app:edittextfont="Raleway-Regular.ttf" />
-            </LinearLayout>
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="Contact No :"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/subhead" />
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:text="Contact No : "
-                    app:edittextfont="Raleway-Bold.ttf" />
+            <TextView
+                android:id="@+id/tvPhoneNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:autoLink="phone"
+                android:clickable="true"
+                android:fontFamily="@font/roboto"
+                android:text="+91 8988989889"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/mainhead" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
-                    android:id="@+id/tvContact"
-                    android:layout_width="wrap_content"
-                    android:singleLine="true"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_height="wrap_content"
-                    android:text="NA"
-                    app:edittextfont="Raleway-Regular.ttf" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="Bus. Name :"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/subhead" />
 
+            <TextView
+                android:id="@+id/tvbus_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:autoLink="phone"
+                android:clickable="true"
+                android:fontFamily="@font/roboto"
+                android:text="NA"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/mainhead" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="Total Amount :"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/subhead" />
+
+            <TextView
+                android:id="@+id/tvTotalAmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:autoLink="phone"
+                android:clickable="true"
+                android:fontFamily="@font/roboto"
+                android:text="0"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/mainhead" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="Full Address :"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/subhead" />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:autoLink="phone"
+                android:clickable="true"
+                android:fontFamily="@font/roboto"
+                android:text="Nath Mandir Road South Tukogant, RNT Marg Indore"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/mainhead" />
         </LinearLayout>
 
 
-    </RelativeLayout>
+
+    </LinearLayout>
+
 </android.support.v7.widget.CardView>
