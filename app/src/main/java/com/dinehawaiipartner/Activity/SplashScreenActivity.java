@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
 import com.dinehawaiipartner.R;
-import com.dinehawaiipartner.Services.LocationService;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 

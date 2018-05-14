@@ -1,4 +1,4 @@
-package com.dinehawaiipartner.Activity;
+package com.dinehawaiipartner.Activity.Driver;
 
 import android.Manifest;
 import android.content.Context;
@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppPreference;
@@ -301,7 +302,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onLocationChanged(Location location) {
-        // map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 13));
+        AppPreference.setCurLat(this, String.valueOf(location.getLatitude()));
+        AppPreference.setCurLong(this, String.valueOf(location.getLongitude()));
         try {
             //currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             Log.e(TAG, "onLocationChanged : " + location.getLatitude() + " : " + location.getLongitude());
@@ -312,9 +314,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 markerCurrent = map.addMarker(markerOptions);
             } else {
                 animateMarker(markerCurrent, new LatLng(location.getLatitude(), location.getLongitude()), false);
-//            markerCurrent.setPosition(new LatLng(location.getLatitude(),location.getLongitude()));
             }
-            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
         } catch (Exception e) {
             e.printStackTrace();
         }

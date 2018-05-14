@@ -34,7 +34,7 @@
             android:label="@string/title_activity_vendor_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.DriverHomeActivity"
+            android:name=".Activity.Driver.DriverHomeActivity"
             android:label="@string/title_activity_driver_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.ManageDriversActivity" />
