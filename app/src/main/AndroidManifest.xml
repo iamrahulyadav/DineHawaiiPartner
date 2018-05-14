@@ -40,13 +40,17 @@
         <activity android:name=".Activity.Manager.ManageDriversActivity" />
         <activity android:name=".Activity.Manager.AddNewDriverActivity" />
         <activity android:name=".Activity.Manager.ManageOrderActivity" />
-        <activity android:name=".Activity.Manager.OrderDetailActivity"></activity>
+        <activity android:name=".Activity.Manager.OrderDetailActivity" />
 
         <service
             android:name=".Services.LocationService"
             android:enabled="true"
             android:exported="true" />
 
+        <activity
+            android:name=".Activity.Driver.NewDeliveryActivity"
+            android:label="@string/title_activity_new_delivery"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
