@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.dinehawaiipartner.Model.DeliveryModel;
-import com.dinehawaiipartner.Model.DriverListModel;
+import com.dinehawaiipartner.Model.VendorAllDriversModel;
 import com.dinehawaiipartner.R;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class VendorHomeAdapter extends RecyclerView.Adapter<VendorHomeAdapter.Vi
     private final Context context;
     private final ArrayList<DeliveryModel> ordersModelArrayList;
     String driverName;
-    private ArrayList<DriverListModel> driverslist = new ArrayList<>();
+    private ArrayList<VendorAllDriversModel> driverslist = new ArrayList<>();
     private String selectedDriverId;
 
     public VendorHomeAdapter(Context context, ArrayList<DeliveryModel> details) {
@@ -61,12 +61,12 @@ public class VendorHomeAdapter extends RecyclerView.Adapter<VendorHomeAdapter.Vi
     }
 
     private void selectDriverDialog() {
-        DriverListModel driver1 = new DriverListModel();
+        VendorAllDriversModel driver1 = new VendorAllDriversModel();
         driver1.setDriverId("1");
         driver1.setDriverName("RK");
         driverslist.add(driver1);
 
-        DriverListModel driver2 = new DriverListModel();
+        VendorAllDriversModel driver2 = new VendorAllDriversModel();
         driver2.setDriverId("2");
         driver2.setDriverName("Vivek");
         driverslist.add(driver2);

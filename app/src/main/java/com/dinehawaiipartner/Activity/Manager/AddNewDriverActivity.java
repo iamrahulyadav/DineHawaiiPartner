@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.dinehawaiipartner.Model.VendorAllDriversModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
@@ -36,11 +37,12 @@ import retrofit2.Response;
 
 public class AddNewDriverActivity extends AppCompatActivity {
     String TAG = "AddDriver";
-    EditText edname, edEmail, edContact, edPass, edVehicleNo, edVehicleType;
+    EditText edname, edEmail, edContact, edPass, edVehicleNo, edVehicleType,edRegVehicleNo;
     Context context;
     boolean editStatus = false;
     LinearLayout ll_addDriver;
     private String driver_id = "";
+    VendorAllDriversModel driversModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +57,14 @@ public class AddNewDriverActivity extends AppCompatActivity {
         } else if (getIntent().getAction().equalsIgnoreCase("EditDriver")) {
             toolbar.setTitle("Update Driver");
             editStatus = true;
-            driver_id = getIntent().getStringExtra("dId");
-            edname.setText(getIntent().getStringExtra("dName"));
-            edContact.setText(getIntent().getStringExtra("dContact"));
-            edEmail.setText(getIntent().getStringExtra("dEmail"));
+            driversModel = (VendorAllDriversModel) getIntent().getSerializableExtra("list");
+            driver_id =driversModel.getDriverId();
+            edname.setText(driversModel.getDriverName());
+            edContact.setText(driversModel.getDriverNumber());
+            edEmail.setText(driversModel.getDriverEmail());
+            edVehicleNo.setText(driversModel.getVehicleNo());
+            edVehicleType.setText(driversModel.getVehicleType());
+            edRegVehicleNo.setText(driversModel.getVehicleRegNo());
         }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -78,7 +84,8 @@ public class AddNewDriverActivity extends AppCompatActivity {
         edContact = findViewById(R.id.etDrContact);
         edPass = findViewById(R.id.etDrPass);
         edVehicleType = findViewById(R.id.etVehicleType);
-        edVehicleNo = findViewById(R.id.etRegNo);
+        edRegVehicleNo = findViewById(R.id.etRegNo);
+        edVehicleNo = findViewById(R.id.etVehicleNo);
         ll_addDriver = findViewById(R.id.ll_addDriver);
         ll_addDriver.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -135,7 +142,9 @@ public class AddNewDriverActivity extends AppCompatActivity {
             edEmail.setError("Enter valid email");
         else if (TextUtils.isEmpty(edPass.getText().toString()))
             edPass.setError("Enter password");
-        else if (TextUtils.isEmpty(edVehicleNo.getText().toString()))
+        else if (TextUtils.isEmpty(edRegVehicleNo.getText().toString()))
+            edRegVehicleNo.setError("Enter vehicle no");
+       else if (TextUtils.isEmpty(edVehicleNo.getText().toString()))
             edVehicleNo.setError("Enter vehicle no");
         else if (TextUtils.isEmpty(edVehicleType.getText().toString()))
             edVehicleType.setError("Enter vehicle type");
@@ -165,8 +174,9 @@ public class AddNewDriverActivity extends AppCompatActivity {
         jsonObject.addProperty("driver_email", edEmail.getText().toString());
         jsonObject.addProperty("driver_number", edContact.getText().toString());
         jsonObject.addProperty("password", edPass.getText().toString());
-       /* jsonObject.addProperty("password", edVehicleNo.getText().toString());
-        jsonObject.addProperty("password", edVehicleType.getText().toString());*/
+        jsonObject.addProperty("vehicle_reg_no", edRegVehicleNo.getText().toString());
+        jsonObject.addProperty("vehicle_no", edVehicleNo.getText().toString());
+        jsonObject.addProperty("vehicle_type", edVehicleType.getText().toString());
         Log.e(TAG, "AddDriver: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
@@ -228,6 +238,9 @@ public class AddNewDriverActivity extends AppCompatActivity {
         jsonObject.addProperty("driver_number", edContact.getText().toString());
         jsonObject.addProperty("password", edPass.getText().toString());
         jsonObject.addProperty("driver_id", driver_id);
+        jsonObject.addProperty("vehicle_reg_no", edRegVehicleNo.getText().toString());
+        jsonObject.addProperty("vehicle_no", edVehicleNo.getText().toString());
+        jsonObject.addProperty("vehicle_type", edVehicleType.getText().toString());
         Log.e(TAG, "EditDriver: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);

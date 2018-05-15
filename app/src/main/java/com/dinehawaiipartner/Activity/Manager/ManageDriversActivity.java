@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import com.dinehawaiipartner.Adapter.ManageDriverAdapter;
 import com.dinehawaiipartner.CustomViews.CustomButton;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
-import com.dinehawaiipartner.Model.DriverListModel;
+import com.dinehawaiipartner.Model.VendorAllDriversModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
@@ -40,18 +41,19 @@ import retrofit2.Response;
 
 public class ManageDriversActivity extends AppCompatActivity implements View.OnClickListener {
     String TAG = "ManageDrivers";
-    ArrayList<DriverListModel> driverslist;
+    ArrayList<VendorAllDriversModel> driverslist;
     CustomTextView nodriver;
     Context context;
     private RecyclerView recycler_view;
     private ManageDriverAdapter adapter;
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_drivers);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Manage Drivers");
+        toolbar.setTitle("Drivers");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
@@ -85,13 +87,10 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
         recycler_view.addOnItemTouchListener(new RecyclerItemClickListener(context, recycler_view, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                DriverListModel listModel = driverslist.get(position);
+                VendorAllDriversModel listModel = driverslist.get(position);
                 Intent intent = new Intent(context, AddNewDriverActivity.class);
-                intent.putExtra("dName", listModel.getDriverName());
-                intent.putExtra("dEmail", listModel.getDriverEmail());
-                intent.putExtra("dContact", listModel.getDriverNumber());
-                intent.putExtra("dId", listModel.getDriverId());
                 intent.setAction("EditDriver");
+                intent.putExtra("list",driverslist.get(position));
                 startActivity(intent);
             }
 
@@ -132,7 +131,7 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Gson gson = new Gson();
-                            DriverListModel model = gson.fromJson(jsonArray.getJSONObject(i).toString(), DriverListModel.class);
+                            VendorAllDriversModel model = gson.fromJson(jsonArray.getJSONObject(i).toString(), VendorAllDriversModel.class);
                             driverslist.add(model);
                         }
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
@@ -162,10 +161,19 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
 
     private void initViews() {
         context = this;
-        driverslist = new ArrayList<DriverListModel>();
+        driverslist = new ArrayList<VendorAllDriversModel>();
         ((CustomButton) findViewById(R.id.btnAddDriver)).setOnClickListener(this);
         recycler_view = findViewById(R.id.recycler_view);
         nodriver =  findViewById(R.id.nodrivers);
+        refreshLayout =  findViewById(R.id.swipeRefresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                driverslist.clear();
+                getAllDrivers();
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
     }
 

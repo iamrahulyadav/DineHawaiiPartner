@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/activityBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/activityBackground"
     tools:context=".Activity.Manager.ManageDriversActivity">
+
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
         android:id="@+id/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -20,35 +21,42 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
     <com.dinehawaiipartner.CustomViews.CustomTextView
         android:id="@+id/nodrivers"
         android:layout_width="wrap_content"
-        android:layout_below="@id/appbar"
-        android:layout_margin="@dimen/_20sdp"
         android:layout_height="wrap_content"
-        android:text="No Drivers"
+        android:layout_below="@id/appbar"
         android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/_20sdp"
+        android:background="@drawable/text_background"
+        android:paddingBottom="@dimen/_5sdp"
         android:paddingLeft="@dimen/_10sdp"
         android:paddingRight="@dimen/_10sdp"
         android:paddingTop="@dimen/_5sdp"
-        android:paddingBottom="@dimen/_5sdp"
-        android:background="@drawable/text_background"
+        android:text="No Drivers"
         android:visibility="gone"
-        app:edittextfont="Raleway-Regular.ttf"
-        />
+        app:edittextfont="Raleway-Regular.ttf" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_below="@id/appbar"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_40sdp" />
+        android:id="@+id/swipeRefresh"
+        android:layout_below="@id/appbar">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?attr/actionBarSize" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <com.dinehawaiipartner.CustomViews.CustomButton
         android:id="@+id/btnAddDriver"
         style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:text="Add New Driver"

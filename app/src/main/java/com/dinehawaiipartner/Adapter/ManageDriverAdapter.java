@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dinehawaiipartner.CustomViews.CustomTextView;
-import com.dinehawaiipartner.Model.DriverListModel;
+import com.dinehawaiipartner.Model.VendorAllDriversModel;
 import com.dinehawaiipartner.R;
 
 import java.util.ArrayList;
@@ -17,9 +17,9 @@ public class ManageDriverAdapter extends RecyclerView.Adapter<ManageDriverAdapte
 
     private static final String TAG = "CouponAdapter";
     private Context context;
-    private ArrayList<DriverListModel> driverList;
+    private ArrayList<VendorAllDriversModel> driverList;
 
-    public ManageDriverAdapter(Context context, ArrayList<DriverListModel> driverList) {
+    public ManageDriverAdapter(Context context, ArrayList<VendorAllDriversModel> driverList) {
         this.context = context;
         this.driverList = driverList;
     }
@@ -34,7 +34,7 @@ public class ManageDriverAdapter extends RecyclerView.Adapter<ManageDriverAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        DriverListModel listModel = driverList.get(position);
+        VendorAllDriversModel listModel = driverList.get(position);
         holder.tvName.setText(listModel.getDriverName());
         holder.tvEmail.setText(listModel.getDriverEmail());
         holder.tvContact.setText(listModel.getDriverNumber());
