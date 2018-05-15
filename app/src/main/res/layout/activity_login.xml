@@ -7,12 +7,26 @@
     android:background="@drawable/splash_background"
     android:orientation="vertical"
     tools:context=".Activity.LoginActivity">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:id="@+id/appbar"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
     <LinearLayout
         android:id="@+id/ll_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_below="@id/appbar"
         android:layout_marginRight="@dimen/_10sdp"
         android:orientation="vertical">
 
@@ -39,7 +53,7 @@
                 android:layout_marginTop="@dimen/_30sdp"
                 android:orientation="horizontal">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     android:id="@+id/text_id"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
@@ -49,11 +63,11 @@
                     android:gravity="center_vertical"
                     android:text="Username/Email"
                     android:textColor="#4ac87a"
-                    app:edittextfont="Raleway-Bold.ttf" />
+                     />
                 
             </LinearLayout>
 
-            <com.dinehawaiipartner.CustomViews.CustomEditText
+            <EditText
                 android:id="@+id/edittext_id"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="match_parent"
@@ -89,7 +103,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     android:id="@+id/text_pass"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
@@ -99,11 +113,11 @@
                     android:gravity="center_vertical"
                     android:text="Password"
                     android:textColor="#4ac87a"
-                    app:edittextfont="Raleway-Bold.ttf" />
+                     />
                 
             </LinearLayout>
 
-            <com.dinehawaiipartner.CustomViews.CustomEditText
+            <EditText
                 android:id="@+id/edittext_pass"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="match_parent"
@@ -119,7 +133,7 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/offwhite"
-                app:edittextfont="Raleway-Regular.ttf" />
+               />
         </LinearLayout>
 
         <View
@@ -144,7 +158,7 @@
             android:layout_height="wrap_content"
             android:gravity="center">
 
-            <com.dinehawaiipartner.CustomViews.CustomButton
+            <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_35sdp"
@@ -159,10 +173,10 @@
                 android:text="LOGIN"
                 android:textAlignment="gravity"
                 android:textColor="#fff"
-                app:edittextfont="Raleway-Bold.ttf" />
+                 />
         </LinearLayout>
 
-        <com.dinehawaiipartner.CustomViews.CustomTextView
+        <TextView
             android:id="@+id/forgetPass"
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
@@ -171,7 +185,7 @@
             android:textAlignment="center"
             android:textColor="@color/offwhite"
             android:textStyle="bold"
-            app:edittextfont="Raleway-Bold.ttf" />
+             />
     </LinearLayout>
 </RelativeLayout>
 

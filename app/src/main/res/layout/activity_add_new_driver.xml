@@ -1,225 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:focusable="true"
-    android:orientation="vertical"
+    android:focusableInTouchMode="true"
     tools:context=".Activity.Manager.AddNewDriverActivity">
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-       android:layout_marginLeft="@dimen/_8sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginRight="@dimen/_8sdp"
-        android:id="@+id/ll_addDriver"
+        android:id="@+id/appbar"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <com.dinehawaiipartner.CustomViews.CustomTextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSelectService"
-            android:layout_marginTop="@dimen/_9sdp"
-            android:drawableStart="@drawable/drawable_green_dot"
-            android:drawablePadding="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Name"
-            android:textColor="@color/colorPrimary"
-            app:edittextfont="Raleway-Bold.ttf" />
-
-        <com.dinehawaiipartner.CustomViews.CustomEditText
-            android:id="@+id/etDrName"
-            style="@style/TextAppearance.AppCompat.Subhead"
+        android:layout_below="@id/appbar"
+        android:scrollbars="none">
+        <LinearLayout
+            android:id="@+id/ll_addDriver"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@null"
-            android:hint="Enter driver name"
-            android:padding="@dimen/_5sdp"
-            android:singleLine="true"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="vertical">
 
-            app:edittextfont="Raleway-Regular.ttf"/>
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"/>
+                android:layout_marginTop="@dimen/_9sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableStart="@drawable/drawable_green_dot"
+                android:gravity="center"
+                android:text="Name"
+                android:textColor="@color/colorPrimary" />
 
-        <com.dinehawaiipartner.CustomViews.CustomTextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSelectService"
-            android:layout_marginTop="@dimen/_9sdp"
-            android:drawableStart="@drawable/drawable_green_dot"
-            android:drawablePadding="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Contact No"
-            android:textColor="@color/colorPrimary"
-            app:edittextfont="Raleway-Bold.ttf" />
+            <EditText
+                android:id="@+id/etDrName"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:hint="Enter driver name"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true"
 
-        <com.dinehawaiipartner.CustomViews.CustomEditText
-            android:id="@+id/etDrContact"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@null"
-            android:hint="Enter driver contact"
-            android:inputType="number"
-            android:padding="@dimen/_5sdp"
-            android:singleLine="true"
-            app:edittextfont="Raleway-Regular.ttf"/>
+                />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorDivider" />
 
-        <com.dinehawaiipartner.CustomViews.CustomTextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSelectService"
-            android:layout_marginTop="@dimen/_9sdp"
-            android:drawableStart="@drawable/drawable_green_dot"
-            android:drawablePadding="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Email"
-            android:textColor="@color/colorPrimary"
-            app:edittextfont="Raleway-Bold.ttf" />
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <com.dinehawaiipartner.CustomViews.CustomEditText
-            android:id="@+id/etDrEmail"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@null"
-            android:inputType="textEmailAddress"
-            android:hint="Enter driver email"
-            android:padding="@dimen/_5sdp"
-            android:singleLine="true"
+                android:layout_marginTop="@dimen/_9sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableStart="@drawable/drawable_green_dot"
+                android:gravity="center"
+                android:text="Contact No"
+                android:textColor="@color/colorPrimary" />
 
-            app:edittextfont="Raleway-Regular.ttf"/>
+            <EditText
+                android:id="@+id/etDrContact"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:hint="Enter driver contact"
+                android:inputType="number"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorDivider" />
 
-        <com.dinehawaiipartner.CustomViews.CustomTextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSelectService"
-            android:layout_marginTop="@dimen/_9sdp"
-            android:drawableStart="@drawable/drawable_green_dot"
-            android:drawablePadding="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Password"
-            android:textColor="@color/colorPrimary"
-            app:edittextfont="Raleway-Bold.ttf" />
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <com.dinehawaiipartner.CustomViews.CustomEditText
-            android:id="@+id/etDrPass"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@null"
-            android:hint="Enter password"
-            android:inputType="textPassword"
-            android:padding="@dimen/_5sdp"
-            android:singleLine="true"
-            app:edittextfont="Raleway-Regular.ttf"/>
+                android:layout_marginTop="@dimen/_9sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableStart="@drawable/drawable_green_dot"
+                android:gravity="center"
+                android:text="Email"
+                android:textColor="@color/colorPrimary" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"/>
-        <com.dinehawaiipartner.CustomViews.CustomTextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSelectService"
-            android:layout_marginTop="@dimen/_9sdp"
-            android:drawableStart="@drawable/drawable_green_dot"
-            android:drawablePadding="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Vehicle Registration No"
-            android:textColor="@color/colorPrimary"
-            app:edittextfont="Raleway-Bold.ttf" />
+            <EditText
+                android:id="@+id/etDrEmail"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:hint="Enter driver email"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true"
 
-        <com.dinehawaiipartner.CustomViews.CustomEditText
-            android:id="@+id/etRegNo"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@null"
-            android:hint="Enter registration no"
-            android:padding="@dimen/_5sdp"
-            android:singleLine="true"
+                />
 
-            app:edittextfont="Raleway-Regular.ttf"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorDivider" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"/>
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <com.dinehawaiipartner.CustomViews.CustomTextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSelectService"
-            android:layout_marginTop="@dimen/_9sdp"
-            android:drawableStart="@drawable/drawable_green_dot"
-            android:drawablePadding="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Vehicle Type"
-            android:textColor="@color/colorPrimary"
-            app:edittextfont="Raleway-Bold.ttf" />
+                android:layout_marginTop="@dimen/_9sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableStart="@drawable/drawable_green_dot"
+                android:gravity="center"
+                android:text="Password"
+                android:textColor="@color/colorPrimary" />
 
-        <com.dinehawaiipartner.CustomViews.CustomEditText
-            android:id="@+id/etVehicleType"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@null"
-            android:hint="Enter vehicle type"
-            android:padding="@dimen/_5sdp"
-            android:singleLine="true"
+            <EditText
+                android:id="@+id/etDrPass"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:hint="Enter password"
+                android:inputType="textPassword"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true" />
 
-            app:edittextfont="Raleway-Regular.ttf"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorDivider" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorDivider"/>
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-    </LinearLayout>
+                android:layout_marginTop="@dimen/_9sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableStart="@drawable/drawable_green_dot"
+                android:gravity="center"
+                android:text="Vehicle Registration No"
+                android:textColor="@color/colorPrimary" />
 
-</ScrollView>
+            <EditText
+                android:id="@+id/etRegNo"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:hint="Enter registration no"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true"
+
+                />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_9sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableStart="@drawable/drawable_green_dot"
+                android:gravity="center"
+                android:text="Vehicle No"
+                android:textColor="@color/colorPrimary" />
+
+            <EditText
+                android:id="@+id/etVehicleNo"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:hint="Enter vehicle no"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true"
+                />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_9sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableStart="@drawable/drawable_green_dot"
+                android:gravity="center"
+                android:text="Vehicle Type"
+                android:textColor="@color/colorPrimary" />
+
+            <EditText
+                android:id="@+id/etVehicleType"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:hint="Enter vehicle type"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="true"
+
+                />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorDivider" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

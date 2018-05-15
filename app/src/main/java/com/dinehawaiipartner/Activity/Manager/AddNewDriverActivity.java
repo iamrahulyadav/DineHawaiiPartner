@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -12,10 +13,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.dinehawaiipartner.CustomViews.CustomEditText;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
@@ -35,7 +36,7 @@ import retrofit2.Response;
 
 public class AddNewDriverActivity extends AppCompatActivity {
     String TAG = "AddDriver";
-    CustomEditText edname, edEmail, edContact, edPass, edVehicleNo, edVehicleType;
+    EditText edname, edEmail, edContact, edPass, edVehicleNo, edVehicleType;
     Context context;
     boolean editStatus = false;
     LinearLayout ll_addDriver;
@@ -46,17 +47,20 @@ public class AddNewDriverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_driver);
         initView();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
         if (getIntent().getAction().equalsIgnoreCase("AddDriver")) {
-            getSupportActionBar().setTitle("Add Driver");
+            toolbar.setTitle("Add Driver");
             editStatus = false;
         } else if (getIntent().getAction().equalsIgnoreCase("EditDriver")) {
-            getSupportActionBar().setTitle("Update Driver");
+            toolbar.setTitle("Update Driver");
             editStatus = true;
             driver_id = getIntent().getStringExtra("dId");
             edname.setText(getIntent().getStringExtra("dName"));
             edContact.setText(getIntent().getStringExtra("dContact"));
             edEmail.setText(getIntent().getStringExtra("dEmail"));
         }
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -75,7 +79,7 @@ public class AddNewDriverActivity extends AppCompatActivity {
         edPass = findViewById(R.id.etDrPass);
         edVehicleType = findViewById(R.id.etVehicleType);
         edVehicleNo = findViewById(R.id.etRegNo);
-        ll_addDriver = (LinearLayout) findViewById(R.id.ll_addDriver);
+        ll_addDriver = findViewById(R.id.ll_addDriver);
         ll_addDriver.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
