@@ -39,6 +39,8 @@ public class AppConstants {
         String UPDATELOG="driver_log_update";
         String LOGOUTDRIVER = "Logout_Vendor_Driver";
         String NEWDELIVERIES = "get_new_deliveries";
+        String STARTTRIP = "start_trip";
+        String COMPLETETRIP = "complete_trip";
     }
 
 
