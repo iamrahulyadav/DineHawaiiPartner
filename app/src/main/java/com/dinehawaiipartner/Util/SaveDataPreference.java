@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 
 public class SaveDataPreference {
     public static final String PREFERENCES = "save_data_pref";
-    public static final String SAVEID = "save_id_bus";
-    public static final String SAVEPASSWD = "save_pass_bus";
+    public static final String SAVEID = "save_id";
+    public static final String SAVEPASSWD = "save_pass";
     private final SharedPreferences sharedPreferences;
     private final SharedPreferences.Editor editor;
 

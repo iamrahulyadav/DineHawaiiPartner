@@ -32,6 +32,7 @@ import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.Functions;
+import com.dinehawaiipartner.Util.ProgressHUD;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -146,6 +147,12 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void logoutVendorApi() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.LOGOUTVENDOR);
         jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
@@ -176,7 +183,9 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
                     } else {
                         Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
+                    progressHD.dismiss();
                 } catch (JSONException e) {
+                    progressHD.dismiss();
                     e.printStackTrace();
                 }
             }
@@ -184,6 +193,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                progressHD.dismiss();
                 Log.e(TAG, "logoutVendorApi error :- " + Log.getStackTraceString(t));
                 Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }

@@ -51,6 +51,7 @@ import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.DirectionsJSONParser;
 import com.dinehawaiipartner.Util.Functions;
+import com.dinehawaiipartner.Util.ProgressHUD;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -931,6 +932,12 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     }
     private void logoutDriverApi() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.LOGOUTDRIVER);
         jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
@@ -963,13 +970,16 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
+                    progressHD.dismiss();
                     e.printStackTrace();
                 }
+                progressHD.dismiss();
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                progressHD.dismiss();
                 Log.e(TAG, "logoutDriverApi error :- " + Log.getStackTraceString(t));
                 Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
