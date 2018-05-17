@@ -101,6 +101,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private static final long INTERVAL = 1000 * 1, FASTEST_INTERVAL = 1000 * 1;
     TextView tvDeliveryId, tvName, tvPhoneNo, tvAddress;
     List<String> waypoints = new ArrayList<>(), waypoints1 = new ArrayList<>();
+    String orderId;
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
@@ -112,6 +113,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private LinearLayout llCustDetails;
     private DeliveryModel data;
     private CardView delivery_view, btnComplete, btnStart, btnCallAdmin;
+    private LatLng customer, restaurant, source;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,21 +144,15 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             initDeliveryView();
             data = (DeliveryModel) getIntent().getSerializableExtra("data");
             Log.e(TAG, "onCreate: data " + data);
+            orderId = data.getOrderId();
             tvDeliveryId.setText("#" + data.getOrderUniqueId());
             tvName.setText(data.getCustName());
             tvPhoneNo.setText(data.getCustPhone());
             tvAddress.setText(data.getCustDeliveryAddress());
 
-            if (data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
-                btnStart.setVisibility(View.VISIBLE);
-                btnComplete.setVisibility(View.GONE);
-            }
-            if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
-                btnStart.setVisibility(View.GONE);
-                btnComplete.setVisibility(View.VISIBLE);
-            }
+
             //route();
-            LatLng restaurant, source, customer;
+
             if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
                 restaurant = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
             } else {
@@ -177,22 +173,37 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            //driver to restaurant
-            waypoints.add(restaurant.latitude + "," + restaurant.longitude);
-            String url = Functions.getDirectionsUrlWaypont(source, restaurant, waypoints);
-            RoutesDownloadTask downloadTask = new RoutesDownloadTask(DriverHomeActivity.this);
-            downloadTask.execute(url);
-
-
-            /*//restaurant to customer
-            waypoints1.add(customer.latitude + "," + customer.longitude);
-            String url1 = Functions.getDirectionsUrlWaypont(restaurant, customer, waypoints);
-            RoutesDownloadTask1 downloadTask1 = new RoutesDownloadTask1(DriverHomeActivity.this);
-            downloadTask1.execute(url1);*/
-
-
+            if (data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
+                btnStart.setVisibility(View.VISIBLE);
+                btnComplete.setVisibility(View.GONE);
+                setDriverToRestRoute();
+            }
+            if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
+                btnStart.setVisibility(View.GONE);
+                btnComplete.setVisibility(View.VISIBLE);
+                setRestToCustRoute();
+            }
         }
+    }
+
+    private void setDriverToRestRoute() {
+        //driver to restaurant
+        waypoints.add(restaurant.latitude + "," + restaurant.longitude);
+        String url = Functions.getDirectionsUrlWaypont(source, restaurant, waypoints);
+        RoutesDownloadTask downloadTask = new RoutesDownloadTask(DriverHomeActivity.this);
+        downloadTask.execute(url);
+
+    }
+
+    private void setRestToCustRoute() {
+        //restaurant to customer
+        if (map != null)
+            map.clear();
+        waypoints1.add(customer.latitude + "," + customer.longitude);
+        String url1 = Functions.getDirectionsUrlWaypont(restaurant, customer, waypoints);
+        RoutesDownloadTask1 downloadTask1 = new RoutesDownloadTask1(DriverHomeActivity.this);
+        downloadTask1.execute(url1);
+
     }
 
     private void init() {
@@ -518,13 +529,130 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 break;
             case R.id.btnStart:
                 Toast.makeText(context, "Starting...", Toast.LENGTH_SHORT).show();
+                startTripTask();
                 break;
             case R.id.btnComplete:
-                Toast.makeText(context, "Completing...", Toast.LENGTH_SHORT).show();
+                completeTripTask();
+//                Toast.makeText(context, "Completing...", Toast.LENGTH_SHORT).show();
                 break;
 
         }
     }
+
+    private void completeTripTask() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.COMPLETETRIP);
+        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        jsonObject.addProperty("order_id", orderId);
+        Log.e(TAG, "startTripTask: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "startTripTask: Response >> " + resp);
+                try {
+
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, "Trip Completed", Toast.LENGTH_SHORT).show();
+                        map.clear();
+                        btnStart.setVisibility(View.GONE);
+                        btnComplete.setVisibility(View.GONE);
+
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    progressHD.dismiss();
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                progressHD.dismiss();
+                Log.e(TAG, "logoutDriverApi error :- " + Log.getStackTraceString(t));
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void startTripTask() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.STARTTRIP);
+        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        jsonObject.addProperty("order_id", orderId);
+        Log.e(TAG, "startTripTask: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "startTripTask: Response >> " + resp);
+                try {
+
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, "Trip Started", Toast.LENGTH_SHORT).show();
+                        setRestToCustRoute();
+                        btnStart.setVisibility(View.GONE);
+                        btnComplete.setVisibility(View.VISIBLE);
+
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    progressHD.dismiss();
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                progressHD.dismiss();
+                Log.e(TAG, "logoutDriverApi error :- " + Log.getStackTraceString(t));
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void hideShowDeliveryView() {
         if (llCustDetails.getVisibility() == View.VISIBLE) {

@@ -1,10 +1,14 @@
 package com.dinehawaiipartner.Activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -55,10 +59,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Login");
         setSupportActionBar(toolbar);
+        mContext = this;
+        checkLocationPermission();
         init();
         setPrefData();
     }
-
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 10);
+        }
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 10);
+        }
+    }
     private void setPrefData() {
         if (!SaveDataPreference.getSaveid(mContext).equalsIgnoreCase("")) {
             edemail.setText(SaveDataPreference.getSaveid(mContext));
@@ -74,7 +87,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void init() {
-        mContext = this;
         edemail = findViewById(R.id.edittext_id);
         edpass = findViewById(R.id.edittext_pass);
         btnlogin = findViewById(R.id.loginBtn);
