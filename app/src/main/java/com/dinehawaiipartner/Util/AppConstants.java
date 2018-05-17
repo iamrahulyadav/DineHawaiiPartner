@@ -40,8 +40,8 @@ public class AppConstants {
         String UPDATELOG = "driver_log_update";
         String LOGOUTDRIVER = "Logout_Vendor_Driver";
         String NEWDELIVERIES = "get_new_deliveries";
-        String STARTTRIP = "start_trip";
-        String COMPLETETRIP = "complete_trip";
+        String STARTDELIVERY = "start_trip";
+        String COMPLETEDELIVERY = "complete_trip";
     }
 
 
@@ -52,6 +52,16 @@ public class AppConstants {
 
     public class NOTIFICATION_KEY {
         public static final String DEFAULT_MESSAGE = "default_message";
-        public static final String DRIVER_NEW_TRIP = "driver_new_trip";
+        public static final String DRIVER_NEW_DELIVERY = "driver_new_delivery";
+        public static final String MANAGER_DELIVERY_PICKEDUP = "manager_trip_pickedup";
+        public static final String MANAGER_DELIVERY_COMPLETED = "manager_trip_completed";
+        public static final String MANAGER_NEW_DELIVERY = "manager_new_delivery";
+    }
+
+    public class NOTIFICATION_ID {
+        public static final int DEFAULT = 1;
+        public static final int DRIVER_NEW_DELIVERY = 2;
+        public static final int MANAGER_DELIVERY_PICKEDUP = 3;
+        public static final int MANAGER_DELIVERY_COMPLETED = 4;
     }
 }

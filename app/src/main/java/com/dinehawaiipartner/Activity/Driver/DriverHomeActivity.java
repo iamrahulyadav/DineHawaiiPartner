@@ -2,6 +2,8 @@ package com.dinehawaiipartner.Activity.Driver;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -205,6 +207,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         downloadTask1.execute(url1);
 
     }
+
 
     private void init() {
 
