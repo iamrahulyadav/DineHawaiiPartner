@@ -44,6 +44,7 @@ public class AppConstants {
         String NEWDELIVERIES = "get_new_deliveries";
         String STARTDELIVERY = "start_trip";
         String COMPLETEDELIVERY = "complete_trip";
+        String DRIVER_START_DELIVERIES = "driver_start_deliveries";
     }
 
 

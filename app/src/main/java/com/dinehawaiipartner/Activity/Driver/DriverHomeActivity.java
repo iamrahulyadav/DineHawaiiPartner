@@ -76,6 +76,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -102,7 +103,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private static final String TAG = "DriverHomeActivity";
     private static final long INTERVAL = 1000 * 1, FASTEST_INTERVAL = 1000 * 1;
-    TextView tvDeliveryId, tvName, tvPhoneNo, tvAddress;
+    TextView tvStatus, tvDeliveryId, tvName, tvPhoneNo, tvAddress;
     List<String> waypoints = new ArrayList<>();
     String orderId;
     LatLng source;
@@ -146,48 +147,104 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         setUpFused();
         init();
         if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
-            initDeliveryView();
             data = (DeliveryModel) getIntent().getSerializableExtra("data");
-            Log.e(TAG, "onCreate: data " + data);
-            orderId = data.getOrderId();
-            tvDeliveryId.setText("#" + data.getOrderUniqueId());
-            tvName.setText(data.getCustName());
-            tvPhoneNo.setText(data.getCustPhone());
-            tvAddress.setText(data.getCustDeliveryAddress());
-
-
-            if (!AppPreference.getCurLat(context).equalsIgnoreCase("0") && !AppPreference.getCurLat(context).equalsIgnoreCase("")) {
-                source = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(new Double(AppPreference.getCurLong(context)).doubleValue()));
-            } else {
-                Toast.makeText(context, "Can't fetch route, current location not found", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
-                restLatLng = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
-            } else {
-                Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
-                custLatLng = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
-            } else {
-                Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
-                btnStart.setVisibility(View.VISIBLE);
-                btnComplete.setVisibility(View.GONE);
-                makeRoute(source, restLatLng);
-
-            } else if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
-                btnStart.setVisibility(View.GONE);
-                btnComplete.setVisibility(View.VISIBLE);
-                makeRoute(source, custLatLng);
-            }
+            tripExist();
+        } else {
+            getStartedDelivery();
         }
+    }
+
+    private void tripExist() {
+        initDeliveryView();
+        Log.e(TAG, "onCreate: data " + this.data);
+        orderId = this.data.getOrderId();
+        tvStatus.setText(this.data.getDeliveryStatus());
+        tvDeliveryId.setText("#" + this.data.getOrderUniqueId());
+        tvName.setText(this.data.getCustName());
+        tvPhoneNo.setText(this.data.getCustPhone());
+        tvAddress.setText(this.data.getCustDeliveryAddress());
+
+        if (!AppPreference.getCurLat(context).equalsIgnoreCase("0") && !AppPreference.getCurLat(context).equalsIgnoreCase("")) {
+            source = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(new Double(AppPreference.getCurLong(context)).doubleValue()));
+        } else {
+            Toast.makeText(context, "Can't fetch route, current location not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!this.data.getBusLatitude().equalsIgnoreCase("0") && !this.data.getBusLatitude().equalsIgnoreCase("")) {
+            restLatLng = new LatLng(new Double(this.data.getBusLatitude()).doubleValue(), new Double(this.data.getBusLongitude()).doubleValue());
+        } else {
+            Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!this.data.getCustLatitude().equalsIgnoreCase("0") && !this.data.getCustLatitude().equalsIgnoreCase("")) {
+            custLatLng = new LatLng(new Double(this.data.getCustLatitude()).doubleValue(), new Double(this.data.getCustLongitude()).doubleValue());
+        } else {
+            Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (this.data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
+            btnStart.setVisibility(View.VISIBLE);
+            btnComplete.setVisibility(View.GONE);
+            makeRoute(source, restLatLng);
+
+        } else if (this.data.getDeliveryStatus().equalsIgnoreCase("Started")) {
+            btnStart.setVisibility(View.GONE);
+            btnComplete.setVisibility(View.VISIBLE);
+            makeRoute(source, custLatLng);
+        }
+    }
+
+    private void getStartedDelivery() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.DRIVER_START_DELIVERIES);
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
+        Log.e(TAG, "getStartedDelivery: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "getStartedDelivery: Response >> " + resp);
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        Gson gson = new Gson();
+                        data = gson.fromJson(jsonArray.getJSONObject(0).toString(), DeliveryModel.class);
+                        if (data != null)
+                            tripExist();
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "getAllNewOrders error :- " + Log.getStackTraceString(t));
+                progressHD.dismiss();
+                Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     private void makeRoute(LatLng source, LatLng destination) {
@@ -209,6 +266,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         llCustDetails = findViewById(R.id.llCustDetails);
         tvHideShow = findViewById(R.id.tvHideShow);
         tvDeliveryId = findViewById(R.id.tvDeliveryId);
+        tvStatus = findViewById(R.id.tvStatus);
         tvName = findViewById(R.id.tvName);
         tvPhoneNo = findViewById(R.id.tvPhoneNo);
         tvAddress = findViewById(R.id.tvAddress);
