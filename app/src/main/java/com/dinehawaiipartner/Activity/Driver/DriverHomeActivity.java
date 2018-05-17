@@ -901,8 +901,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.UPDATELOG);
             jsonObject.addProperty("driver_id", FirebaseInstanceId.getInstance().getToken());
             jsonObject.addProperty("fcm_id", FirebaseInstanceId.getInstance().getToken());
-            jsonObject.addProperty("driver_lat", "");
-            jsonObject.addProperty("driver_long", "");
+            jsonObject.addProperty("driver_lat", AppPreference.getCurLat(context));
+            jsonObject.addProperty("driver_long", AppPreference.getCurLong(context));
 
             Log.e(TAG, "updateDriverLogTask request >>>>>" + jsonObject.toString());
 
