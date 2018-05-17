@@ -52,6 +52,10 @@
             android:name=".Activity.Driver.NewDeliveryActivity"
             android:label="@string/title_activity_new_delivery"
             android:theme="@style/AppTheme"></activity>
+
+        <receiver android:name=".Reciever.SendLocation"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

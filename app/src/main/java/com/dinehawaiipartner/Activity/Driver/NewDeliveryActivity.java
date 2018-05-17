@@ -41,10 +41,10 @@ import retrofit2.Response;
 public class NewDeliveryActivity extends AppCompatActivity {
     String TAG = "NewDeliveryActivity";
     ArrayList<DeliveryModel> list;
+    TextView noOrder;
     private RecyclerView recycler_view;
     private Context context;
     private DriverDeliveryAdapter adapter;
-    TextView noOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +57,10 @@ public class NewDeliveryActivity extends AppCompatActivity {
         list = new ArrayList<DeliveryModel>();
         noOrder = findViewById(R.id.noOrder);
         setRecyclerView();
-       if (Functions.isNetworkAvailable(context))
-           getAllNewOrders();
-       else
-           Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+        if (Functions.isNetworkAvailable(context))
+            getAllNewOrders();
+        else
+            Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -95,6 +95,7 @@ public class NewDeliveryActivity extends AppCompatActivity {
             }
         }));
     }
+
     private void getAllNewOrders() {
         final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
             @Override
@@ -105,8 +106,7 @@ public class NewDeliveryActivity extends AppCompatActivity {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.NEWDELIVERIES);
-        jsonObject.addProperty("user_id", AppPreference.getUserid(context));
-        jsonObject.addProperty("business_id", AppPreference.getBusinessid(context));
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         Log.e(TAG, "getAllNewOrders: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);

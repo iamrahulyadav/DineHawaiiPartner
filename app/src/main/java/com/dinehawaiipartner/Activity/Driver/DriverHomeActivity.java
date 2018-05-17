@@ -47,8 +47,10 @@ import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Reciever.SendLocation;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Services.LocationService;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.DirectionsJSONParser;
@@ -74,8 +76,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -89,6 +89,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -136,11 +137,10 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         userName = headerView.findViewById(R.id.customerName);
         userName.setText(AppPreference.getUsername(context));
         checkLocationPermission();
-        // new LocationService(context);
+        new LocationService(context);
 
         setUpMap();
         setUpFused();
-
         init();
         if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
             initDeliveryView();
@@ -153,15 +153,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             tvAddress.setText(data.getCustDeliveryAddress());
 
 
-            //route();
-
-            if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
-                restaurant = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
-            } else {
-                Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             if (!AppPreference.getCurLat(context).equalsIgnoreCase("0") && !AppPreference.getCurLat(context).equalsIgnoreCase("")) {
                 source = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(new Double(AppPreference.getCurLong(context)).doubleValue()));
             } else {
@@ -169,20 +160,26 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 return;
             }
 
-            if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
-                customer = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
-            } else {
-                Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
-                return;
-            }
+
             if (data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
                 btnStart.setVisibility(View.VISIBLE);
                 btnComplete.setVisibility(View.GONE);
+                if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
+                    restaurant = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
+                } else {
+                    Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 setDriverToRestRoute();
-            }
-            if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
+            } else if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
                 btnStart.setVisibility(View.GONE);
                 btnComplete.setVisibility(View.VISIBLE);
+                if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
+                    customer = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
+                } else {
+                    Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 setRestToCustRoute();
             }
         }
@@ -394,7 +391,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     protected void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            return;
         }
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         Log.e(TAG, "startLocationUpdates: Started");
@@ -550,8 +547,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             }
         });
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.COMPLETETRIP);
-        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.COMPLETEDELIVERY);
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "startTripTask: Request >> " + jsonObject);
 
@@ -607,8 +604,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             }
         });
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.STARTTRIP);
-        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.STARTDELIVERY);
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "startTripTask: Request >> " + jsonObject);
 
@@ -721,6 +718,18 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void sendLocationAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, SendLocation.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, alarmIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), alarmIntent);
+       /* alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                1 * 60 * 1000,  // After five minute
+                1 * 60 * 1000,  // Every five minute
+                alarmIntent);*/
     }
 
     public class RoutesDownloadTask extends AsyncTask<String, Void, String> {
@@ -1096,49 +1105,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
             }
         }
-    }
-
-    class updateDriverLogTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.UPDATELOG);
-            jsonObject.addProperty("driver_id", FirebaseInstanceId.getInstance().getToken());
-            jsonObject.addProperty("fcm_id", FirebaseInstanceId.getInstance().getToken());
-            jsonObject.addProperty("driver_lat", AppPreference.getCurLat(context));
-            jsonObject.addProperty("driver_long", AppPreference.getCurLong(context));
-
-            Log.e(TAG, "updateDriverLogTask request >>>>>" + jsonObject.toString());
-
-            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-
-            Call<JsonObject> call = apiService.drivers_url(jsonObject);
-            call.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.e(TAG, "updateDriverLogTask reponse>>>>>> " + response.body().toString());
-                    JsonObject jsonObject = response.body();
-                    if (jsonObject.get("status").getAsString().equals("200")) {
-                        JsonArray jsonArray = jsonObject.getAsJsonArray("result");
-                    } else {
-                        JsonObject result = jsonObject.getAsJsonObject("result");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    Log.e("Response: onFailure", t.toString());
-                }
-            });
-            return null;
-        }
-
     }
 
 }

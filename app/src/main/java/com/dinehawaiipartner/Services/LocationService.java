@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -13,6 +14,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.dinehawaiipartner.Retrofit.ApiClient;
+import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,6 +25,12 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class LocationService extends Service implements
@@ -29,8 +39,8 @@ public class LocationService extends Service implements
         GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "LocationService";
-    private static final long INTERVAL = 1 * 1000;
-    private static final long FASTEST_INTERVAL = 1 * 1000;
+    private static final long INTERVAL = 3 * 60 * 1000;
+    private static final long FASTEST_INTERVAL = 3 * 60 * 1000;
     public static Location mCurrentLocation;
     Context mContext;
     LocationRequest mLocationRequest;
@@ -103,17 +113,53 @@ public class LocationService extends Service implements
     @Override
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
-        AppPreference.setCurLat(mContext, String.valueOf(location.getLatitude()));
-        AppPreference.setCurLong(mContext, String.valueOf(location.getLongitude()));
-//        sendLocation();//api call
-        Log.e(TAG, "onChange >> Lat: " + location.getLatitude() + ", Long: " + location.getLongitude());
+        if (mCurrentLocation != null) {
+            Log.e(TAG, "onChange >> Lat: " + location.getLatitude() + ", Long: " + location.getLongitude());
+            AppPreference.setCurLat(mContext, String.valueOf(location.getLatitude()));
+            AppPreference.setCurLong(mContext, String.valueOf(location.getLongitude()));
+            new updateDriverLog().execute();
+        }
     }
-
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    class updateDriverLog extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.UPDATELOG);
+            jsonObject.addProperty("driver_id", AppPreference.getUserid(mContext));
+            jsonObject.addProperty("fcm_id", FirebaseInstanceId.getInstance().getToken());
+            jsonObject.addProperty("driver_lat", AppPreference.getCurLat(mContext));
+            jsonObject.addProperty("driver_long", AppPreference.getCurLong(mContext));
+
+            Log.e(TAG, "updateDriverLog: Request >>" + jsonObject.toString());
+
+            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+
+            Call<JsonObject> call = apiService.drivers_url(jsonObject);
+            call.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.e(TAG, "updateDriverLog: Response >> " + response.body().toString());
+                    JsonObject jsonObject = response.body();
+                    if (jsonObject.get("status").getAsString().equals("200")) {
+                    } else {
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e("Response: onFailure", t.toString());
+                }
+            });
+            return null;
+        }
     }
 
 
