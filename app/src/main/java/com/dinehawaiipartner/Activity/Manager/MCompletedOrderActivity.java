@@ -3,18 +3,18 @@ package com.dinehawaiipartner.Activity.Manager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.MStartedOrderAdapter;
-import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
@@ -37,13 +37,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MCompletedOrderActivity extends AppCompatActivity {
+    public static ArrayList<DeliveryModel> ordersList = new ArrayList<DeliveryModel>();
     String TAG = "MCompletedOrderActivity";
     Context context;
-    CustomTextView noOrders;
+    TextView noOrders;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private MStartedOrderAdapter startedAdapter;
-    public static ArrayList<DeliveryModel> ordersList = new ArrayList<DeliveryModel>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,7 @@ public class MCompletedOrderActivity extends AppCompatActivity {
     private void initViews() {
         context = this;
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        noOrders = (CustomTextView) findViewById(R.id.noOrder);
+        noOrders = (TextView) findViewById(R.id.noOrder);
         mLayoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
@@ -70,12 +71,12 @@ public class MCompletedOrderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

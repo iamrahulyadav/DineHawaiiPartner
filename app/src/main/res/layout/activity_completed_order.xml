@@ -24,9 +24,9 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_below="@id/appbar"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
-    <com.dinehawaiipartner.CustomViews.CustomTextView
+    <TextView
         android:id="@+id/noOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:paddingTop="@dimen/_5sdp"
         android:text="No Orders"
         android:visibility="gone"
-        app:edittextfont="Raleway-Regular.ttf" />
+      />
 
 
 </RelativeLayout>

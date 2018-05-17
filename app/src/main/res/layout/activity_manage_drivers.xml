@@ -22,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.dinehawaiipartner.CustomViews.CustomTextView
+    <TextView
         android:id="@+id/nodrivers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,8 +35,7 @@
         android:paddingRight="@dimen/_10sdp"
         android:paddingTop="@dimen/_5sdp"
         android:text="No Drivers"
-        android:visibility="gone"
-        app:edittextfont="Raleway-Regular.ttf" />
+        android:visibility="gone" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
@@ -52,7 +51,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
-    <com.dinehawaiipartner.CustomViews.CustomButton
+    <Button
         android:id="@+id/btnAddDriver"
         style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="match_parent"
@@ -61,7 +60,6 @@
         android:background="@color/colorPrimary"
         android:text="Add New Driver"
         android:textAllCaps="true"
-        android:textColor="@color/white"
-        app:edittextfont="@string/raleway_regular" />
+        android:textColor="@color/white" />
 
 </RelativeLayout>

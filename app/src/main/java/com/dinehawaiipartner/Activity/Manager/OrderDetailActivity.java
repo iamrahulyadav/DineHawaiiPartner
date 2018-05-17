@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.R;
@@ -15,7 +16,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
 
     private LinearLayout llBasic, llItems, llDelivery;
 
-    private CustomTextView tvOrderId, tvDateTime, tvOrderStatus, tvOrderType, tvContactNo, tvDeliveryName,
+    private TextView tvOrderId, tvDateTime, tvOrderStatus, tvOrderType, tvContactNo, tvDeliveryName,
             tvDeliveryAddress, tvTotalAmount;
 
     @Override

@@ -39,7 +39,7 @@
                     android:layout_margin="@dimen/_5sdp"
                     android:orientation="vertical">
 
-                    <com.dinehawaiipartner.CustomViews.CustomTextView
+                    <TextView
                         android:id="@+id/basicinfo"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="match_parent"
@@ -75,13 +75,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.3">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text="Order Id"
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -89,12 +89,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -102,14 +102,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvOrderId"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
 
                             </RelativeLayout>
 
@@ -127,13 +127,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.3">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text="Date &amp; Time"
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -141,12 +141,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -154,7 +154,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvDateTime"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
@@ -162,7 +162,7 @@
                                     android:layout_margin="@dimen/_5sdp"
 
                                     android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
 
                             </RelativeLayout>
 
@@ -180,13 +180,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.3">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text="Order Status"
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -194,12 +194,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -207,7 +207,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvOrderStatus"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
@@ -215,7 +215,7 @@
                                     android:layout_margin="@dimen/_5sdp"
 
                                     android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
 
                             </RelativeLayout>
                         </LinearLayout>
@@ -231,13 +231,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.3">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text="Order Type"
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -245,13 +245,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text=":"
                                     android:textStyle="bold"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -259,7 +259,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvOrderType"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
@@ -267,7 +267,7 @@
                                     android:layout_margin="@dimen/_5sdp"
 
                                     android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
 
                             </RelativeLayout>
 
@@ -298,7 +298,7 @@
                     android:layout_margin="@dimen/_5sdp"
                     android:orientation="vertical">
 
-                    <com.dinehawaiipartner.CustomViews.CustomTextView
+                    <TextView
                         android:id="@+id/items"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="match_parent"
@@ -337,14 +337,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvItemName"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:singleLine="true"
                                     android:text="Items"
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
                             </RelativeLayout>
 
                         </LinearLayout>
@@ -371,16 +371,16 @@
                             android:layout_marginTop="@dimen/_2sdp"
                             android:layout_weight="2">
 
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
+                            <TextView
                                 style="@style/TextAppearance.AppCompat.Subhead"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_5sdp"
                                 android:layout_weight="1"
                                 android:text="Total (Tax included)"
-                                app:edittextfont="@string/raleway_regular" />
+                                />
 
-                            <com.dinehawaiipartner.CustomViews.CustomTextView
+                            <TextView
                                 android:id="@+id/tvTotalAmount"
                                 style="@style/TextAppearance.AppCompat.Subhead"
                                 android:layout_width="wrap_content"
@@ -389,7 +389,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center_vertical|end"
                                 android:text="$$$"
-                                app:edittextfont="@string/raleway_regular" />
+                                />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -417,7 +417,7 @@
                     android:layout_margin="@dimen/_5sdp"
                     android:orientation="vertical">
 
-                    <com.dinehawaiipartner.CustomViews.CustomTextView
+                    <TextView
                         android:id="@+id/delivery"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="match_parent"
@@ -453,13 +453,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.3">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text="Customer"
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
 
                             </RelativeLayout>
 
@@ -468,13 +468,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -482,7 +482,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvDeliveryName"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
@@ -490,7 +490,7 @@
 
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
 
@@ -507,14 +507,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.3">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
 
                                     android:text="Contact No."
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -522,13 +522,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -536,7 +536,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvContactNo"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
@@ -547,7 +547,7 @@
                                     android:clickable="true"
                                     android:text="NA"
 
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
 
@@ -564,14 +564,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.3">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
 
                                     android:text="Address "
-                                    app:edittextfont="@string/raleway_regular" />
+                                    />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -579,13 +579,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/_5sdp"
                                     android:text=":"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -593,7 +593,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6">
 
-                                <com.dinehawaiipartner.CustomViews.CustomTextView
+                                <TextView
                                     android:id="@+id/tvDeliveryAddress"
                                     style="@style/TextAppearance.AppCompat.Subhead"
                                     android:layout_width="wrap_content"
@@ -601,7 +601,7 @@
                                     android:layout_margin="@dimen/_5sdp"
                                     android:autoLink="map"
                                     android:text="NA"
-                                    app:edittextfont="Raleway-Regular.ttf" />
+                                   />
                             </RelativeLayout>
 
 
@@ -625,7 +625,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <com.dinehawaiipartner.CustomViews.CustomButton
+            <Button
                 android:id="@+id/accpetOrder"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -633,7 +633,6 @@
                 android:layout_height="match_parent"
                 android:text="Accept Order"
                 android:textAllCaps="true"
-                app:edittextfont="@string/raleway_regular"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:textColor="@color/white"
                 />
@@ -641,7 +640,7 @@
                 android:layout_width="1dp"
                 android:background="@android:color/transparent"
                 android:layout_height="match_parent"></View>
-            <com.dinehawaiipartner.CustomViews.CustomButton
+            <Button
                 android:id="@+id/reject_order"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -650,8 +649,8 @@
                 android:text="Reject Order"
                 android:textColor="@color/white"
                 style="@style/TextAppearance.AppCompat.Subhead"
-                app:edittextfont="@string/raleway_regular" />
-            <com.dinehawaiipartner.CustomViews.CustomButton
+                />
+            <Button
                 android:id="@+id/alot_driver"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -661,7 +660,7 @@
                 android:text="Alot Driver"
                 android:textColor="@color/white"
                 style="@style/TextAppearance.AppCompat.Subhead"
-                app:edittextfont="@string/raleway_regular" />
+                />
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

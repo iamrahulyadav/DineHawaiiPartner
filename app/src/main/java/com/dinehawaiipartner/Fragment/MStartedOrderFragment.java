@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.MStartedOrderAdapter;
@@ -45,7 +46,7 @@ public class MStartedOrderFragment extends Fragment {
     public static ArrayList<DeliveryModel> ordersList = new ArrayList<DeliveryModel>();
     String TAG = "Pending Order";
     Context context;
-    CustomTextView noOrders;
+TextView noOrders;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private MStartedOrderAdapter startedAdapter;
@@ -63,7 +64,7 @@ public class MStartedOrderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_started_order, container, false);
         context = getActivity();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        noOrders = (CustomTextView) view.findViewById(R.id.noOrder);
+        noOrders = (TextView) view.findViewById(R.id.noOrder);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

@@ -13,11 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.ManageDriverAdapter;
-import com.dinehawaiipartner.CustomViews.CustomButton;
-import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.VendorAllDriversModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
@@ -42,11 +42,11 @@ import retrofit2.Response;
 public class ManageDriversActivity extends AppCompatActivity implements View.OnClickListener {
     String TAG = "ManageDrivers";
     ArrayList<VendorAllDriversModel> driverslist;
-    CustomTextView nodriver;
+    TextView nodriver;
     Context context;
+    SwipeRefreshLayout refreshLayout;
     private RecyclerView recycler_view;
     private ManageDriverAdapter adapter;
-    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
                 VendorAllDriversModel listModel = driverslist.get(position);
                 Intent intent = new Intent(context, AddNewDriverActivity.class);
                 intent.setAction("EditDriver");
-                intent.putExtra("list",driverslist.get(position));
+                intent.putExtra("list", driverslist.get(position));
                 startActivity(intent);
             }
 
@@ -162,10 +162,10 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
     private void initViews() {
         context = this;
         driverslist = new ArrayList<VendorAllDriversModel>();
-        ((CustomButton) findViewById(R.id.btnAddDriver)).setOnClickListener(this);
+        ((Button) findViewById(R.id.btnAddDriver)).setOnClickListener(this);
         recycler_view = findViewById(R.id.recycler_view);
-        nodriver =  findViewById(R.id.nodrivers);
-        refreshLayout =  findViewById(R.id.swipeRefresh);
+        nodriver = findViewById(R.id.nodrivers);
+        refreshLayout = findViewById(R.id.swipeRefresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

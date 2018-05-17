@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,7 +25,6 @@ import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
 import com.dinehawaiipartner.Activity.Manager.VendorHomeActivity;
-import com.dinehawaiipartner.CustomViews.CustomCheckBox;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     LinearLayout ll_login;
     private String TAG = "LoginActivity";
     private EditText edpass, edemail;
-    private CustomCheckBox rememberMe;
+    private CheckBox rememberMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         init();
         setPrefData();
     }
+
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 10);
@@ -72,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 10);
         }
     }
+
     private void setPrefData() {
         if (!SaveDataPreference.getSaveid(mContext).equalsIgnoreCase("")) {
             edemail.setText(SaveDataPreference.getSaveid(mContext));

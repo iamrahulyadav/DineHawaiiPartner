@@ -142,7 +142,7 @@
             android:layout_marginTop="@dimen/_2sdp"
             android:background="@color/offwhite"/>
 
-        <com.dinehawaiipartner.CustomViews.CustomCheckBox
+        <CheckBox
             android:buttonTint="@color/colorPrimary"
             android:textColor="@color/offwhite"
             android:id="@+id/rememberme"
