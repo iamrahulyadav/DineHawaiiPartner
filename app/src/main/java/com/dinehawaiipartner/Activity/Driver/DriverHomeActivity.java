@@ -98,11 +98,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
     private static final String TAG = "DriverHomeActivity";
-    private static final long INTERVAL = 1000 * 1;
-    private static final long FASTEST_INTERVAL = 1000 * 1;
+    private static final long INTERVAL = 1000 * 1, FASTEST_INTERVAL = 1000 * 1;
     TextView tvDeliveryId, tvName, tvPhoneNo, tvAddress;
-    List<String> waypoints = new ArrayList<>();
-    List<String> waypoints1 = new ArrayList<>();
+    List<String> waypoints = new ArrayList<>(), waypoints1 = new ArrayList<>();
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
@@ -110,10 +108,10 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Context context;
-    private CardView delivery_view;
     private TextView tvHideShow;
     private LinearLayout llCustDetails;
     private DeliveryModel data;
+    private CardView delivery_view, btnComplete, btnStart, btnCallAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +137,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         setUpMap();
         setUpFused();
 
+        init();
         if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
             initDeliveryView();
             data = (DeliveryModel) getIntent().getSerializableExtra("data");
@@ -148,6 +147,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             tvPhoneNo.setText(data.getCustPhone());
             tvAddress.setText(data.getCustDeliveryAddress());
 
+            if (data.getDeliveryStatus().equalsIgnoreCase("Pending"))
+                btnStart.setVisibility(View.VISIBLE);
             //route();
             LatLng restaurant, source, customer;
             if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
@@ -178,17 +179,24 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             downloadTask.execute(url);
 
 
-            //restaurant to customer
+            /*//restaurant to customer
             waypoints1.add(customer.latitude + "," + customer.longitude);
             String url1 = Functions.getDirectionsUrlWaypont(restaurant, customer, waypoints);
             RoutesDownloadTask1 downloadTask1 = new RoutesDownloadTask1(DriverHomeActivity.this);
-            downloadTask1.execute(url1);
+            downloadTask1.execute(url1);*/
 
 
         }
     }
 
+    private void init() {
+
+        btnCallAdmin = findViewById(R.id.btnCallAdmin);
+    }
+
     private void initDeliveryView() {
+        btnComplete = findViewById(R.id.btnComplete);
+        btnStart = findViewById(R.id.btnStart);
         delivery_view = findViewById(R.id.delivery_view);
         llCustDetails = findViewById(R.id.llCustDetails);
         tvHideShow = findViewById(R.id.tvHideShow);
@@ -198,6 +206,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         tvAddress = findViewById(R.id.tvAddress);
         delivery_view.setVisibility(View.VISIBLE);
         delivery_view.setOnClickListener(this);
+        btnComplete.setOnClickListener(this);
+        btnStart.setOnClickListener(this);
     }
 
 
@@ -272,7 +282,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             default:
                 break;
         }
@@ -498,6 +507,15 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.delivery_view:
                 hideShowDeliveryView();
                 break;
+            case R.id.btnCallAdmin:
+                Toast.makeText(context, "Calling admin...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnStart:
+                Toast.makeText(context, "Starting...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnComplete:
+                Toast.makeText(context, "Completing...", Toast.LENGTH_SHORT).show();
+                break;
 
         }
     }
@@ -511,6 +529,61 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             tvHideShow.setText("Hide Details");
         }
 
+    }
+
+    private void logoutDriverApi() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.LOGOUTDRIVER);
+        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        Log.e(TAG, "logoutDriverApi: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.login_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "logoutDriverApi: Response >> " + resp);
+                try {
+
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                        AppPreference.clearPreference(context);
+                        startActivity(new Intent(context, LoginActivity.class));
+                        finish();
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    progressHD.dismiss();
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                progressHD.dismiss();
+                Log.e(TAG, "logoutDriverApi error :- " + Log.getStackTraceString(t));
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public class RoutesDownloadTask extends AsyncTask<String, Void, String> {
@@ -888,7 +961,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-
     class updateDriverLogTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -930,60 +1002,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             return null;
         }
 
-    }
-    private void logoutDriverApi() {
-        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                // TODO Auto-generated method stub
-            }
-        });
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.LOGOUTDRIVER);
-        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
-        Log.e(TAG, "logoutDriverApi: Request >> " + jsonObject);
-
-        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.login_url(jsonObject);
-
-        call.enqueue(new Callback<JsonObject>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                String resp = response.body().toString();
-                Log.e(TAG, "logoutDriverApi: Response >> " + resp);
-                try {
-
-                    JSONObject jsonObject = new JSONObject(resp);
-                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        JSONObject object = jsonArray.getJSONObject(0);
-                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
-                        AppPreference.clearPreference(context);
-                        startActivity(new Intent(context, LoginActivity.class));
-                        finish();
-                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        JSONObject object = jsonArray.getJSONObject(0);
-                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    progressHD.dismiss();
-                    e.printStackTrace();
-                }
-                progressHD.dismiss();
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                progressHD.dismiss();
-                Log.e(TAG, "logoutDriverApi error :- " + Log.getStackTraceString(t));
-                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 }

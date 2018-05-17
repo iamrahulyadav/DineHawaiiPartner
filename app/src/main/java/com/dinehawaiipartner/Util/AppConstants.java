@@ -7,8 +7,8 @@ package com.dinehawaiipartner.Util;
 public class AppConstants {
 
 
-    public static String KEY_METHOD="method";
-    public static String KEY_USER_ID="user_id";
+    public static String KEY_METHOD = "method";
+    public static String KEY_USER_ID = "user_id";
 
 
     public interface BASEURL {
@@ -16,17 +16,18 @@ public class AppConstants {
     }
 
     public interface ENDPOINT {
-         String LOGINURL = "Register_Vendor_Log.php";
-         String DRIVERURL = "Vendor_Partner_Driver_Api.php";
-         String ORDERSURL = "get_Orders_Api.php";
+        String LOGINURL = "Register_Vendor_Log.php";
+        String DRIVERURL = "Vendor_Partner_Driver_Api.php";
+        String ORDERSURL = "get_Orders_Api.php";
     }
 
     public interface REGISTRATION {
 
-      String USERLOGIN = "Partner_Vendor_login";
+        String USERLOGIN = "Partner_Vendor_login";
 
     }
-    public interface VENDOR_METHODS{
+
+    public interface VENDOR_METHODS {
         String ALLDRIVERS = "All_Drivers";
         String ADD_DRIVER = "Add_New_Driver";
         String EDIT_DRIVER = "Edit_New_Driver";
@@ -36,7 +37,7 @@ public class AppConstants {
     }
 
     public interface DRIVER_METHODS {
-        String UPDATELOG="driver_log_update";
+        String UPDATELOG = "driver_log_update";
         String LOGOUTDRIVER = "Logout_Vendor_Driver";
         String NEWDELIVERIES = "get_new_deliveries";
         String STARTTRIP = "start_trip";
@@ -47,5 +48,10 @@ public class AppConstants {
     public class LOGIN_TYPE {
         public static final String VENDOR_USER = "PartnerVendor";
         public static final String DRIVER = "Driver";
+    }
+
+    public class NOTIFICATION_KEY {
+        public static final String DEFAULT_MESSAGE = "default_message";
+        public static final String DRIVER_NEW_TRIP = "driver_new_trip";
     }
 }
