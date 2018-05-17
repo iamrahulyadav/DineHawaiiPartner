@@ -10,8 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dinehawaiipartner.Adapter.CompletedOrderAdapter;
-import com.dinehawaiipartner.Adapter.PendingOrderAdapter;
+import com.dinehawaiipartner.Adapter.MStartedOrderAdapter;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.OrdersModel;
 import com.dinehawaiipartner.R;
@@ -21,16 +20,16 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CompletedOrderFragment extends Fragment {
+public class MStartedOrderFragment extends Fragment {
     String TAG = "Pending Order";
     Context context;
     CustomTextView noOrders;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private CompletedOrderAdapter pendingAdapter;
+    private MStartedOrderAdapter pendingAdapter;
     public static ArrayList<OrdersModel> ordersList = new ArrayList<OrdersModel>();
 
-    public CompletedOrderFragment() {
+    public MStartedOrderFragment() {
         // Required empty public constructor
     }
 
@@ -47,7 +46,7 @@ public class CompletedOrderFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(pendingAdapter);
-        pendingAdapter = new CompletedOrderAdapter(context, ordersList);
+        pendingAdapter = new MStartedOrderAdapter(context, ordersList);
         mRecyclerView.setAdapter(pendingAdapter);
         pendingAdapter.notifyDataSetChanged();
         return view;

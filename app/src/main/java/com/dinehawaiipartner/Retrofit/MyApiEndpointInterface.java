@@ -15,6 +15,9 @@ public interface MyApiEndpointInterface {
     @POST(AppConstants.ENDPOINT.LOGINURL)
     Call<JsonObject> login_url(@Body JsonObject jsonObject);
 
-    @POST(AppConstants.ENDPOINT.GETALLDRIVERURL)
-    Call<JsonObject> get_all_drivers_url(@Body JsonObject jsonObject);
+    @POST(AppConstants.ENDPOINT.DRIVERURL)
+    Call<JsonObject> drivers_url(@Body JsonObject jsonObject);
+
+    @POST(AppConstants.ENDPOINT.ORDERSURL)
+    Call<JsonObject> orders_url(@Body JsonObject jsonObject);
 }

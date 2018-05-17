@@ -20,7 +20,7 @@ import com.dinehawaiipartner.R;
 import java.util.ArrayList;
 
 public class VendorHomeAdapter extends RecyclerView.Adapter<VendorHomeAdapter.ViewHolder> {
-    private final String TAG = "PendingOrderAdapter";
+    private final String TAG = "MPendingOrderAdapter";
     private final Context context;
     private final ArrayList<DeliveryModel> ordersModelArrayList;
     String driverName;

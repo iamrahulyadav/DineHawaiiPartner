@@ -115,7 +115,7 @@ public class ManageDriversActivity extends AppCompatActivity implements View.OnC
         Log.e(TAG, "getAllDrivers: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.get_all_drivers_url(jsonObject);
+        Call<JsonObject> call = apiService.drivers_url(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @SuppressLint("LongLogTag")

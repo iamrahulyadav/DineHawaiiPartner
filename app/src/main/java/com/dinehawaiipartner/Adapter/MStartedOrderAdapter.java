@@ -13,12 +13,12 @@ import com.dinehawaiipartner.R;
 
 import java.util.ArrayList;
 
-public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAdapter.ViewHolder> {
-    private final String TAG = "CompletedOrderAdapter";
+public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdapter.ViewHolder> {
+    private final String TAG = "MStartedOrderAdapter";
     private final Context context;
     private final ArrayList<OrdersModel> ordersModelArrayList;
 
-    public CompletedOrderAdapter(Context context, ArrayList<OrdersModel> details) {
+    public MStartedOrderAdapter(Context context, ArrayList<OrdersModel> details) {
         this.context = context;
         this.ordersModelArrayList = details;
     }

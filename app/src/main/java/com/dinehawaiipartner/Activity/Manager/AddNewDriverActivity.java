@@ -180,7 +180,7 @@ public class AddNewDriverActivity extends AppCompatActivity {
         Log.e(TAG, "AddDriver: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.get_all_drivers_url(jsonObject);
+        Call<JsonObject> call = apiService.drivers_url(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @SuppressLint("LongLogTag")
@@ -244,7 +244,7 @@ public class AddNewDriverActivity extends AppCompatActivity {
         Log.e(TAG, "EditDriver: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.get_all_drivers_url(jsonObject);
+        Call<JsonObject> call = apiService.drivers_url(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @SuppressLint("LongLogTag")

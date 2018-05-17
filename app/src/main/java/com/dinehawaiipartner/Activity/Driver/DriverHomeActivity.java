@@ -45,6 +45,9 @@ import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Retrofit.ApiClient;
+import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.DirectionsJSONParser;
 import com.dinehawaiipartner.Util.Functions;
@@ -68,7 +71,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -80,6 +88,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DriverHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
@@ -140,21 +152,21 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
                 restaurant = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
             } else {
-                Toast.makeText(context, "Can't fetch route, restaurant address is not found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (!AppPreference.getCurLat(context).equalsIgnoreCase("0") && !AppPreference.getCurLat(context).equalsIgnoreCase("")) {
                 source = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(new Double(AppPreference.getCurLong(context)).doubleValue()));
             } else {
-                Toast.makeText(context, "Can't fetch route, current location is not found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Can't fetch route, current location not found", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
                 customer = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
             } else {
-                Toast.makeText(context, "Can't fetch route, customer address is not found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -268,15 +280,14 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private void showLogoutAlert() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Dine Hawaii Partner");
-        builder.setIcon(R.mipmap.ic_launcher);
         builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int id) {
-                        AppPreference.clearPreference(context);
-                        startActivity(new Intent(context, LoginActivity.class));
-                        finish();
+                        if (Functions.isNetworkAvailable(context))
+                            logoutDriverApi();
+                        else
+                            Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
 
                     }
                 })
@@ -875,4 +886,94 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             }
         }
     }
+
+
+    class updateDriverLogTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.UPDATELOG);
+            jsonObject.addProperty("driver_id", FirebaseInstanceId.getInstance().getToken());
+            jsonObject.addProperty("fcm_id", FirebaseInstanceId.getInstance().getToken());
+            jsonObject.addProperty("driver_lat", "");
+            jsonObject.addProperty("driver_long", "");
+
+            Log.e(TAG, "updateDriverLogTask request >>>>>" + jsonObject.toString());
+
+            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+
+            Call<JsonObject> call = apiService.drivers_url(jsonObject);
+            call.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.e(TAG, "updateDriverLogTask reponse>>>>>> " + response.body().toString());
+                    JsonObject jsonObject = response.body();
+                    if (jsonObject.get("status").getAsString().equals("200")) {
+                        JsonArray jsonArray = jsonObject.getAsJsonArray("result");
+                    } else {
+                        JsonObject result = jsonObject.getAsJsonObject("result");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e("Response: onFailure", t.toString());
+                }
+            });
+            return null;
+        }
+
+    }
+    private void logoutDriverApi() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.LOGOUTDRIVER);
+        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        Log.e(TAG, "logoutDriverApi: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.login_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "logoutDriverApi: Response >> " + resp);
+                try {
+
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                        AppPreference.clearPreference(context);
+                        startActivity(new Intent(context, LoginActivity.class));
+                        finish();
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "logoutDriverApi error :- " + Log.getStackTraceString(t));
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

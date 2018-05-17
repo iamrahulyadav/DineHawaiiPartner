@@ -17,7 +17,8 @@ public class AppConstants {
 
     public interface ENDPOINT {
          String LOGINURL = "Register_Vendor_Log.php";
-         String GETALLDRIVERURL = "Vendor_Partner_Driver_Api.php";
+         String DRIVERURL = "Vendor_Partner_Driver_Api.php";
+         String ORDERSURL = "get_Orders_Api.php";
     }
 
     public interface REGISTRATION {
@@ -29,6 +30,15 @@ public class AppConstants {
         String ALLDRIVERS = "All_Drivers";
         String ADD_DRIVER = "Add_New_Driver";
         String EDIT_DRIVER = "Edit_New_Driver";
+        String GETALLPENDINGORDERS = "getDeliveryOrders";
+        String ASSIGNORDER = "assignOrderToDriver";
+        String LOGOUTVENDOR = "Logout_Vendor_Driver";
+    }
+
+    public interface DRIVER_METHODS {
+        String UPDATELOG="driver_log_update";
+        String LOGOUTDRIVER = "Logout_Vendor_Driver";
+        String NEWDELIVERIES = "get_new_deliveries";
     }
 
 

@@ -1,29 +1,50 @@
 package com.dinehawaiipartner.Activity.Driver;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.DriverDeliveryAdapter;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Retrofit.ApiClient;
+import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Util.AppConstants;
+import com.dinehawaiipartner.Util.AppPreference;
+import com.dinehawaiipartner.Util.Functions;
+import com.dinehawaiipartner.Util.ProgressHUD;
 import com.dinehawaiipartner.Util.RecyclerItemClickListener;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class NewDeliveryActivity extends AppCompatActivity {
-
-
+    String TAG = "NewDeliveryActivity";
     ArrayList<DeliveryModel> list;
     private RecyclerView recycler_view;
     private Context context;
     private DriverDeliveryAdapter adapter;
+    TextView noOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +55,12 @@ public class NewDeliveryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         list = new ArrayList<DeliveryModel>();
+        noOrder = findViewById(R.id.noOrder);
         setRecyclerView();
-        setStaticData();
+       if (Functions.isNetworkAvailable(context))
+           getAllNewOrders();
+       else
+           Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -48,31 +73,6 @@ public class NewDeliveryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setStaticData() {
-        DeliveryModel data1 = new DeliveryModel();
-        data1.setOrderId("1");
-        data1.setCustName("Vivek");
-        data1.setCustPhone("98656556565");
-        data1.setCustDeliveryAddress("Atal Dwar, HIG Main Road, Nehru Nagar, Indore, Madhya Pradesh");
-        data1.setCustLatitude("22.735784");
-        data1.setCustLongitude("75.882492");
-        data1.setBusLatitude("22.751462");
-        data1.setBusLongitude("75.889286");
-
-        DeliveryModel data2 = new DeliveryModel();
-        data2.setOrderId("2");
-        data2.setCustName("RK");
-        data2.setCustPhone("98656556565");
-        data2.setCustDeliveryAddress("89, Scheme No 54, Vijay Nagar, Near SICA School Vijay Nagar, Vijay Nagar, Scheme No 54, Indore, Madhya Pradesh 452010");
-        data2.setCustLatitude("22.756332");
-        data2.setCustLongitude("75.884425");
-        data2.setBusLatitude("22.751462");
-        data2.setBusLongitude("75.889286");
-
-        list.add(data1);
-        list.add(data2);
-        adapter.notifyDataSetChanged();
-    }
 
     private void setRecyclerView() {
         recycler_view = (RecyclerView) findViewById(R.id.recycler_view);
@@ -95,5 +95,62 @@ public class NewDeliveryActivity extends AppCompatActivity {
             }
         }));
     }
+    private void getAllNewOrders() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
 
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.NEWDELIVERIES);
+        jsonObject.addProperty("user_id", AppPreference.getUserid(context));
+        jsonObject.addProperty("business_id", AppPreference.getBusinessid(context));
+        Log.e(TAG, "getAllNewOrders: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "getAllNewOrders: Response >> " + resp);
+                try {
+                    list.clear();
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        noOrder.setVisibility(View.GONE);
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Gson gson = new Gson();
+                            DeliveryModel model = gson.fromJson(jsonArray.getJSONObject(i).toString(), DeliveryModel.class);
+                            list.add(model);
+                        }
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        list.clear();
+                        noOrder.setVisibility(View.VISIBLE);
+                    }
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    noOrder.setVisibility(View.VISIBLE);
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "getAllNewOrders error :- " + Log.getStackTraceString(t));
+                progressHD.dismiss();
+                noOrder.setVisibility(View.VISIBLE);
+                Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 }

@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.dinehawaiipartner.Fragment.CompletedOrderFragment;
-import com.dinehawaiipartner.Fragment.PendingOrderFragment;
+import com.dinehawaiipartner.Fragment.MStartedOrderFragment;
+import com.dinehawaiipartner.Fragment.MPendingOrderFragment;
 import com.dinehawaiipartner.R;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class ManageOrderActivity extends AppCompatActivity {
         context = this;
         viewPager = findViewById(R.id.viewpager);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), context);
-        pagerAdapter.addFragment(new PendingOrderFragment());
-        pagerAdapter.addFragment(new CompletedOrderFragment());
+        pagerAdapter.addFragment(new MPendingOrderFragment());
+        pagerAdapter.addFragment(new MStartedOrderFragment());
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);

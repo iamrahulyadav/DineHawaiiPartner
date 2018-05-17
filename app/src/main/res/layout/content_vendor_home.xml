@@ -8,25 +8,26 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activity.Manager.VendorHomeActivity"
     tools:showIn="@layout/app_bar_vendor_home">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    ○
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.dinehawaiipartner.CustomViews.CustomTextView
-        android:id="@+id/noOrder"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/_20sdp"
-        android:background="@drawable/text_background"
-        android:paddingBottom="@dimen/_5sdp"
-        android:paddingLeft="@dimen/_10sdp"
-        android:paddingRight="@dimen/_10sdp"
-        android:paddingTop="@dimen/_5sdp"
-        android:text="No Orders"
-        android:visibility="gone"
-        app:edittextfont="Raleway-Regular.ttf" />
+        android:layout_below="@id/appbar">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar_bar"
+            android:background="@color/white"
+            android:elevation="1dp"
+            android:minHeight="@dimen/_40sdp"
+            android:scrollbars="vertical"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextColor="#e0808080"></android.support.design.widget.TabLayout>
+    </android.support.v4.view.ViewPager>
+
 </LinearLayout>

@@ -10,6 +10,9 @@ public class DeliveryModel implements Serializable {
     @SerializedName("order_id")
     @Expose
     private String orderId;
+    @SerializedName("order_unique_id")
+    @Expose
+    private String orderUniqueId;
     @SerializedName("cust_name")
     @Expose
     private String custName;
@@ -46,6 +49,15 @@ public class DeliveryModel implements Serializable {
     @SerializedName("bus_phone")
     @Expose
     private String busPhone;
+    @SerializedName("delivery_status")
+    @Expose
+    private String deliveryStatus;
+    @SerializedName("assign_status")
+    @Expose
+    private String assignStatus;
+    @SerializedName("assign_driver")
+    @Expose
+    private String assignDriver;
 
     public String getOrderId() {
         return orderId;
@@ -53,6 +65,14 @@ public class DeliveryModel implements Serializable {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getOrderUniqueId() {
+        return orderUniqueId;
+    }
+
+    public void setOrderUniqueId(String orderUniqueId) {
+        this.orderUniqueId = orderUniqueId;
     }
 
     public String getCustName() {
@@ -151,10 +171,35 @@ public class DeliveryModel implements Serializable {
         this.busPhone = busPhone;
     }
 
+    public String getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public String getAssignStatus() {
+        return assignStatus;
+    }
+
+    public void setAssignStatus(String assignStatus) {
+        this.assignStatus = assignStatus;
+    }
+
+    public String getAssignDriver() {
+        return assignDriver;
+    }
+
+    public void setAssignDriver(String assignDriver) {
+        this.assignDriver = assignDriver;
+    }
+
     @Override
     public String toString() {
         return "DeliveryModel{" +
                 "orderId='" + orderId + '\'' +
+                ", orderUniqueId='" + orderUniqueId + '\'' +
                 ", custName='" + custName + '\'' +
                 ", custPhone='" + custPhone + '\'' +
                 ", custDeliveryAddress='" + custDeliveryAddress + '\'' +
@@ -167,6 +212,10 @@ public class DeliveryModel implements Serializable {
                 ", busLongitude='" + busLongitude + '\'' +
                 ", busAddress='" + busAddress + '\'' +
                 ", busPhone='" + busPhone + '\'' +
+                ", deliveryStatus='" + deliveryStatus + '\'' +
+                ", assignStatus='" + assignStatus + '\'' +
+                ", assignDriver='" + assignDriver + '\'' +
                 '}';
     }
 }
+

@@ -1,42 +1,57 @@
 package com.dinehawaiipartner.Activity.Manager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
-import com.dinehawaiipartner.Adapter.VendorHomeAdapter;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
-import com.dinehawaiipartner.Model.DeliveryModel;
+import com.dinehawaiipartner.Fragment.MPendingOrderFragment;
+import com.dinehawaiipartner.Fragment.MStartedOrderFragment;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Retrofit.ApiClient;
+import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
+import com.dinehawaiipartner.Util.Functions;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VendorHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public static ArrayList<DeliveryModel> ordersList;
     Context context;
     String TAG = "VendorHomeActivity";
-    CustomTextView noOrders;
+    ViewPager viewPager;
     private View headerView;
     private CustomTextView userName;
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
-    private VendorHomeAdapter vendorHomeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,43 +63,16 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     private void init() {
         context = this;
-        ordersList = new ArrayList<DeliveryModel>();
-        setStaticData();
-
-
-        mRecyclerView = findViewById(R.id.recycler_view);
-        noOrders = findViewById(R.id.noOrder);
-        mLayoutManager = new LinearLayoutManager(context);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(vendorHomeAdapter);
-        vendorHomeAdapter = new VendorHomeAdapter(context, ordersList);
-        mRecyclerView.setAdapter(vendorHomeAdapter);
-        vendorHomeAdapter.notifyDataSetChanged();
-    }
-
-    private void setStaticData() {
-        DeliveryModel delivery1 = new DeliveryModel();
-        delivery1.setOrderId("1");
-        delivery1.setOrderAmount("500");
-        delivery1.setCustName("Kirti");
-        delivery1.setCustPhone("8959848545");
-        delivery1.setCustDeliveryAddress("Vijay nagar");
-        delivery1.setBusinessName("Marriott");
-        delivery1.setBusPhone("98546512145");
-        delivery1.setBusAddress("Scheme no 54");
-        ordersList.add(delivery1);
-
-        DeliveryModel delivery2= new DeliveryModel();
-        delivery2.setOrderId("2");
-        delivery2.setOrderAmount("800");
-        delivery2.setCustName("Rajkumar");
-        delivery2.setCustPhone("9854648122");
-        delivery2.setCustDeliveryAddress("South tukoganj");
-        delivery2.setBusinessName("Shreemaya");
-        delivery2.setBusPhone("89874455545");
-        delivery2.setBusAddress("vijay nagar");
-        ordersList.add(delivery2);
+        viewPager = findViewById(R.id.viewpager);
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), context);
+        pagerAdapter.addFragment(new MPendingOrderFragment());
+        pagerAdapter.addFragment(new MStartedOrderFragment());
+        viewPager.setAdapter(pagerAdapter);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setText("PENDING");
+        tabLayout.getTabAt(1).setText("STARTED");
+        viewPager.setCurrentItem(0);
     }
 
     private void setToolbar() {
@@ -107,7 +95,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -136,16 +124,14 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
 
     private void showLogoutAlert() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Dine Hawaii Partner");
-        builder.setIcon(R.mipmap.ic_launcher);
         builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int id) {
-                        AppPreference.clearPreference(context);
-                        startActivity(new Intent(context, LoginActivity.class));
-                        finish();
+                    public void onClick(DialogInterface dialog, int id) {
 
+                        if (Functions.isNetworkAvailable(context))
+                            logoutVendorApi();
+                        else
+                            Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("No",
@@ -157,6 +143,51 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
                         });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void logoutVendorApi() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.LOGOUTVENDOR);
+        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        Log.e(TAG, "logoutVendorApi: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.login_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "logoutVendorApi: Response >> " + resp);
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                        AppPreference.clearPreference(context);
+                        startActivity(new Intent(context, LoginActivity.class));
+                        finish();
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "logoutVendorApi error :- " + Log.getStackTraceString(t));
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -172,10 +203,8 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_vendor_logout:
                 showLogoutAlert();
@@ -199,6 +228,30 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         switch (v.getId()) {
 
 
+        }
+    }
+
+    class PagerAdapter extends android.support.v4.app.FragmentStatePagerAdapter {
+        Context context;
+        List<Fragment> managerList = new ArrayList<Fragment>();
+
+        public PagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return managerList.size();
+        }
+
+        public void addFragment(Fragment fragment) {
+            managerList.add(fragment);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return managerList.get(position);
         }
     }
 }
