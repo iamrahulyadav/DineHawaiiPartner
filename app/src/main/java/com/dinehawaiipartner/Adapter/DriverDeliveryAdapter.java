@@ -35,7 +35,7 @@ public class DriverDeliveryAdapter extends RecyclerView.Adapter<DriverDeliveryAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DeliveryModel listModel = driverList.get(position);
-        holder.tvDeliveryId.setText("#" + listModel.getOrderId());
+        holder.tvDeliveryId.setText("#" + listModel.getOrderUniqueId());
         holder.tvName.setText(listModel.getCustName());
         holder.tvPhoneNo.setText(listModel.getCustPhone());
         holder.tvAddress.setText(listModel.getCustDeliveryAddress());

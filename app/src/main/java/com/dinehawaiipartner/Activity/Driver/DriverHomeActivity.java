@@ -142,7 +142,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             initDeliveryView();
             data = (DeliveryModel) getIntent().getSerializableExtra("data");
             Log.e(TAG, "onCreate: data " + data);
-            tvDeliveryId.setText("#" + data.getOrderId());
+            tvDeliveryId.setText("#" + data.getOrderUniqueId());
             tvName.setText(data.getCustName());
             tvPhoneNo.setText(data.getCustPhone());
             tvAddress.setText(data.getCustDeliveryAddress());
