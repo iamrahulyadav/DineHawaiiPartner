@@ -47,8 +47,10 @@ import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Reciever.SendLocation;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Services.LocationService;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.DirectionsJSONParser;
@@ -74,8 +76,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -89,6 +89,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -102,8 +103,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private static final String TAG = "DriverHomeActivity";
     private static final long INTERVAL = 1000 * 1, FASTEST_INTERVAL = 1000 * 1;
     TextView tvDeliveryId, tvName, tvPhoneNo, tvAddress;
-    List<String> waypoints = new ArrayList<>(), waypoints1 = new ArrayList<>();
+    List<String> waypoints = new ArrayList<>();
     String orderId;
+    LatLng source;
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
@@ -115,7 +117,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private LinearLayout llCustDetails;
     private DeliveryModel data;
     private CardView delivery_view, btnComplete, btnStart, btnCallAdmin;
-    private LatLng customer, restaurant, source;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +137,10 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         userName = headerView.findViewById(R.id.customerName);
         userName.setText(AppPreference.getUsername(context));
         checkLocationPermission();
-        // new LocationService(context);
+        new LocationService(context);
 
         setUpMap();
         setUpFused();
-
         init();
         if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
             initDeliveryView();
@@ -153,15 +153,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             tvAddress.setText(data.getCustDeliveryAddress());
 
 
-            //route();
-
-            if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
-                restaurant = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
-            } else {
-                Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             if (!AppPreference.getCurLat(context).equalsIgnoreCase("0") && !AppPreference.getCurLat(context).equalsIgnoreCase("")) {
                 source = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(new Double(AppPreference.getCurLong(context)).doubleValue()));
             } else {
@@ -169,48 +160,41 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 return;
             }
 
-            if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
-                customer = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
-            } else {
-                Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
-                return;
-            }
+
             if (data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
                 btnStart.setVisibility(View.VISIBLE);
                 btnComplete.setVisibility(View.GONE);
-                setDriverToRestRoute();
-            }
-            if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
+                LatLng destination;
+                if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
+                    destination = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
+                    makeRoute(source, destination);
+                } else {
+                    Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } else if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
                 btnStart.setVisibility(View.GONE);
                 btnComplete.setVisibility(View.VISIBLE);
-                setRestToCustRoute();
+                if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
+                    LatLng destination = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
+                    makeRoute(source, destination);
+                } else {
+                    Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         }
     }
 
-    private void setDriverToRestRoute() {
-        //driver to restaurant
-        waypoints.add(restaurant.latitude + "," + restaurant.longitude);
-        String url = Functions.getDirectionsUrlWaypont(source, restaurant, waypoints);
+    private void makeRoute(LatLng source, LatLng destination) {
+        waypoints.clear();
+        waypoints.add(destination.latitude + "," + destination.longitude);
+        String url = Functions.getDirectionsUrlWaypont(source, destination, waypoints);
         RoutesDownloadTask downloadTask = new RoutesDownloadTask(DriverHomeActivity.this);
         downloadTask.execute(url);
-
     }
-
-    private void setRestToCustRoute() {
-        //restaurant to customer
-        if (map != null)
-            map.clear();
-        waypoints1.add(customer.latitude + "," + customer.longitude);
-        String url1 = Functions.getDirectionsUrlWaypont(restaurant, customer, waypoints);
-        RoutesDownloadTask1 downloadTask1 = new RoutesDownloadTask1(DriverHomeActivity.this);
-        downloadTask1.execute(url1);
-
-    }
-
 
     private void init() {
-
         btnCallAdmin = findViewById(R.id.btnCallAdmin);
     }
 
@@ -342,6 +326,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_driver_deliveries:
                 startActivity(new Intent(context, NewDeliveryActivity.class));
                 break;
+            case R.id.nav_driver_home:
+                startActivity(new Intent(context, DriverHomeActivity.class).setAction("").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -394,7 +381,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     protected void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            return;
         }
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         Log.e(TAG, "startLocationUpdates: Started");
@@ -551,7 +538,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         });
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.COMPLETEDELIVERY);
-        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "startTripTask: Request >> " + jsonObject);
 
@@ -569,11 +556,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        JSONObject object = jsonArray.getJSONObject(0);
                         Toast.makeText(context, "Trip Completed", Toast.LENGTH_SHORT).show();
-                        map.clear();
-                        btnStart.setVisibility(View.GONE);
-                        btnComplete.setVisibility(View.GONE);
+                        startActivity(new Intent(context, NewDeliveryActivity.class));
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
@@ -608,7 +592,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         });
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.STARTDELIVERY);
-        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "startTripTask: Request >> " + jsonObject);
 
@@ -626,11 +610,17 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        JSONObject object = jsonArray.getJSONObject(0);
                         Toast.makeText(context, "Trip Started", Toast.LENGTH_SHORT).show();
-                        setRestToCustRoute();
+                        map.clear();
                         btnStart.setVisibility(View.GONE);
                         btnComplete.setVisibility(View.VISIBLE);
+                        if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
+                            LatLng destination = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
+                            makeRoute(new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(AppPreference.getCurLong(context)).doubleValue()), destination);
+                        } else {
+                            Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
@@ -721,6 +711,18 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void sendLocationAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, SendLocation.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, alarmIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), alarmIntent);
+       /* alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                1 * 60 * 1000,  // After five minute
+                1 * 60 * 1000,  // Every five minute
+                alarmIntent);*/
     }
 
     public class RoutesDownloadTask extends AsyncTask<String, Void, String> {
@@ -901,244 +903,14 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(points.get(points.size() - 1));
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_rest_icon)));
-                markerOptions.title("Restaurant's Location");
-                markerOptions.snippet("This is restaurant's Location");
-                map.addMarker(markerOptions);
-
-            }
-        }
-
-    }
-
-    public class RoutesDownloadTask1 extends AsyncTask<String, Void, String> {
-
-        Context context;
-        String distanceTime;
-
-        public RoutesDownloadTask1(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected String doInBackground(String... url) {
-
-            String data = "";
-
-            try {
-                data = downloadUrl(url[0]);
-            } catch (Exception e) {
-                Log.d("Background Task", e.toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            ParserTask parserTask = new ParserTask();
-
-            parserTask.execute(result);
-        }
-
-        private String downloadUrl(String strUrl) throws IOException {
-            String data = "";
-            InputStream iStream = null;
-            HttpURLConnection urlConnection = null;
-            try {
-                URL url = new URL(strUrl);
-
-                urlConnection = (HttpURLConnection) url.openConnection();
-
-                urlConnection.connect();
-
-                iStream = urlConnection.getInputStream();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-                StringBuffer sb = new StringBuffer();
-
-                String line = "";
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                data = sb.toString();
-
-                br.close();
-
-            } catch (Exception e) {
-                //Log.d("Exception while downloading url", e.toString());
-            } finally {
-                iStream.close();
-                urlConnection.disconnect();
-            }
-            return data;
-        }
-
-        public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
-
-            // Parsing the data in non-ui thread
-            @Override
-            protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-
-                JSONObject jObject;
-                List<List<HashMap<String, String>>> routes = null;
-                Log.d("routes", "111");
-
-                try {
-
-                    jObject = new JSONObject(jsonData[0]);
-                    DirectionsJSONParser parser = new DirectionsJSONParser();
-
-                    // Starts parsing data
-                    routes = parser.parse(jObject);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } catch (OutOfMemoryError e) {
-                    e.printStackTrace();
-                }
-                return routes;
-            }
-
-            // Executes in UI thread, after the parsing process
-            @Override
-            protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-                PolylineOptions lineOptions = null;
-                ArrayList<LatLng> points = null;
-                String distance = "";
-                String duration = "1";
-                String durationValue = "1";
-                String distanceValue = "0";
-
-                try {
-                    if (result.size() < 1) {
-                        //Toast.makeText(ParserTask.this, "No Points", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                } catch (NullPointerException e) {
-                    return;
-                }
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                // Traversing through all the routes
-                for (int i = 0; i < result.size(); i++) {
-                    if (i == 1) {
-                        lineOptions = new PolylineOptions();
-                        points = new ArrayList<LatLng>();
-                        // Fetching i-th route
-                        List<HashMap<String, String>> path = result.get(i);
-                        // Fetching all the points in i-th route
-                        for (int j = 0; j < path.size(); j++) {
-                            HashMap<String, String> point = path.get(j);
-
-                            if (j == 0) {    // Get distance from the list
-                                distance = point.get("distance");
-                                distanceValue = point.get("distance");
-                                continue;
-                            } else if (j == 1) { // Get duration from the list
-                                duration = point.get("duration");
-                                durationValue = point.get("value");
-                                Log.d("duration ss", duration + "::" + durationValue);
-                                continue;
-                            } else if (j == 2) { // Get duration from the list
-
-                                continue;
-                            }
-
-                            double lat = Double.parseDouble(point.get("lat"));
-                            double lng = Double.parseDouble(point.get("lng"));
-                            LatLng position = new LatLng(lat, lng);
-                            //Log.d("routes",position.toString());
-                            points.add(position);
-                            com.google.android.gms.maps.model.LatLng mapPoint =
-                                    new com.google.android.gms.maps.model.LatLng(lat, lng);
-                            builder.include(mapPoint);
-
-                        }
-                        lineOptions.addAll(points);
-
-                        lineOptions.width(8);
-
-                        lineOptions.color(Color.BLUE);
-                        lineOptions.geodesic(true);
-
-                        // if(polylineFinal.isGeodesic())
-                        //  polylineFinal.remove();
-                        map.addPolyline(lineOptions);
-                        //mMap.setPadding(0, measuredHeight/2, 0, 0);
-
-                        map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
-
-                        // mMap.setPadding(0, cardView.getHeight(), 0, 0);
-                    }
-                }
-
-               /* // Start marker
-                MarkerOptions options = new MarkerOptions();
-                options.position(resturantLatlong);
-                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_m));
-                map.addMarker(options);*/
-
-                //        // End marker
-
-                /* MarkerOptions options2 = new MarkerOptions();
-                options2.position(points.get(points.size() - 1));
-                options2.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_c));
-                map.addMarker(options2);*/
-
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(points.get(points.size() - 1));
                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_cust_icon)));
                 markerOptions.title("Customer's Location");
                 markerOptions.snippet("This is customer's location");
                 map.addMarker(markerOptions);
-
             }
         }
-    }
-
-    class updateDriverLogTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.UPDATELOG);
-            jsonObject.addProperty("driver_id", FirebaseInstanceId.getInstance().getToken());
-            jsonObject.addProperty("fcm_id", FirebaseInstanceId.getInstance().getToken());
-            jsonObject.addProperty("driver_lat", AppPreference.getCurLat(context));
-            jsonObject.addProperty("driver_long", AppPreference.getCurLong(context));
-
-            Log.e(TAG, "updateDriverLogTask request >>>>>" + jsonObject.toString());
-
-            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-
-            Call<JsonObject> call = apiService.drivers_url(jsonObject);
-            call.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.e(TAG, "updateDriverLogTask reponse>>>>>> " + response.body().toString());
-                    JsonObject jsonObject = response.body();
-                    if (jsonObject.get("status").getAsString().equals("200")) {
-                        JsonArray jsonArray = jsonObject.getAsJsonArray("result");
-                    } else {
-                        JsonObject result = jsonObject.getAsJsonObject("result");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    Log.e("Response: onFailure", t.toString());
-                }
-            });
-            return null;
-        }
 
     }
+
 
 }
