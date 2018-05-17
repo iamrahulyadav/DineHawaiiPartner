@@ -57,6 +57,12 @@ public class NewDeliveryActivity extends AppCompatActivity {
         list = new ArrayList<DeliveryModel>();
         noOrder = findViewById(R.id.noOrder);
         setRecyclerView();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (Functions.isNetworkAvailable(context))
             getAllNewOrders();
         else
