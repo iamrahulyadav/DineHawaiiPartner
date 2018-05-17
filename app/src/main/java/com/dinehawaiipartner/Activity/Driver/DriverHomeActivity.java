@@ -147,8 +147,14 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             tvPhoneNo.setText(data.getCustPhone());
             tvAddress.setText(data.getCustDeliveryAddress());
 
-            if (data.getDeliveryStatus().equalsIgnoreCase("Pending"))
+            if (data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
                 btnStart.setVisibility(View.VISIBLE);
+                btnComplete.setVisibility(View.GONE);
+            }
+            if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
+                btnStart.setVisibility(View.GONE);
+                btnComplete.setVisibility(View.VISIBLE);
+            }
             //route();
             LatLng restaurant, source, customer;
             if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
@@ -733,7 +739,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         }
                         lineOptions.addAll(points);
 
-                        lineOptions.width(6);
+                        lineOptions.width(8);
 
                         lineOptions.color(Color.RED);
                         lineOptions.geodesic(true);
@@ -921,7 +927,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         }
                         lineOptions.addAll(points);
 
-                        lineOptions.width(6);
+                        lineOptions.width(8);
 
                         lineOptions.color(Color.BLUE);
                         lineOptions.geodesic(true);
