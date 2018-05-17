@@ -106,6 +106,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     List<String> waypoints = new ArrayList<>();
     String orderId;
     LatLng source;
+    Marker markerRestaurant = null, markerCustomer = null;
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
@@ -117,6 +118,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private LinearLayout llCustDetails;
     private DeliveryModel data;
     private CardView delivery_view, btnComplete, btnStart, btnCallAdmin;
+    private LatLng restLatLng;
+    private LatLng custLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,28 +163,29 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 return;
             }
 
+            if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
+                restLatLng = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
+            } else {
+                Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
+                custLatLng = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
+            } else {
+                Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
                 btnStart.setVisibility(View.VISIBLE);
                 btnComplete.setVisibility(View.GONE);
-                LatLng destination;
-                if (!data.getBusLatitude().equalsIgnoreCase("0") && !data.getBusLatitude().equalsIgnoreCase("")) {
-                    destination = new LatLng(new Double(data.getBusLatitude()).doubleValue(), new Double(data.getBusLongitude()).doubleValue());
-                    makeRoute(source, destination);
-                } else {
-                    Toast.makeText(context, "Can't fetch route, restaurant address not found", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                makeRoute(source, restLatLng);
+
             } else if (data.getDeliveryStatus().equalsIgnoreCase("Started")) {
                 btnStart.setVisibility(View.GONE);
                 btnComplete.setVisibility(View.VISIBLE);
-                if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
-                    LatLng destination = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
-                    makeRoute(source, destination);
-                } else {
-                    Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                makeRoute(source, custLatLng);
             }
         }
     }
@@ -213,7 +217,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         btnComplete.setOnClickListener(this);
         btnStart.setOnClickListener(this);
     }
-
 
     private void setUpFused() {
         createLocationRequest();
@@ -557,6 +560,10 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
                         Toast.makeText(context, "Trip Completed", Toast.LENGTH_SHORT).show();
+                        map.clear();
+                        delivery_view.setVisibility(View.GONE);
+                        btnComplete.setVisibility(View.GONE);
+                        btnStart.setVisibility(View.GONE);
                         startActivity(new Intent(context, NewDeliveryActivity.class));
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
@@ -612,6 +619,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
                         Toast.makeText(context, "Trip Started", Toast.LENGTH_SHORT).show();
                         map.clear();
+                        markerCurrent = null;
+                        markerCustomer = null;
+                        markerRestaurant = null;
                         btnStart.setVisibility(View.GONE);
                         btnComplete.setVisibility(View.VISIBLE);
                         if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
@@ -645,7 +655,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             }
         });
     }
-
 
     private void hideShowDeliveryView() {
         if (llCustDetails.getVisibility() == View.VISIBLE) {
@@ -901,12 +910,32 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 options2.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_c));
                 map.addMarker(options2);*/
 
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(points.get(points.size() - 1));
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_cust_icon)));
-                markerOptions.title("Customer's Location");
-                markerOptions.snippet("This is customer's location");
-                map.addMarker(markerOptions);
+                if (map != null) {
+                    if (markerCustomer == null) {
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(custLatLng);
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_cust_icon)));
+                        markerOptions.title("Customer's Location");
+                        markerCustomer = map.addMarker(markerOptions);
+                    }
+
+
+                    if (markerRestaurant == null) {
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(restLatLng);
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_rest_icon)));
+                        markerOptions.title("Customer's Location");
+                        markerRestaurant = map.addMarker(markerOptions);
+                    }
+
+                    if (markerCurrent == null) {
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(AppPreference.getCurLong(context)).doubleValue()));
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.custom_map_scooter_icon)));
+                        markerOptions.title("Customer's Location");
+                        markerCurrent = map.addMarker(markerOptions);
+                    }
+                }
             }
         }
 
