@@ -34,6 +34,8 @@ public class AppConstants {
         String GETALLPENDINGORDERS = "getDeliveryOrders";
         String ASSIGNORDER = "assignOrderToDriver";
         String LOGOUTVENDOR = "Logout_Vendor_Driver";
+        String GETSTARTEDDELIVERY = "getStartedDeliveryOrders";
+        String GETCOMPLETEDDELIVERY = "getCompletedDeliveryOrders";
     }
 
     public interface DRIVER_METHODS {

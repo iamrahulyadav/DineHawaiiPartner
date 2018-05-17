@@ -4,7 +4,7 @@
     <string name="raleway_regular">Raleway-Regular.ttf</string>
     <string name="raleway_bold">Raleway-Bold.ttf</string>
     <string name="login">Login with your account</string>
-    <string name="title_activity_vendor_home">Trips</string>
+    <string name="title_activity_vendor_home">Deliveries</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

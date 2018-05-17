@@ -1,18 +1,16 @@
-package com.dinehawaiipartner.Fragment;
-
+package com.dinehawaiipartner.Activity.Manager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.MStartedOrderAdapter;
@@ -38,51 +36,48 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class MStartedOrderFragment extends Fragment {
-    public static ArrayList<DeliveryModel> ordersList = new ArrayList<DeliveryModel>();
-    String TAG = "Pending Order";
+public class MCompletedOrderActivity extends AppCompatActivity {
+    String TAG = "MCompletedOrderActivity";
     Context context;
     CustomTextView noOrders;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private MStartedOrderAdapter startedAdapter;
-    SwipeRefreshLayout refreshLayout;
-
-    public MStartedOrderFragment() {
-        // Required empty public constructor
+    public static ArrayList<DeliveryModel> ordersList = new ArrayList<DeliveryModel>();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_completed_order);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Orders");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initViews();
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_started_order, container, false);
-        context = getActivity();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        noOrders = (CustomTextView) view.findViewById(R.id.noOrder);
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+    private void initViews() {
+        context = this;
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        noOrders = (CustomTextView) findViewById(R.id.noOrder);
+        mLayoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(startedAdapter);
         startedAdapter = new MStartedOrderAdapter(context, ordersList);
         mRecyclerView.setAdapter(startedAdapter);
         startedAdapter.notifyDataSetChanged();
+    }
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshLayout.setRefreshing(false);
-                noOrders.setVisibility(View.GONE);
-                ordersList.clear();
-                getAllStartOrdersList();
-            }
-        });
-        return view;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+                default:
+                    break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -91,13 +86,12 @@ public class MStartedOrderFragment extends Fragment {
         if (ordersList != null)
             ordersList.clear();
         if (Functions.isNetworkAvailable(context))
-            getAllStartOrdersList();
-
+            getAllCompletedOrdersList();
         else
-            Toast.makeText(context, getActivity().getResources().getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getResources().getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
     }
 
-    private void getAllStartOrdersList() {
+    private void getAllCompletedOrdersList() {
         final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -106,10 +100,10 @@ public class MStartedOrderFragment extends Fragment {
         });
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.GETSTARTEDDELIVERY);
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.GETCOMPLETEDDELIVERY);
         jsonObject.addProperty("user_id", AppPreference.getUserid(context));
         jsonObject.addProperty("business_id", AppPreference.getBusinessid(context));
-        Log.e(TAG, "getAllStartOrdersList: Request >> " + jsonObject);
+        Log.e(TAG, "getAllCompletedOrdersList: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
         Call<JsonObject> call = apiService.orders_url(jsonObject);
@@ -119,7 +113,7 @@ public class MStartedOrderFragment extends Fragment {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 String resp = response.body().toString();
-                Log.e(TAG, "getAllStartOrdersList: Response >> " + resp);
+                Log.e(TAG, "getAllCompletedOrdersList: Response >> " + resp);
                 try {
                     ordersList.clear();
                     JSONObject jsonObject = new JSONObject(resp);

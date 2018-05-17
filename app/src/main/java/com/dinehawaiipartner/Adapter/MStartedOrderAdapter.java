@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.Model.OrdersModel;
 import com.dinehawaiipartner.R;
 
@@ -16,9 +18,9 @@ import java.util.ArrayList;
 public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdapter.ViewHolder> {
     private final String TAG = "MStartedOrderAdapter";
     private final Context context;
-    private final ArrayList<OrdersModel> ordersModelArrayList;
+    private final ArrayList<DeliveryModel> ordersModelArrayList;
 
-    public MStartedOrderAdapter(Context context, ArrayList<OrdersModel> details) {
+    public MStartedOrderAdapter(Context context, ArrayList<DeliveryModel> details) {
         this.context = context;
         this.ordersModelArrayList = details;
     }
@@ -33,7 +35,20 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        final DeliveryModel model = ordersModelArrayList.get(position);
+        holder.tvCustName.setText(model.getCustName());
+        holder.tvCustAddress.setText(model.getCustDeliveryAddress());
+        holder.tvCustContact.setText(model.getCustPhone());
+        holder.tvorderId.setText("#" + model.getOrderUniqueId());
+        holder.tvbus_name.setText(model.getBusinessName());
+        holder.tvTotalAmt.setText("$" + model.getOrderAmount());
+        if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0"))
+            holder.assignDriver.setVisibility(View.GONE);
+        else {
+            holder.assignDriver.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+            holder.assignDriver.setEnabled(false);
+            holder.assignDriver.setText("Assigned To : "+model.getAssignDriver());
+        }
     }
 
     @Override
@@ -43,12 +58,17 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        RelativeLayout itemlayout;
-
+        TextView tvCustName, tvCustAddress, tvCustContact, tvorderId, tvbus_name, tvTotalAmt, assignDriver;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
+            tvCustName = itemView.findViewById(R.id.tvName);
+            tvCustAddress = itemView.findViewById(R.id.tvAddress);
+            tvCustContact = itemView.findViewById(R.id.tvPhoneNo);
+            tvorderId = itemView.findViewById(R.id.tvorder_id);
+            tvbus_name = itemView.findViewById(R.id.tvbus_name);
+            tvTotalAmt = itemView.findViewById(R.id.tvTotalAmt);
+            assignDriver = itemView.findViewById(R.id.assignDriver);
         }
     }
 }

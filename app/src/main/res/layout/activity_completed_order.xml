@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/activityBackground"
     android:layout_height="match_parent"
-    tools:context=".Activity.Manager.ManageOrderActivity">
+    tools:context=".Activity.Manager.MCompletedOrderActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:id="@+id/appbar"
@@ -20,26 +20,28 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_below="@id/appbar"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_40sdp">
+        android:layout_below="@id/appbar"
+        android:layout_height="wrap_content" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar_bar"
-            android:background="@color/white"
-            android:elevation="1dp"
-            android:minHeight="@dimen/_40sdp"
-            android:scrollbars="vertical"
-            app:tabIndicatorColor="@color/colorPrimary"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextColor="#e0808080"></android.support.design.widget.TabLayout>
-    </android.support.v4.view.ViewPager>
+    <com.dinehawaiipartner.CustomViews.CustomTextView
+        android:id="@+id/noOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_20sdp"
+        android:background="@drawable/text_background"
+        android:layout_below="@id/appbar"
+        android:paddingBottom="@dimen/_5sdp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:text="No Orders"
+        android:visibility="gone"
+        app:edittextfont="Raleway-Regular.ttf" />
+
 
 </RelativeLayout>

@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class SendLocation extends BroadcastReceiver implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private
+
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private GoogleApiClient mGoogleApiClient;
@@ -30,7 +30,7 @@ public class SendLocation extends BroadcastReceiver implements GoogleApiClient.C
 
     @Override
     public void onReceive(Context mContext, Intent intent) {
-        Log.e(TAG, "onReceive: ", );
+
         this.mContext = mContext;
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addApi(LocationServices.API)

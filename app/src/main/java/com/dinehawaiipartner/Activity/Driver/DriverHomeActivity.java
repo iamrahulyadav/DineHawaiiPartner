@@ -550,7 +550,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             }
         });
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.COMPLETETRIP);
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.COMPLETEDELIVERY);
         jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "startTripTask: Request >> " + jsonObject);
@@ -607,7 +607,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             }
         });
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.STARTTRIP);
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.STARTDELIVERY);
         jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "startTripTask: Request >> " + jsonObject);

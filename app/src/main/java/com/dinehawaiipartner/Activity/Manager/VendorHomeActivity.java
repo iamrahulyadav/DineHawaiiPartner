@@ -220,7 +220,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
                 showLogoutAlert();
                 break;
             case R.id.nav_vendor_orders:
-                startActivity(new Intent(context, ManageOrderActivity.class));
+                startActivity(new Intent(context, MCompletedOrderActivity.class));
                 break;
             case R.id.nav_vendor_drivers:
                 startActivity(new Intent(context, ManageDriversActivity.class));
