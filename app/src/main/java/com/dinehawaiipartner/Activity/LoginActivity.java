@@ -84,8 +84,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             edpass.setText(SaveDataPreference.getSavepass(mContext));
             edpass.setSelection(edpass.getText().toString().length());
         }
-        if (!SaveDataPreference.getSavepass(mContext).equalsIgnoreCase("") && !SaveDataPreference.getSaveid(mContext).equalsIgnoreCase(""))
-            rememberMe.setChecked(true);
+       /* if (!SaveDataPreference.getSavepass(mContext).equalsIgnoreCase("") && !SaveDataPreference.getSaveid(mContext).equalsIgnoreCase(""))
+            rememberMe.setChecked(true);*/
     }
 
     private void init() {
