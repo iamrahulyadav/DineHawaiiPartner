@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,6 @@ import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.ProgressHUD;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -64,21 +64,24 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
         holder.tvCustName.setText(model.getCustName());
         holder.tvCustAddress.setText(model.getCustDeliveryAddress());
         holder.tvCustContact.setText(model.getCustPhone());
-        holder.tvorderId.setText("#" + model.getOrderUniqueId());
+        holder.tvorderId.setText("#" + model.getOrderId());
         holder.tvbus_name.setText(model.getBusinessName());
         holder.tvTotalAmt.setText("$" + model.getOrderAmount());
-        if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0"))
+        if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0")) {
+            holder.cardDriver.setCardBackgroundColor(context.getResources().getColor(R.color.colorRed));
+            holder.assignDriver.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_link_black_24dp, 0, 0, 0);
             holder.assignDriver.setEnabled(true);
-        else {
-            holder.assignDriver.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+        } else {
+            holder.cardDriver.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+            holder.assignDriver.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_directions_bike_black_24dp, 0, 0, 0);
             holder.assignDriver.setEnabled(false);
-            holder.assignDriver.setText("Assigned To : "+model.getAssignDriver());
+            holder.assignDriver.setText(model.getAssignDriver());
         }
         holder.assignDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (driverslist != null && !driverslist.isEmpty())
-                    selectDriverDialog(model.getOrderId(),holder);
+                    selectDriverDialog(model.getOrderId(), holder);
                 else
                     Toast.makeText(context, "No Drivers Available", Toast.LENGTH_SHORT).show();
             }
@@ -117,7 +120,7 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
                     Toast.makeText(context, "Select Driver", Toast.LENGTH_SHORT).show();
                 else {
                     selectedDriverId = String.valueOf(group.getCheckedRadioButtonId());
-                    assignTripToDriver(selectedDriverId,orderId,driverName,holder);
+                    assignTripToDriver(selectedDriverId, orderId, driverName, holder);
                     dialogInterface.cancel();
                 }
             }
@@ -139,8 +142,8 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.ASSIGNORDER);
         jsonObject.addProperty("user_id", AppPreference.getUserid(context));
-        jsonObject.addProperty("driver_id",selectedDriverId);
-        jsonObject.addProperty("order_id",orderId);
+        jsonObject.addProperty("driver_id", selectedDriverId);
+        jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "assignTripToDriver: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
@@ -155,13 +158,14 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
                 try {
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
-                        holder.assignDriver.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                        holder.cardDriver.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+                        holder.assignDriver.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_directions_bike_black_24dp, 0, 0, 0);
                         holder.assignDriver.setEnabled(false);
-                        holder.assignDriver.setText("Assigned To : "+driverName);
+                        holder.assignDriver.setText(driverName);
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray array = jsonObject.getJSONArray("result");
                         JSONObject object = array.getJSONObject(0);
-                         Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     Toast.makeText(context, context.getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -188,9 +192,11 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCustName, tvCustAddress, tvCustContact, tvorderId, tvbus_name, tvTotalAmt, assignDriver;
+        CardView cardDriver;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            cardDriver = itemView.findViewById(R.id.cardDriver);
             tvCustName = itemView.findViewById(R.id.tvName);
             tvCustAddress = itemView.findViewById(R.id.tvAddress);
             tvCustContact = itemView.findViewById(R.id.tvPhoneNo);

@@ -53,9 +53,21 @@
             android:label="@string/title_activity_new_delivery"
             android:theme="@style/AppTheme"></activity>
 
-        <receiver android:name=".Reciever.SendLocation"
+        <receiver
+            android:name=".Reciever.SendLocation"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
+
+        <service android:name=".Services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Services.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

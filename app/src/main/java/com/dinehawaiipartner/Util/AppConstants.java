@@ -6,10 +6,8 @@ package com.dinehawaiipartner.Util;
 
 public class AppConstants {
 
-
     public static String KEY_METHOD = "method";
     public static String KEY_USER_ID = "user_id";
-
 
     public interface BASEURL {
         String URL = "http://take007.co.in/Projects-Work/Hawaii/APP/Partner_App/";
@@ -56,9 +54,9 @@ public class AppConstants {
     public class NOTIFICATION_KEY {
         public static final String DEFAULT_MESSAGE = "default_message";
         public static final String DRIVER_NEW_DELIVERY = "driver_new_delivery";
-        public static final String MANAGER_DELIVERY_PICKEDUP = "manager_trip_pickedup";
-        public static final String MANAGER_DELIVERY_COMPLETED = "manager_trip_completed";
         public static final String MANAGER_NEW_DELIVERY = "manager_new_delivery";
+        public static final String MANAGER_DELIVERY_PICKEDUP = "manager_driver_picked";
+        public static final String MANAGER_DELIVERY_COMPLETED = "manager_driver_completed";
     }
 
     public class NOTIFICATION_ID {

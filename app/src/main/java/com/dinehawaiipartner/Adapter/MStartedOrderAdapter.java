@@ -39,7 +39,7 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
         holder.tvCustName.setText(model.getCustName());
         holder.tvCustAddress.setText(model.getCustDeliveryAddress());
         holder.tvCustContact.setText(model.getCustPhone());
-        holder.tvorderId.setText("#" + model.getOrderUniqueId());
+        holder.tvorderId.setText("#" + model.getOrderId());
         holder.tvbus_name.setText(model.getBusinessName());
         holder.tvTotalAmt.setText("$" + model.getOrderAmount());
         if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0"))

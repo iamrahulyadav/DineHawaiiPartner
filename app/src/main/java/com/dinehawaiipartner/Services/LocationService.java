@@ -117,7 +117,8 @@ public class LocationService extends Service implements
             Log.e(TAG, "onChange >> Lat: " + location.getLatitude() + ", Long: " + location.getLongitude());
             AppPreference.setCurLat(mContext, String.valueOf(location.getLatitude()));
             AppPreference.setCurLong(mContext, String.valueOf(location.getLongitude()));
-            new updateDriverLog().execute();
+            if (AppPreference.getUserType(mContext).equalsIgnoreCase(AppConstants.LOGIN_TYPE.DRIVER))
+                new updateDriverLog().execute();
         }
     }
 

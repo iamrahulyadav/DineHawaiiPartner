@@ -7,9 +7,10 @@
     android:background="@drawable/splash_background"
     android:orientation="vertical"
     tools:context=".Activity.LoginActivity">
+
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
         android:id="@+id/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -21,12 +22,13 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
     <LinearLayout
         android:id="@+id/ll_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/_10sdp"
         android:layout_below="@id/appbar"
+        android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp"
         android:orientation="vertical">
 
@@ -62,9 +64,8 @@
                     android:drawablePadding="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:text="Username/Email"
-                    android:textColor="#4ac87a"
-                     />
-                
+                    android:textColor="#4ac87a" />
+
             </LinearLayout>
 
             <EditText
@@ -82,14 +83,14 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/offwhite"
-                app:edittextfont="Raleway-Regular.ttf" />
+                android:fontFamily="@font/roboto" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:layout_marginTop="@dimen/_2sdp"
-            android:background="@color/offwhite"/>
+            android:background="@color/offwhite" />
 
 
         <LinearLayout
@@ -112,9 +113,8 @@
                     android:drawablePadding="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:text="Password"
-                    android:textColor="#4ac87a"
-                     />
-                
+                    android:textColor="#4ac87a" />
+
             </LinearLayout>
 
             <EditText
@@ -132,26 +132,25 @@
                 android:padding="@dimen/_5sdp"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textColorHint="@color/offwhite"
-               />
+                android:textColorHint="@color/offwhite" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:layout_marginTop="@dimen/_2sdp"
-            android:background="@color/offwhite"/>
+            android:background="@color/offwhite" />
 
         <CheckBox
-            android:buttonTint="@color/colorPrimary"
-            android:textColor="@color/offwhite"
             android:id="@+id/rememberme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
+            android:buttonTint="@color/colorPrimary"
             android:text="@string/save_pwd_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            />
+            android:textColor="@color/offwhite"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -172,8 +171,7 @@
                 android:paddingRight="@dimen/_15sdp"
                 android:text="LOGIN"
                 android:textAlignment="gravity"
-                android:textColor="#fff"
-                 />
+                android:textColor="#fff" />
         </LinearLayout>
 
         <TextView
@@ -184,8 +182,7 @@
             android:text="FORGOT PASSWORD"
             android:textAlignment="center"
             android:textColor="@color/offwhite"
-            android:textStyle="bold"
-             />
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
 

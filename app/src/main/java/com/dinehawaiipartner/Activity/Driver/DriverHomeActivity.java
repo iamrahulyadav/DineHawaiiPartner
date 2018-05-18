@@ -146,20 +146,16 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         setUpMap();
         setUpFused();
         init();
-        if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
-            data = (DeliveryModel) getIntent().getSerializableExtra("data");
-            tripExist();
-        } else {
-            getStartedDelivery();
-        }
+
     }
 
     private void tripExist() {
         initDeliveryView();
         Log.e(TAG, "onCreate: data " + this.data);
         orderId = this.data.getOrderId();
-        tvStatus.setText(this.data.getDeliveryStatus());
-        tvDeliveryId.setText("#" + this.data.getOrderUniqueId());
+        if (this.data.getDeliveryStatus().equalsIgnoreCase("Started"))
+            tvStatus.setText("Picked-up");
+        tvDeliveryId.setText("#" + this.data.getOrderId());
         tvName.setText(this.data.getCustName());
         tvPhoneNo.setText(this.data.getCustPhone());
         tvAddress.setText(this.data.getCustDeliveryAddress());
@@ -484,6 +480,12 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onResume() {
         super.onResume();
+        if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
+            data = (DeliveryModel) getIntent().getSerializableExtra("data");
+            tripExist();
+        } else {
+            getStartedDelivery();
+        }
         if (mGoogleApiClient.isConnected()) {
             startLocationUpdates();
         }
@@ -506,7 +508,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             } else {
                 animateMarker(markerCurrent, new LatLng(location.getLatitude(), location.getLongitude()), false);
             }*/
-//            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -579,7 +581,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(context, "Calling admin...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnStart:
-                Toast.makeText(context, "Starting...", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Starting...", Toast.LENGTH_SHORT).show();
                 startTripTask();
                 break;
             case R.id.btnComplete:
@@ -619,6 +621,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
                         Toast.makeText(context, "Trip Completed", Toast.LENGTH_SHORT).show();
                         map.clear();
+                        markerCurrent = null;
+                        markerRestaurant = null;
+                        markerCustomer = null;
                         delivery_view.setVisibility(View.GONE);
                         btnComplete.setVisibility(View.GONE);
                         btnStart.setVisibility(View.GONE);
@@ -675,7 +680,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        Toast.makeText(context, "Trip Started", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Trip Started", Toast.LENGTH_SHORT).show();
                         map.clear();
                         markerCurrent = null;
                         markerCustomer = null;

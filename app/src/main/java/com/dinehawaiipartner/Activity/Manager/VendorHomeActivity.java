@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -20,11 +23,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
-import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Fragment.MPendingOrderFragment;
 import com.dinehawaiipartner.Fragment.MStartedOrderFragment;
 import com.dinehawaiipartner.R;
@@ -72,9 +75,38 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setText("PENDING");
-        tabLayout.getTabAt(1).setText("STARTED");
+        tabLayout.getTabAt(0).setIcon(R.drawable.tab_pending).setText("Pending");
+        tabLayout.getTabAt(1).setIcon(R.drawable.tab_started).setText("Started");
         viewPager.setCurrentItem(0);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(Color.parseColor("#4ac779"), PorterDuff.Mode.SRC_IN);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(Color.parseColor("#747474"), PorterDuff.Mode.SRC_IN);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        View root = tabLayout.getChildAt(0);
+        if (root instanceof LinearLayout) {
+            ((LinearLayout) root).setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setColor(getResources().getColor(R.color.colorDivider));
+            drawable.setSize(2, 1);
+
+            ((LinearLayout) root).setDividerPadding(40);
+            ((LinearLayout) root).setDividerDrawable(drawable);
+        }
+
     }
 
     private void setToolbar() {
