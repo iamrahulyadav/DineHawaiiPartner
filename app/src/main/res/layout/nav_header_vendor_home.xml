@@ -19,7 +19,7 @@
         app:civ_border_overlay="false"
         app:civ_border_width="2dp"/>
 
-    <com.dinehawaiipartner.CustomViews.CustomTextView
+    <TextView
         android:id="@+id/customerName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:text="NA"
         android:textAlignment="center"
         style="@style/TextAppearance.AppCompat.Subhead"
-        app:edittextfont="Raleway-Bold.ttf"/>
+     />
 
 
 </LinearLayout>

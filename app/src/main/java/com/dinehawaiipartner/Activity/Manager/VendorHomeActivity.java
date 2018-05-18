@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
@@ -52,7 +53,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
     String TAG = "VendorHomeActivity";
     ViewPager viewPager;
     private View headerView;
-    private CustomTextView userName;
+    private TextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
