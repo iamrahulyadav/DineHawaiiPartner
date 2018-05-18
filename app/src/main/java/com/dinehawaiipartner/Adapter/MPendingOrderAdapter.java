@@ -89,15 +89,16 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
     }
 
     private void selectDriverDialog(final String orderId, final ViewHolder holder) {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setTitle("Select Driver");
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
+        dialog.setMessage("Select Driver");
         final RadioGroup group = new RadioGroup(context);
         for (int i = 0; i < driverslist.size(); i++) {
             RadioButton button = new RadioButton(context);
             button.setId(Integer.parseInt(driverslist.get(i).getDriverId()));
             button.setText(driverslist.get(i).getDriverName());
+            button.setTextAppearance(context, R.style.MyTextAppearanceSmall);
             RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(30, 8, 0, 0);
+            params.setMargins(50, 10, 0, 0);
             button.setLayoutParams(params);
             group.addView(button);
         }
@@ -105,19 +106,17 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                 RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
                 driverName = radioButton.getText().toString();
                 Log.e(TAG, "onClick: vendorText" + driverName);
-
             }
         });
-        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("ASSIGN", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Log.e(TAG, "onClick: " + group.getCheckedRadioButtonId());
                 if (group.getCheckedRadioButtonId() == -1)
-                    Toast.makeText(context, "Select Driver", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Driver not selected", Toast.LENGTH_SHORT).show();
                 else {
                     selectedDriverId = String.valueOf(group.getCheckedRadioButtonId());
                     assignTripToDriver(selectedDriverId, orderId, driverName, holder);
@@ -126,9 +125,14 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
             }
         });
 
+        dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+
         dialog.setView(group);
         dialog.show();
-
     }
 
     private void assignTripToDriver(String selectedDriverId, String orderId, final String driverName, final ViewHolder holder) {

@@ -2,15 +2,14 @@ package com.dinehawaiipartner.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dinehawaiipartner.Model.DeliveryModel;
-import com.dinehawaiipartner.Model.OrdersModel;
 import com.dinehawaiipartner.R;
 
 import java.util.ArrayList;
@@ -45,9 +44,8 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
         if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0"))
             holder.assignDriver.setVisibility(View.GONE);
         else {
-            holder.assignDriver.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             holder.assignDriver.setEnabled(false);
-            holder.assignDriver.setText("Assigned To : "+model.getAssignDriver());
+            holder.assignDriver.setText(model.getAssignDriver());
         }
     }
 
@@ -59,6 +57,7 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvCustName, tvCustAddress, tvCustContact, tvorderId, tvbus_name, tvTotalAmt, assignDriver;
+        CardView cardDriver;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -69,6 +68,9 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
             tvbus_name = itemView.findViewById(R.id.tvbus_name);
             tvTotalAmt = itemView.findViewById(R.id.tvTotalAmt);
             assignDriver = itemView.findViewById(R.id.assignDriver);
+            cardDriver = itemView.findViewById(R.id.cardDriver);
+            cardDriver.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+            assignDriver.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_directions_bike_black_24dp, 0, 0, 0);
         }
     }
 }

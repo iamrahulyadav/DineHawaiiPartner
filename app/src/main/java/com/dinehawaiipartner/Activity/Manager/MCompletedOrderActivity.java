@@ -50,7 +50,7 @@ public class MCompletedOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_completed_order);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Orders");
+        toolbar.setTitle("History");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();

@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="10" />
+                                                <entry key="paddingPercent" value="5" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,8 +34,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Hvantage\Downloads\custom_map_customer_icon.png" />
-                                      <entry key="outputName" value="custom_map_cust_icon" />
+                                      <entry key="imageAsset" value="C:\Users\Hvantage\Downloads\icon\time-left.png" />
+                                      <entry key="outputName" value="tab_pending" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="4ac779" />
                                     </map>
@@ -73,7 +73,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_call_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_directions_bike_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -84,7 +84,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_call_black_24dp" />
+                            <entry key="outputName" value="ic_directions_bike_black_24dp" />
                             <entry key="sourceFile" value="C:\Users\Hvantage" />
                           </map>
                         </option>

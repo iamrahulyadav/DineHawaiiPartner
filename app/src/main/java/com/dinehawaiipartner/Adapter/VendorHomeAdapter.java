@@ -46,7 +46,7 @@ public class VendorHomeAdapter extends RecyclerView.Adapter<VendorHomeAdapter.Vi
         holder.tvCustName.setText(model.getCustName());
         holder.tvCustAddress.setText(model.getCustDeliveryAddress());
         holder.tvCustContact.setText(model.getCustPhone());
-        holder.tvorderId.setText("#"+model.getOrderId());
+        holder.tvorderId.setText("#" + model.getOrderId());
         holder.tvbus_name.setText(model.getBusinessName());
         holder.tvTotalAmt.setText("$" + model.getOrderAmount());
 
@@ -71,7 +71,7 @@ public class VendorHomeAdapter extends RecyclerView.Adapter<VendorHomeAdapter.Vi
         driver2.setDriverName("Vivek");
         driverslist.add(driver2);
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
         dialog.setTitle("Select Driver");
         final RadioGroup group = new RadioGroup(context);
         for (int i = 0; i < driverslist.size(); i++) {

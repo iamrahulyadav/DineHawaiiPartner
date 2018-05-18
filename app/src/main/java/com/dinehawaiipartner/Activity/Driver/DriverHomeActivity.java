@@ -318,7 +318,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showExitAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context,R.style.MyAlertDialogTheme);
         alertDialog.setIcon(R.mipmap.ic_launcher);
         alertDialog.setMessage("Do you want to exit?");
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -350,7 +350,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showLogoutAlert() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.MyAlertDialogTheme);
         builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,

@@ -133,7 +133,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
 
             alertDialog.setIcon(R.mipmap.ic_launcher);
             alertDialog.setMessage("Do you want to exit?");
@@ -157,7 +157,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showLogoutAlert() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
         builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -251,6 +251,9 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         switch (item.getItemId()) {
             case R.id.nav_vendor_logout:
                 showLogoutAlert();
+                break;
+            case R.id.nav_vendor_home:
+                startActivity(new Intent(context, VendorHomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.nav_vendor_orders:
                 startActivity(new Intent(context, MCompletedOrderActivity.class));
