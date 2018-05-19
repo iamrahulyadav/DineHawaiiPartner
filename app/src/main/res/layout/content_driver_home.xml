@@ -19,10 +19,26 @@
         tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
     <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_above="@id/llBottom"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/_5sdp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabMyLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/llBottom"
+        android:layout_margin="@dimen/_8sdp"
+        android:elevation="0dp"
+        android:src="@drawable/ic_my_location_white_24dp"
+        app:elevation="0dp" />
 
     <LinearLayout
+        android:id="@+id/llBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">

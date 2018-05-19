@@ -22,6 +22,7 @@ import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -40,6 +41,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +78,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -121,6 +124,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private CardView delivery_view, btnComplete, btnStart, btnCallAdmin;
     private LatLng restLatLng;
     private LatLng custLatLng;
+    private ProgressBar progressBar;
+    private FloatingActionButton fabMyLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +152,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         setUpMap();
         setUpFused();
         init();
+        new UpdateFCMTask().execute();
 
     }
 
@@ -194,12 +201,12 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void getStartedDelivery() {
-        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+        /*final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 // TODO Auto-generated method stub
             }
-        });
+        });*/
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.DRIVER_START_DELIVERIES);
@@ -228,14 +235,14 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                progressHD.dismiss();
+//                progressHD.dismiss();
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "getAllNewOrders error :- " + Log.getStackTraceString(t));
-                progressHD.dismiss();
+//                progressHD.dismiss();
                 Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
             }
         });
@@ -253,6 +260,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private void init() {
         btnCallAdmin = findViewById(R.id.btnCallAdmin);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        fabMyLocation = (FloatingActionButton) findViewById(R.id.fabMyLocation);
+        fabMyLocation.setOnClickListener(this);
     }
 
     private void initDeliveryView() {
@@ -318,7 +328,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showExitAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context,R.style.MyAlertDialogTheme);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
         alertDialog.setIcon(R.mipmap.ic_launcher);
         alertDialog.setMessage("Do you want to exit?");
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -350,7 +360,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showLogoutAlert() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.MyAlertDialogTheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
         builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
@@ -395,40 +405,27 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onMapReady(final GoogleMap maps) {
         map = maps;
+        if (!AppPreference.getCurLat(context).equalsIgnoreCase("0.0") && !AppPreference.getCurLong(context).equalsIgnoreCase("0.0"))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(AppPreference.getCurLong(context)).doubleValue()), 15));
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        map.setMyLocationEnabled(true);
-        setCurrentLocationMarker();
-      /*  map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     Log.e("checkSelfPermission", false + "");
                     return;
                 }
                 map.setMyLocationEnabled(true);
-
                 setCurrentLocationMarker();
-
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
             }
-        });*/
+        });
     }
 
     @Override
@@ -454,6 +451,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         markerOptions.title("Current Location");
         markerOptions.snippet("This is your current location");
         markerCurrent = map.addMarker(markerOptions);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -576,6 +574,12 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         switch (view.getId()) {
             case R.id.delivery_view:
                 hideShowDeliveryView();
+                break;
+            case R.id.fabMyLocation:
+                if (new Double(AppPreference.getCurLat(context)).doubleValue() != 0.0) {
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue()
+                            , new Double(AppPreference.getCurLong(context)).doubleValue()), 18));
+                }
                 break;
             case R.id.btnCallAdmin:
                 Toast.makeText(context, "Calling admin...", Toast.LENGTH_SHORT).show();
@@ -795,6 +799,44 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 1 * 60 * 1000,  // After five minute
                 1 * 60 * 1000,  // Every five minute
                 alarmIntent);*/
+    }
+
+    class UpdateFCMTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.COMMON_METHODS.UPDATE_FCM);
+            jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+            jsonObject.addProperty(AppConstants.KEY_FCM_ID, FirebaseInstanceId.getInstance().getToken());
+            jsonObject.addProperty(AppConstants.KEY_USER_TYPE, AppPreference.getUserTypeId(context));
+            Log.e(TAG, "UpdateFCMTask: Request >> " + jsonObject);
+
+            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+            Call<JsonObject> call = apiService.login_url(jsonObject);
+
+            call.enqueue(new Callback<JsonObject>() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    String resp = response.body().toString();
+                    Log.e(TAG, "UpdateFCMTask: Response >> " + resp);
+                    try {
+                        JSONObject jsonObject = new JSONObject(resp);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e(TAG, "logoutVendorApi error :- " + Log.getStackTraceString(t));
+                }
+            });
+            return null;
+        }
     }
 
     public class RoutesDownloadTask extends AsyncTask<String, Void, String> {

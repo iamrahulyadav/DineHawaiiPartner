@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -37,6 +38,7 @@ import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.Functions;
 import com.dinehawaiipartner.Util.ProgressHUD;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -64,6 +66,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_vendor_home);
         setToolbar();
         init();
+        new UpdateFCMTask().execute();
     }
 
     private void init() {
@@ -274,6 +277,44 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         switch (v.getId()) {
 
 
+        }
+    }
+
+    class UpdateFCMTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.COMMON_METHODS.UPDATE_FCM);
+            jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+            jsonObject.addProperty(AppConstants.KEY_FCM_ID, FirebaseInstanceId.getInstance().getToken());
+            jsonObject.addProperty(AppConstants.KEY_USER_TYPE, AppPreference.getUserTypeId(context));
+            Log.e(TAG, "UpdateFCMTask: Request >> " + jsonObject);
+
+            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+            Call<JsonObject> call = apiService.login_url(jsonObject);
+
+            call.enqueue(new Callback<JsonObject>() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    String resp = response.body().toString();
+                    Log.e(TAG, "UpdateFCMTask: Response >> " + resp);
+                    try {
+                        JSONObject jsonObject = new JSONObject(resp);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e(TAG, "logoutVendorApi error :- " + Log.getStackTraceString(t));
+                }
+            });
+            return null;
         }
     }
 

@@ -21,6 +21,7 @@ public class AppPreference {
     public static final String CUR_LAT = "cur_lat";
     public static final String CUR_LONG = "cur_long";
     public static final String VENDOR_URL = "vendor_url";
+    private static final String USER_TYPE_ID = "user_type_id ";
 
 
     private final SharedPreferences sharedPreferences;
@@ -248,6 +249,20 @@ public class AppPreference {
         SharedPreferences pereference = context.getSharedPreferences(
                 MBPREFERENCES, 0);
         return pereference.getString(VENDOR_URL, "");
+    }
+
+    public static void setUserTypeId(Context context, String value) {
+        SharedPreferences preferences = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        Editor editor = preferences.edit();
+        editor.putString(USER_TYPE_ID, value);
+        editor.commit();
+    }
+
+    public static String getUserTypeId(Context context) {
+        SharedPreferences pereference = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        return pereference.getString(USER_TYPE_ID, "");
     }
 
 
