@@ -14,16 +14,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static Retrofit retrofit = null;
+
     public static Retrofit getClient() {
-        if (retrofit==null) {
+        if (retrofit == null) {
             Gson gson = new GsonBuilder()
                     .setLenient()
                     .create();
 
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .readTimeout(1, TimeUnit.MINUTES)

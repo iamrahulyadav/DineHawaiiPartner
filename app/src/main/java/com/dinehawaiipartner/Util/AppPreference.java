@@ -20,6 +20,7 @@ public class AppPreference {
     public static final String USER_TYPE = "userType";
     public static final String CUR_LAT = "cur_lat";
     public static final String CUR_LONG = "cur_long";
+    public static final String VENDOR_URL = "vendor_url";
 
 
     private final SharedPreferences sharedPreferences;
@@ -72,7 +73,7 @@ public class AppPreference {
         editor.putString(CUSTOMER_PIC, id);
         editor.commit();
     }
-    
+
 
     public static String getUsername(Context context) {
         SharedPreferences pereference = context.getSharedPreferences(
@@ -233,6 +234,20 @@ public class AppPreference {
         SharedPreferences pereference = context.getSharedPreferences(
                 MBPREFERENCES, 0);
         return pereference.getString(CUR_LONG, "0.0");
+    }
+
+    public static void setVendorUrl(Context context, String value) {
+        SharedPreferences preferences = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        Editor editor = preferences.edit();
+        editor.putString(VENDOR_URL, value);
+        editor.commit();
+    }
+
+    public static String getVendorUrl(Context context) {
+        SharedPreferences pereference = context.getSharedPreferences(
+                MBPREFERENCES, 0);
+        return pereference.getString(VENDOR_URL, "");
     }
 
 

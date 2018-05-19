@@ -17,6 +17,8 @@ public class AppConstants {
         String LOGINURL = "Register_Vendor_Log.php";
         String DRIVERURL = "Vendor_Partner_Driver_Api.php";
         String ORDERSURL = "get_Orders_Api.php";
+
+        String OTHER_VENDOR_URL = "normal_user/register_log.php";
     }
 
     public interface REGISTRATION {
@@ -49,6 +51,7 @@ public class AppConstants {
     public class LOGIN_TYPE {
         public static final String VENDOR_USER = "PartnerVendor";
         public static final String DRIVER = "Driver";
+        public static final String OTHER_VENDOR = "OtherVendor";
     }
 
     public class NOTIFICATION_KEY {
@@ -64,5 +67,9 @@ public class AppConstants {
         public static final int DRIVER_NEW_DELIVERY = 2;
         public static final int MANAGER_DELIVERY_PICKEDUP = 3;
         public static final int MANAGER_DELIVERY_COMPLETED = 4;
+    }
+
+    public class OTHER_VENDOR_API {
+        public static final String LOGOUT = "mobile_logout";
     }
 }

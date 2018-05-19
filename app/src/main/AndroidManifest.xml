@@ -24,6 +24,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -50,7 +51,7 @@
         <activity
             android:name=".Activity.Driver.NewDeliveryActivity"
             android:label="@string/title_activity_new_delivery"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <receiver
             android:name=".Reciever.SendLocation"
@@ -67,6 +68,11 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".Activity.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

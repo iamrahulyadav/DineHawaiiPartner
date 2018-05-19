@@ -167,7 +167,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         AppPreference.setLongitude(mContext, jsonObject1.getString("longitude"));
                         AppPreference.setBusinessid(mContext, jsonObject1.getString("business_id"));
 
-
                         if (jsonObject1.getString("userType").equalsIgnoreCase("Driver")) {
                             AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.DRIVER);
                             startActivity(new Intent(mContext, DriverHomeActivity.class).setAction(""));
@@ -178,6 +177,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             finish();
                         }
 
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("700")) {
+                        AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.OTHER_VENDOR);
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+                        AppPreference.setUsername(LoginActivity.this, jsonObject1.getString("first_name") + " " + jsonObject1.getString("last_name"));
+                        AppPreference.setVendorUrl(LoginActivity.this, jsonObject1.getString("VENDOR_ADMIN_Url"));
+                        AppPreference.setUserid(LoginActivity.this, jsonObject1.getString("user_id"));
+                        Intent intent = new Intent(getApplicationContext(), WebViewActivity.class);
+                        startActivity(intent);
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
                         JSONObject jsonObj = jsonArray.getJSONObject(0);
