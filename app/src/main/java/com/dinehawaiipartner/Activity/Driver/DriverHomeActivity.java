@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +122,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private CardView delivery_view, btnComplete, btnStart, btnCallAdmin;
     private LatLng restLatLng;
     private LatLng custLatLng;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,6 +255,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private void init() {
         btnCallAdmin = findViewById(R.id.btnCallAdmin);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     private void initDeliveryView() {
@@ -318,7 +321,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showExitAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context,R.style.MyAlertDialogTheme);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
         alertDialog.setIcon(R.mipmap.ic_launcher);
         alertDialog.setMessage("Do you want to exit?");
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -350,7 +353,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void showLogoutAlert() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.MyAlertDialogTheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
         builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
@@ -397,38 +400,21 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         map = maps;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        map.setMyLocationEnabled(true);
-        setCurrentLocationMarker();
-      /*  map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     Log.e("checkSelfPermission", false + "");
                     return;
                 }
                 map.setMyLocationEnabled(true);
-
                 setCurrentLocationMarker();
-
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
             }
-        });*/
+        });
     }
 
     @Override
@@ -454,6 +440,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         markerOptions.title("Current Location");
         markerOptions.snippet("This is your current location");
         markerCurrent = map.addMarker(markerOptions);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

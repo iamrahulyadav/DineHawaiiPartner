@@ -31,6 +31,7 @@
         <activity
             android:name=".Activity.Manager.VendorHomeActivity"
             android:label="@string/title_activity_vendor_home"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Activity.Driver.DriverHomeActivity"

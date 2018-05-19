@@ -30,9 +30,10 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
                 if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.DRIVER)) {
                     startActivity(new Intent(context, DriverHomeActivity.class).setAction(""));
-                } else if (
-                        AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.VENDOR_USER))
+                } else if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.VENDOR_USER))
                     startActivity(new Intent(context, VendorHomeActivity.class));
+                else if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.OTHER_VENDOR))
+                    startActivity(new Intent(context, WebViewActivity.class));
                 else
                     startActivity(new Intent(context, LoginActivity.class));
                 finish();

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,9 @@ import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
+import com.dinehawaiipartner.Util.Functions;
 import com.dinehawaiipartner.Util.ProgressHUD;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -43,8 +46,49 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (!AppPreference.getUsername(context).equalsIgnoreCase(""))
+            getSupportActionBar().setTitle(AppPreference.getUsername(context));
+
         init();
         startWebView();
+
+    }
+
+    class UpdateFCMTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.COMMON_METHODS.UPDATE_FCM);
+            jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+            jsonObject.addProperty(AppConstants.KEY_FCM_ID, FirebaseInstanceId.getInstance().getToken());
+            Log.e(TAG, "UpdateFCMTask: Request >> " + jsonObject);
+
+            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+            Call<JsonObject> call = apiService.login_url(jsonObject);
+
+            call.enqueue(new Callback<JsonObject>() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    String resp = response.body().toString();
+                    Log.e(TAG, "UpdateFCMTask: Response >> " + resp);
+                    try {
+                        JSONObject jsonObject = new JSONObject(resp);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e(TAG, "logoutVendorApi error :- " + Log.getStackTraceString(t));
+                }
+            });
+            return null;
+        }
     }
 
     @Override
@@ -57,7 +101,7 @@ public class WebViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
-                vendorLogoutMethod();
+                showLogoutAlert();
                 break;
             default:
                 break;
@@ -65,7 +109,85 @@ public class WebViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void vendorLogoutMethod() {
+
+    private void showLogoutAlert() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
+        builder.setMessage("Do you want to logout?").setCancelable(false).setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (Functions.isNetworkAvailable(context))
+                            logoutVendorApi();
+                        else
+                            Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                            }
+                        });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void logoutVendorApi() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.LOGOUTVENDOR);
+        jsonObject.addProperty(AppConstants.KEY_USER_ID, AppPreference.getUserid(context));
+        Log.e(TAG, "logoutVendorApi: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.login_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "logoutVendorApi: Response >> " + resp);
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                        AppPreference.clearPreference(context);
+                        startActivity(new Intent(context, LoginActivity.class));
+                        finish();
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                    progressHD.dismiss();
+                } catch (JSONException e) {
+                    progressHD.dismiss();
+                    e.printStackTrace();
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                progressHD.dismiss();
+                Log.e(TAG, "logoutVendorApi error :- " + Log.getStackTraceString(t));
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void vendorLogoutMethodOld() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("method", AppConstants.OTHER_VENDOR_API.LOGOUT);
         jsonObject.addProperty("user_id", AppPreference.getUserid(context));

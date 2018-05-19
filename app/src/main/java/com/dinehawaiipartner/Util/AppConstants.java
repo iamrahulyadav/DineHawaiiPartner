@@ -6,6 +6,7 @@ package com.dinehawaiipartner.Util;
 
 public class AppConstants {
 
+    public static final String KEY_FCM_ID = "fcm_id";
     public static String KEY_METHOD = "method";
     public static String KEY_USER_ID = "user_id";
 
@@ -71,5 +72,9 @@ public class AppConstants {
 
     public class OTHER_VENDOR_API {
         public static final String LOGOUT = "mobile_logout";
+    }
+
+    public class COMMON_METHODS {
+        public static final String UPDATE_FCM = "update_fcm_token";
     }
 }
