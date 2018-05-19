@@ -33,7 +33,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WebViewActivity extends AppCompatActivity {
-
     private static final String TAG = "WebViewActivity";
     private WebViewActivity context;
     private WebView webView;
@@ -63,7 +62,6 @@ public class WebViewActivity extends AppCompatActivity {
             default:
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
