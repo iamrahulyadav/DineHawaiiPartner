@@ -11,12 +11,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.R;
 
 public class ProgressHUD extends Dialog
 
-    {
+{
 
     public ProgressHUD(Context context) {
         super(context);
@@ -26,8 +25,8 @@ public class ProgressHUD extends Dialog
         super(context, theme);
     }
 
-        public static ProgressHUD show(Context context, CharSequence message, boolean indeterminate, boolean cancelable,
-        DialogInterface.OnCancelListener cancelListener) {
+    public static ProgressHUD show(Context context, CharSequence message, boolean indeterminate, boolean cancelable,
+                                   DialogInterface.OnCancelListener cancelListener) {
 
         ProgressHUD dialog = new ProgressHUD(context, R.style.ProgressHUD);
         dialog.setTitle("");
@@ -48,26 +47,25 @@ public class ProgressHUD extends Dialog
         dialog.setCanceledOnTouchOutside(false);
         //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         // dialog.show();
-        if(!((Activity) context).isFinishing())
-        {
+        if (!((Activity) context).isFinishing()) {
             dialog.show();
         }
         return dialog;
     }
 
-        public void onWindowFocusChanged(boolean hasFocus) {
+    public void onWindowFocusChanged(boolean hasFocus) {
         ImageView imageView = (ImageView) findViewById(R.id.spinnerImageView);
         AnimationDrawable spinner = (AnimationDrawable) imageView.getBackground();
         spinner.start();
     }
 
-        public void setMessage(CharSequence message) {
+    public void setMessage(CharSequence message) {
         if (message != null && message.length() > 0) {
             findViewById(R.id.message).setVisibility(View.VISIBLE);
-            CustomTextView txt = (CustomTextView) findViewById(R.id.message);
+            TextView txt = (TextView) findViewById(R.id.message);
             txt.setText(message);
             txt.invalidate();
         }
     }
-    }
+}
 

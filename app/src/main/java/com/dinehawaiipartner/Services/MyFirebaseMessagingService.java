@@ -13,7 +13,7 @@ import android.util.Log;
 
 import com.dinehawaiipartner.Activity.Driver.NewDeliveryActivity;
 import com.dinehawaiipartner.Activity.Manager.MCompletedOrderActivity;
-import com.dinehawaiipartner.Activity.Manager.VendorHomeActivity;
+import com.dinehawaiipartner.Activity.Manager.ManagerHomeActivity;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -48,7 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(MANAGER_NEW_DELIVERY);
-                    Intent intent = new Intent(this, VendorHomeActivity.class);
+                    Intent intent = new Intent(this, ManagerHomeActivity.class);
                     sendNewTripNotification(intent, jsonObject.getString("order_id"), jsonObject.getString("msg"), jsonObject.getString("delivery_adddress"));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -66,7 +66,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(MANAGER_DELIVERY_PICKEDUP);
-                    Intent intent = new Intent(this, VendorHomeActivity.class);
+                    Intent intent = new Intent(this, ManagerHomeActivity.class);
                     sendNotification(intent, jsonObject.getString("msg"));
                 } catch (JSONException e) {
                     e.printStackTrace();

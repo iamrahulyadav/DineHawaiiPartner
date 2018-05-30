@@ -85,13 +85,14 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/offwhite" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:src="@drawable/lines" />
+
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:background="@color/offwhite" />
 
 
         <LinearLayout
@@ -137,19 +138,13 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/offwhite" />
 
-            <!-- <ImageView
+             <ImageView
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:scaleType="fitXY"
-                 android:src="@drawable/lines" />-->
+                 android:src="@drawable/lines" />
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:background="@color/offwhite" />
 
         <CheckBox
             android:id="@+id/rememberme"
@@ -185,17 +180,6 @@
                 android:textColor="#fff"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/forgetPass"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="FORGOT PASSWORD"
-            android:textAlignment="center"
-            android:textColor="@color/offwhite"
-            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
 

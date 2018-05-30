@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
-import com.dinehawaiipartner.Activity.Manager.VendorHomeActivity;
+import com.dinehawaiipartner.Activity.Manager.ManagerHomeActivity;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
@@ -116,7 +116,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-
     private void loginApi() {
         if (Functions.isNetworkAvailable(mContext)) {
             JsonObject jsonObject = new JsonObject();
@@ -168,11 +167,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         if (jsonObject1.getString("userType").equalsIgnoreCase("Driver")) {
                             AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.DRIVER);
-                            startActivity(new Intent(mContext, DriverHomeActivity.class).setAction(""));
+                            startActivity(new Intent(mContext, DriverHomeActivity.class).setAction("").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         } else if (jsonObject1.getString("userType").equalsIgnoreCase("Partner Vendor")) {
                             AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.VENDOR_USER);
-                            startActivity(new Intent(mContext, VendorHomeActivity.class));
+                            startActivity(new Intent(mContext, ManagerHomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         }
 

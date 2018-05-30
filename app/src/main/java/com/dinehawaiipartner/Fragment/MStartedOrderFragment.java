@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.MStartedOrderAdapter;
-import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
@@ -46,11 +45,11 @@ public class MStartedOrderFragment extends Fragment {
     public static ArrayList<DeliveryModel> ordersList = new ArrayList<DeliveryModel>();
     String TAG = "Pending Order";
     Context context;
-TextView noOrders;
+    TextView noOrders;
+    SwipeRefreshLayout refreshLayout;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private MStartedOrderAdapter startedAdapter;
-    SwipeRefreshLayout refreshLayout;
 
     public MStartedOrderFragment() {
         // Required empty public constructor

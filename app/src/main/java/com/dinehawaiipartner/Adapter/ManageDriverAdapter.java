@@ -6,8 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.VendorAllDriversModel;
 import com.dinehawaiipartner.R;
 
@@ -46,12 +46,12 @@ public class ManageDriverAdapter extends RecyclerView.Adapter<ManageDriverAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        CustomTextView tvContact, tvName, tvEmail;
+        TextView tvContact, tvName, tvEmail;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvContact = itemView.findViewById(R.id.tvDrContact);
-            tvName =  itemView.findViewById(R.id.tvDrName);
+            tvName = itemView.findViewById(R.id.tvDrName);
             tvEmail = itemView.findViewById(R.id.tvDrEmail);
 
         }

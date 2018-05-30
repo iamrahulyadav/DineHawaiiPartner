@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
+import com.dinehawaiipartner.Activity.ProfileActivity;
 import com.dinehawaiipartner.Fragment.MPendingOrderFragment;
 import com.dinehawaiipartner.Fragment.MStartedOrderFragment;
 import com.dinehawaiipartner.R;
@@ -50,10 +51,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class VendorHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class ManagerHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     Context context;
-    String TAG = "VendorHomeActivity";
+    String TAG = "ManagerHomeActivity";
     ViewPager viewPager;
     private View headerView;
     private TextView userName;
@@ -124,7 +125,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
         userName = headerView.findViewById(R.id.customerName);
-        userName.setText(AppPreference.getUsername(VendorHomeActivity.this));
+        userName.setText(AppPreference.getUsername(ManagerHomeActivity.this));
     }
 
     @Override
@@ -207,7 +208,7 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
                         JSONObject object = jsonArray.getJSONObject(0);
                         Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
                         AppPreference.clearPreference(context);
-                        startActivity(new Intent(context, LoginActivity.class));
+                        startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         finish();
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
@@ -253,13 +254,16 @@ public class VendorHomeActivity extends AppCompatActivity implements NavigationV
                 showLogoutAlert();
                 break;
             case R.id.nav_vendor_home:
-                startActivity(new Intent(context, VendorHomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(context, ManagerHomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.nav_vendor_orders:
                 startActivity(new Intent(context, MCompletedOrderActivity.class));
                 break;
             case R.id.nav_vendor_drivers:
                 startActivity(new Intent(context, ManageDriversActivity.class));
+                break;
+           case R.id.nav_vendor_profile:
+                startActivity(new Intent(context, ProfileActivity.class));
                 break;
             default:
                 break;
