@@ -26,7 +26,15 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/_5sdp" />
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/navigateRoute"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_above="@id/progressBar"
+        android:src="@drawable/navigatebtn"/>
     <LinearLayout
         android:id="@+id/llBottom"
         android:layout_width="match_parent"

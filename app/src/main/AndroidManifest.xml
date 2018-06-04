@@ -73,7 +73,10 @@
             android:name=".Activity.WebViewActivity"
             android:label="@string/title_activity_web_view"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activity.ProfileActivity"></activity>
+        <activity android:name=".Activity.ProfileActivity" />
+        <activity android:name=".Activity.Driver.DriverNewTripActivity" />
+        <activity android:name=".Activity.Manager.ManagerNewTripActivity" />
+        <activity android:name=".Activity.OrderDetailActivity"></activity>
     </application>
 
 </manifest>

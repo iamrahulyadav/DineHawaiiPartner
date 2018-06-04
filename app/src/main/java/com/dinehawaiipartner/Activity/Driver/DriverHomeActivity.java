@@ -15,6 +15,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -109,6 +110,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     String orderId;
     LatLng source;
     Marker markerRestaurant = null, markerCustomer = null;
+    ImageView navigateRoute;
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
@@ -260,6 +262,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private void initDeliveryView() {
         btnComplete = findViewById(R.id.btnComplete);
+        navigateRoute = findViewById(R.id.navigateRoute);
         btnStart = findViewById(R.id.btnStart);
         delivery_view = findViewById(R.id.delivery_view);
         llCustDetails = findViewById(R.id.llCustDetails);
@@ -272,6 +275,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         delivery_view.setVisibility(View.VISIBLE);
         delivery_view.setOnClickListener(this);
         btnComplete.setOnClickListener(this);
+        navigateRoute.setOnClickListener(this);
         btnStart.setOnClickListener(this);
     }
 
@@ -572,6 +576,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.btnCallAdmin:
                 Toast.makeText(context, "Calling admin...", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.navigateRoute:
+                openNavigationMethod();
+                break;
             case R.id.btnStart:
                 if (Functions.isNetworkAvailable(context))
                     startTripTask();
@@ -586,6 +593,14 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 break;
 
         }
+    }
+
+    private void openNavigationMethod() {
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("google.navigation:q=" + restLatLng.latitude
+                        + "," + restLatLng.longitude + ""));
+
+        startActivity(intent);
     }
 
 
