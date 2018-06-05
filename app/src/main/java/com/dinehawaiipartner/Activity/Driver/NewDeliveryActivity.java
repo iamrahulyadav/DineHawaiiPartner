@@ -142,7 +142,7 @@ public class NewDeliveryActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     noOrder.setVisibility(View.VISIBLE);
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
                 progressHD.dismiss();
@@ -154,7 +154,7 @@ public class NewDeliveryActivity extends AppCompatActivity {
                 Log.e(TAG, "getAllNewOrders error :- " + Log.getStackTraceString(t));
                 progressHD.dismiss();
                 noOrder.setVisibility(View.VISIBLE);
-                Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         });
 

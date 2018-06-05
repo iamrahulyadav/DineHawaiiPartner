@@ -33,6 +33,7 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        DeliveryModel listModel = tripList.get(position);
         holder.tvDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +41,10 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
                 context.startActivity(intent);
             }
         });
+        holder.tvOrderId.setText("#" + listModel.getOrderId());
+        holder.tvCustName.setText(listModel.getCustName());
+        holder.tvPhoneNo.setText(listModel.getCustPhone());
+        holder.tvPickupAddr.setText(listModel.getCustDeliveryAddress());
     }
 
     @Override
@@ -49,7 +54,7 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDetails, tvOrderId, tvCustName, tvPickupAddr, tvReject, tvAccept;
+        TextView tvDetails, tvOrderId, tvCustName, tvPickupAddr, tvReject, tvAccept,tvPhoneNo;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,6 +64,7 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
             tvPickupAddr = (TextView) itemView.findViewById(R.id.tvPickupAddr);
             tvReject = (TextView) itemView.findViewById(R.id.tvReject);
             tvAccept = (TextView) itemView.findViewById(R.id.tvAccept);
+            tvPhoneNo = (TextView) itemView.findViewById(R.id.tvPhoneNo);
         }
     }
 }
