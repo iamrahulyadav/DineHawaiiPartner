@@ -34,6 +34,7 @@ public class AppConstants {
         String ADD_DRIVER = "Add_New_Driver";
         String EDIT_DRIVER = "Edit_New_Driver";
         String GETALLPENDINGORDERS = "getDeliveryOrders";
+        String GETPENDINGDELIVERYORDERS= "getPendingDeliveryOrders";
         String ASSIGNORDER = "assignOrderToDriver";
         String LOGOUTVENDOR = "Logout_Vendor_Driver";
         String GETSTARTEDDELIVERY = "getStartedDeliveryOrders";
