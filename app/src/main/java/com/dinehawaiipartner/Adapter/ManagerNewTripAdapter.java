@@ -1,22 +1,40 @@
 package com.dinehawaiipartner.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.Manager.ManagerHomeActivity;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
+import com.dinehawaiipartner.Retrofit.ApiClient;
+import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
+import com.dinehawaiipartner.Util.AppConstants;
+import com.dinehawaiipartner.Util.AppPreference;
+import com.dinehawaiipartner.Util.ProgressHUD;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAdapter.ViewHolder> {
+    private static String TAG = "ManagerNewTripAdapter";
     Context context;
     ArrayList<DeliveryModel> tripList;
 
@@ -24,7 +42,6 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
         this.context = context;
         this.tripList = modalList;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,7 +52,7 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        DeliveryModel model = tripList.get(position);
+        final DeliveryModel model = tripList.get(position);
         holder.tvRestName.setText(model.getBusinessName());
         holder.tvRestPhone.setText(model.getBusPhone());
         holder.tvPickupAddr.setText(model.getBusAddress());
@@ -57,14 +74,14 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
         holder.tvAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, ManagerHomeActivity.class));
+                acceptDelivery(model.getOrderId());
             }
         });
 
         holder.tvReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                rejectDelivery(model.getOrderId());
             }
         });
     }
@@ -72,6 +89,101 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
     @Override
     public int getItemCount() {
         return tripList.size();
+    }
+
+    private void acceptDelivery(String orderId) {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.VENDOR_ACCEPT_DELIVERY);
+        jsonObject.addProperty("vendor_id", AppPreference.getUserid(context));
+        jsonObject.addProperty("order_id", orderId);
+        Log.e(TAG, "acceptDelivery: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "acceptDelivery: Response >> " + resp);
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        Toast.makeText(context, jsonObject.getJSONArray("result").getJSONObject(0).getString("msg"), Toast.LENGTH_SHORT).show();
+                        context.startActivity(new Intent(context, ManagerHomeActivity.class));
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        Toast.makeText(context, jsonObject.getJSONArray("result").getJSONObject(0).getString("msg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "error :- " + Log.getStackTraceString(t));
+                progressHD.dismiss();
+                Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void rejectDelivery(String orderId) {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.VENDOR_REJECT_DELIVERY);
+        jsonObject.addProperty("vendor_id", AppPreference.getUserid(context));
+        jsonObject.addProperty("order_id", orderId);
+        Log.e(TAG, "rejectDelivery: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "rejectDelivery: Response >> " + resp);
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "error :- " + Log.getStackTraceString(t));
+                progressHD.dismiss();
+                Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -93,4 +205,5 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
             tvReject = (TextView) itemView.findViewById(R.id.tvReject);
         }
     }
+
 }

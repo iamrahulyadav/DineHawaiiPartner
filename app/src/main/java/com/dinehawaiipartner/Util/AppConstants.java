@@ -34,11 +34,13 @@ public class AppConstants {
         String ADD_DRIVER = "Add_New_Driver";
         String EDIT_DRIVER = "Edit_New_Driver";
         String GETALLPENDINGORDERS = "getDeliveryOrders";
-        String GETPENDINGDELIVERYORDERS= "getPendingDeliveryOrders";
+        String GETPENDINGDELIVERYORDERS = "getPendingDeliveryOrders";
         String ASSIGNORDER = "assignOrderToDriver";
         String LOGOUTVENDOR = "Logout_Vendor_Driver";
         String GETSTARTEDDELIVERY = "getStartedDeliveryOrders";
         String GETCOMPLETEDDELIVERY = "getCompletedDeliveryOrders";
+        String VENDOR_ACCEPT_DELIVERY = "vendor_accept_delivery";
+        String VENDOR_REJECT_DELIVERY = "vendor_reject_delivery";
     }
 
     public interface DRIVER_METHODS {
@@ -63,7 +65,7 @@ public class AppConstants {
         public static final String MANAGER_NEW_DELIVERY = "manager_new_delivery";
         public static final String MANAGER_DELIVERY_PICKEDUP = "manager_driver_picked";
         public static final String MANAGER_DELIVERY_COMPLETED = "manager_driver_completed";
-        public static final String MANAGER_DELIVERY_ACCEPTED ="manager_delivery_accepted" ;
+        public static final String MANAGER_DELIVERY_ACCEPTED = "manager_delivery_accepted";
     }
 
     public class NOTIFICATION_ID {

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,7 @@ public class ManagerNewTripActivity extends AppCompatActivity {
     private ArrayList<DeliveryModel> list;
     private RecyclerView recycler_view;
     private ManagerNewTripAdapter adapter;
+    private SwipeRefreshLayout swipe_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,61 +62,76 @@ public class ManagerNewTripActivity extends AppCompatActivity {
     }
 
     private void getAllPendingOrdersList() {
-        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.GETPENDINGDELIVERYORDERS);
-        jsonObject.addProperty("user_id", AppPreference.getUserid(context));
-        jsonObject.addProperty("business_id", AppPreference.getBusinessid(context));
-        Log.e(TAG, "getAllPendingOrdersList: Request >> " + jsonObject);
-
-        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.orders_url(jsonObject);
-
-        call.enqueue(new Callback<JsonObject>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                String resp = response.body().toString();
-                Log.e(TAG, "getAllPendingOrdersList: Response >> " + resp);
-                try {
-                    list.clear();
-                    JSONObject jsonObject = new JSONObject(resp);
-                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
-//                        noOrders.setVisibility(View.GONE);
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            Gson gson = new Gson();
-                            DeliveryModel model = gson.fromJson(jsonArray.getJSONObject(i).toString(), DeliveryModel.class);
-                            list.add(model);
-                        }
-                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
-                        list.clear();
-//                        noOrders.setVisibility(View.VISIBLE);
-                    }
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-//                    noOrders.setVisibility(View.VISIBLE);
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
+        if (Functions.isNetworkAvailable(ManagerNewTripActivity.this)) {
+            swipe_container.setRefreshing(false);
+            final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    // TODO Auto-generated method stub
                 }
-                progressHD.dismiss();
-            }
+            });
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "error :- " + Log.getStackTraceString(t));
-                progressHD.dismiss();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.GETPENDINGDELIVERYORDERS);
+            jsonObject.addProperty("user_id", AppPreference.getUserid(context));
+            jsonObject.addProperty("business_id", AppPreference.getBusinessid(context));
+            Log.e(TAG, "getAllPendingOrdersList: Request >> " + jsonObject);
+
+            MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+            Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+            call.enqueue(new Callback<JsonObject>() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    String resp = response.body().toString();
+                    Log.e(TAG, "getAllPendingOrdersList: Response >> " + resp);
+                    try {
+                        list.clear();
+                        JSONObject jsonObject = new JSONObject(resp);
+                        if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+//                        noOrders.setVisibility(View.GONE);
+                            JSONArray jsonArray = jsonObject.getJSONArray("result");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Gson gson = new Gson();
+                                DeliveryModel model = gson.fromJson(jsonArray.getJSONObject(i).toString(), DeliveryModel.class);
+                                list.add(model);
+                            }
+
+                        } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                            list.clear();
+                        }
+                        adapter.notifyDataSetChanged();
+
+                        if (list.isEmpty()) {
+                            Toast.makeText(ManagerNewTripActivity.this, "No pending deliveries avaialble", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        }
+
+                    } catch (JSONException e) {
+//                    noOrders.setVisibility(View.VISIBLE);
+                        Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        onBackPressed();
+
+                    }
+                    progressHD.dismiss();
+                }
+
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e(TAG, "error :- " + Log.getStackTraceString(t));
+                    progressHD.dismiss();
 //                noOrders.setVisibility(View.VISIBLE);
-                Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+
+                }
+            });
+        } else {
+            Toast.makeText(ManagerNewTripActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -122,7 +139,7 @@ public class ManagerNewTripActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -131,6 +148,14 @@ public class ManagerNewTripActivity extends AppCompatActivity {
     private void init() {
         context = this;
         list = new ArrayList<>();
+        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllPendingOrdersList();
+            }
+        });
+
     }
 
     private void setTripAdapter() {
@@ -143,11 +168,12 @@ public class ManagerNewTripActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Functions.isNetworkAvailable(ManagerNewTripActivity.this))
-            getAllPendingOrdersList();
-        else {
-            Toast.makeText(ManagerNewTripActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
-        }
+        getAllPendingOrdersList();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(context, ManagerHomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     class MyReciever extends BroadcastReceiver {
@@ -155,7 +181,8 @@ public class ManagerNewTripActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e(TAG, "onReceive:");
-            onResume();
+            getAllPendingOrdersList();
+
         }
     }
 }

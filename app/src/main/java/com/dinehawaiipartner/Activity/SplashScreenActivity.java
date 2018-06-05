@@ -9,7 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
-import com.dinehawaiipartner.Activity.Manager.ManagerHomeActivity;
+import com.dinehawaiipartner.Activity.Manager.ManagerNewTripActivity;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
@@ -31,7 +31,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.DRIVER)) {
                     startActivity(new Intent(context, DriverHomeActivity.class).setAction(""));
                 } else if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.VENDOR_USER))
-                    startActivity(new Intent(context, ManagerHomeActivity.class));
+                    startActivity(new Intent(context, ManagerNewTripActivity.class));
                 else if (AppPreference.getUserType(context).equalsIgnoreCase(AppConstants.LOGIN_TYPE.OTHER_VENDOR))
                     startActivity(new Intent(context, WebViewActivity.class));
                 else

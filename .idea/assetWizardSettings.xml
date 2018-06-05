@@ -18,12 +18,12 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
-                                      <entry key="image">
+                                      <entry key="clipartAsset">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="5" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_call_received_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,10 +34,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Hvantage\Downloads\icon\time-left.png" />
-                                      <entry key="outputName" value="tab_pending" />
+                                      <entry key="imageAsset" value="C:\Users\Hvantage\Desktop\round-call_received-android-white\res\drawable-xxxhdpi\round_call_received_white_48.png" />
+                                      <entry key="outputName" value="new_trip" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="4ac779" />
+                                      <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
                                 </PersistentState>

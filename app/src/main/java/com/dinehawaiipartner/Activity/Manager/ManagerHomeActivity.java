@@ -239,13 +239,15 @@ public class ManagerHomeActivity extends AppCompatActivity implements Navigation
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        if (item.getItemId() == R.id.action_new) {
+            startActivity(new Intent(context, ManagerNewTripActivity.class));
+        }
 
         return super.onOptionsItemSelected(item);
     }
