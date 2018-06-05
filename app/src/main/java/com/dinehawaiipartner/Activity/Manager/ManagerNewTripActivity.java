@@ -104,7 +104,7 @@ public class ManagerNewTripActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
 
                         if (list.isEmpty()) {
-                            Toast.makeText(ManagerNewTripActivity.this, "No pending deliveries avaialble", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ManagerNewTripActivity.this, "No pending deliveries available", Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         }
 
@@ -126,13 +126,11 @@ public class ManagerNewTripActivity extends AppCompatActivity {
 //                noOrders.setVisibility(View.VISIBLE);
                     Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
                     onBackPressed();
-
                 }
             });
         } else {
             Toast.makeText(ManagerNewTripActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
@@ -155,7 +153,6 @@ public class ManagerNewTripActivity extends AppCompatActivity {
                 getAllPendingOrdersList();
             }
         });
-
     }
 
     private void setTripAdapter() {
@@ -177,12 +174,10 @@ public class ManagerNewTripActivity extends AppCompatActivity {
     }
 
     class MyReciever extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e(TAG, "onReceive:");
             getAllPendingOrdersList();
-
         }
     }
 }
