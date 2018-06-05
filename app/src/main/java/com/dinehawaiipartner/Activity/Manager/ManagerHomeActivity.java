@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dinehawaiipartner.Activity.Driver.NewDeliveryActivity;
 import com.dinehawaiipartner.Activity.LoginActivity;
 import com.dinehawaiipartner.Activity.ProfileActivity;
 import com.dinehawaiipartner.Fragment.MPendingOrderFragment;
@@ -256,6 +257,9 @@ public class ManagerHomeActivity extends AppCompatActivity implements Navigation
             case R.id.nav_vendor_logout:
                 showLogoutAlert();
                 break;
+            case R.id.nav_new_delivery:
+                startActivity(new Intent(context, NewDeliveryActivity.class));
+                break;
             case R.id.nav_vendor_home:
                 startActivity(new Intent(context, ManagerHomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
@@ -265,7 +269,7 @@ public class ManagerHomeActivity extends AppCompatActivity implements Navigation
             case R.id.nav_vendor_drivers:
                 startActivity(new Intent(context, ManageDriversActivity.class));
                 break;
-           case R.id.nav_vendor_profile:
+            case R.id.nav_vendor_profile:
                 startActivity(new Intent(context, ProfileActivity.class));
                 break;
             default:

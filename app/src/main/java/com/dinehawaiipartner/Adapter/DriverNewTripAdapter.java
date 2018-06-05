@@ -1,14 +1,12 @@
 package com.dinehawaiipartner.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dinehawaiipartner.Activity.OrderDetailActivity;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 
@@ -34,14 +32,6 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         DeliveryModel listModel = tripList.get(position);
-        holder.tvDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, OrderDetailActivity.class);
-                context.startActivity(intent);
-            }
-        });
-        holder.tvOrderId.setText("#" + listModel.getOrderId());
         holder.tvCustName.setText(listModel.getCustName());
         holder.tvPhoneNo.setText(listModel.getCustPhone());
         holder.tvPickupAddr.setText(listModel.getCustDeliveryAddress());
@@ -54,12 +44,10 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDetails, tvOrderId, tvCustName, tvPickupAddr, tvReject, tvAccept,tvPhoneNo;
+        TextView tvCustName, tvPickupAddr, tvReject, tvAccept, tvPhoneNo;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvOrderId = (TextView) itemView.findViewById(R.id.tvOrderId);
-            tvDetails = (TextView) itemView.findViewById(R.id.tvDetails);
             tvCustName = (TextView) itemView.findViewById(R.id.tvCustName);
             tvPickupAddr = (TextView) itemView.findViewById(R.id.tvPickupAddr);
             tvReject = (TextView) itemView.findViewById(R.id.tvReject);
