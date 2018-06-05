@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
-import com.dinehawaiipartner.Activity.Manager.VendorHomeActivity;
+import com.dinehawaiipartner.Activity.Manager.ManagerHomeActivity;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
 import com.dinehawaiipartner.Retrofit.MyApiEndpointInterface;
@@ -116,7 +116,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-
     private void loginApi() {
         if (Functions.isNetworkAvailable(mContext)) {
             JsonObject jsonObject = new JsonObject();
@@ -168,25 +167,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         if (jsonObject1.getString("userType").equalsIgnoreCase("Driver")) {
                             AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.DRIVER);
-                            startActivity(new Intent(mContext, DriverHomeActivity.class).setAction(""));
+                            startActivity(new Intent(mContext, DriverHomeActivity.class).setAction("").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         } else if (jsonObject1.getString("userType").equalsIgnoreCase("Partner Vendor")) {
                             AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.VENDOR_USER);
-                            startActivity(new Intent(mContext, VendorHomeActivity.class));
+                            startActivity(new Intent(mContext, ManagerHomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         }
 
-                        AppPreference.setUserTypeId(mContext, jsonObject1.getString("user_type"));
-
                     } else if (jsonObject.getString("status").equalsIgnoreCase("300")) {
+                        AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.OTHER_VENDOR);
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
                         JSONObject jsonObject1 = jsonArray.getJSONObject(0);
-                        AppPreference.setUserType(mContext, AppConstants.LOGIN_TYPE.OTHER_VENDOR);
-                        AppPreference.setUserTypeId(mContext, jsonObject1.getString("user_type"));
-                        AppPreference.setUserid(LoginActivity.this, jsonObject1.getString("user_id"));
                         AppPreference.setUsername(LoginActivity.this, jsonObject1.getString("first_name") + " " + jsonObject1.getString("last_name"));
                         AppPreference.setVendorUrl(LoginActivity.this, jsonObject1.getString("VENDOR_ADMIN_Url"));
-                        Intent intent = new Intent(getApplicationContext(), WebViewActivity.class);
+                        AppPreference.setUserid(LoginActivity.this, jsonObject1.getString("user_id"));
+                        Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
                         startActivity(intent);
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");

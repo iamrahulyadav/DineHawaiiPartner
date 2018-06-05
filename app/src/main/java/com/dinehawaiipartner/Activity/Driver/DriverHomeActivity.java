@@ -15,6 +15,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,7 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Activity.LoginActivity;
-import com.dinehawaiipartner.CustomViews.CustomTextView;
+import com.dinehawaiipartner.Activity.ProfileActivity;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Reciever.SendLocation;
@@ -111,10 +112,11 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     String orderId;
     LatLng source;
     Marker markerRestaurant = null, markerCustomer = null;
+    ImageView navigateRoute;
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
-    private CustomTextView userName;
+    private TextView userName;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Context context;
@@ -267,6 +269,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private void initDeliveryView() {
         btnComplete = findViewById(R.id.btnComplete);
+        navigateRoute = findViewById(R.id.navigateRoute);
         btnStart = findViewById(R.id.btnStart);
         delivery_view = findViewById(R.id.delivery_view);
         llCustDetails = findViewById(R.id.llCustDetails);
@@ -279,6 +282,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         delivery_view.setVisibility(View.VISIBLE);
         delivery_view.setOnClickListener(this);
         btnComplete.setOnClickListener(this);
+        navigateRoute.setOnClickListener(this);
         btnStart.setOnClickListener(this);
     }
 
@@ -353,6 +357,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_deliveries:
+                startActivity(new Intent(context, NewDeliveryActivity.class));
             default:
                 break;
         }
@@ -392,6 +398,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                 break;
             case R.id.nav_driver_deliveries:
                 startActivity(new Intent(context, NewDeliveryActivity.class));
+                break;
+            case R.id.nav_driver_profile:
+                startActivity(new Intent(context, ProfileActivity.class));
                 break;
             case R.id.nav_driver_home:
                 startActivity(new Intent(context, DriverHomeActivity.class).setAction("").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -584,17 +593,33 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.btnCallAdmin:
                 Toast.makeText(context, "Calling admin...", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.navigateRoute:
+                openNavigationMethod();
+                break;
             case R.id.btnStart:
-//                Toast.makeText(context, "Starting...", Toast.LENGTH_SHORT).show();
-                startTripTask();
+                if (Functions.isNetworkAvailable(context))
+                    startTripTask();
+                else
+                    Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnComplete:
-                completeTripTask();
-//                Toast.makeText(context, "Completing...", Toast.LENGTH_SHORT).show();
+                if (Functions.isNetworkAvailable(context))
+                    completeTripTask();
+                else
+                    Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                 break;
 
         }
     }
+
+    private void openNavigationMethod() {
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("google.navigation:q=" + restLatLng.latitude
+                        + "," + restLatLng.longitude + ""));
+
+        startActivity(intent);
+    }
+
 
     private void completeTripTask() {
         final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
@@ -763,7 +788,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         JSONObject object = jsonArray.getJSONObject(0);
                         Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
                         AppPreference.clearPreference(context);
-                        startActivity(new Intent(context, LoginActivity.class));
+                        startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         finish();
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");

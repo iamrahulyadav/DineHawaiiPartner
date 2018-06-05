@@ -3,7 +3,6 @@ package com.dinehawaiipartner.Activity.Driver;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dinehawaiipartner.Adapter.DriverDeliveryAdapter;
+import com.dinehawaiipartner.Adapter.DriverNewTripAdapter;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
@@ -24,7 +23,6 @@ import com.dinehawaiipartner.Util.AppConstants;
 import com.dinehawaiipartner.Util.AppPreference;
 import com.dinehawaiipartner.Util.Functions;
 import com.dinehawaiipartner.Util.ProgressHUD;
-import com.dinehawaiipartner.Util.RecyclerItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -38,35 +36,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewDeliveryActivity extends AppCompatActivity {
-    String TAG = "NewDeliveryActivity";
-    ArrayList<DeliveryModel> list;
-    TextView noOrder;
+public class DriverNewTripActivity extends AppCompatActivity {
+    Context context;
+    String TAG = "DriverNewTrip";
+    private ArrayList<DeliveryModel> tripsList;
     private RecyclerView recycler_view;
-    private Context context;
-    private DriverDeliveryAdapter adapter;
+    private DriverNewTripAdapter tripsAdapter;
+    TextView noOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_delivery);
-        context = this;
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_driver_new_trip);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("New Orders");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        list = new ArrayList<DeliveryModel>();
-        noOrder = findViewById(R.id.noOrder);
-        setRecyclerView();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (Functions.isNetworkAvailable(context))
-            getAllNewOrders();
-        else
-            Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+        init();
+        setTripAdapter();
     }
 
     @Override
@@ -79,29 +66,28 @@ public class NewDeliveryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void setRecyclerView() {
-        recycler_view = (RecyclerView) findViewById(R.id.recycler_view);
-        recycler_view.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new DriverDeliveryAdapter(context, list);
-        recycler_view.setAdapter(adapter);
-        recycler_view.addOnItemTouchListener(new RecyclerItemClickListener(context, recycler_view, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(context, DriverHomeActivity.class);
-                intent.putExtra("data", list.get(position));
-                intent.setAction("Delivery");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        }));
+    private void init() {
+        context = this;
+        tripsList = new ArrayList<>();
+        noOrder = (TextView)findViewById(R.id.noOrder);
     }
 
+    private void setTripAdapter() {
+        recycler_view = (RecyclerView) findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(context);
+        recycler_view.setLayoutManager(manager);
+        tripsAdapter = new DriverNewTripAdapter(context, tripsList);
+        recycler_view.setAdapter(tripsAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Functions.isNetworkAvailable(context))
+            getAllNewOrders();
+        else
+            Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+    }
     private void getAllNewOrders() {
         final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
             @Override
@@ -125,7 +111,7 @@ public class NewDeliveryActivity extends AppCompatActivity {
                 String resp = response.body().toString();
                 Log.e(TAG, "getAllNewOrders: Response >> " + resp);
                 try {
-                    list.clear();
+                    tripsList.clear();
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
                         noOrder.setVisibility(View.GONE);
@@ -133,13 +119,13 @@ public class NewDeliveryActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Gson gson = new Gson();
                             DeliveryModel model = gson.fromJson(jsonArray.getJSONObject(i).toString(), DeliveryModel.class);
-                            list.add(model);
+                            tripsList.add(model);
                         }
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
-                        list.clear();
+                        tripsList.clear();
                         noOrder.setVisibility(View.VISIBLE);
                     }
-                    adapter.notifyDataSetChanged();
+                    tripsAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     noOrder.setVisibility(View.VISIBLE);
                     Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();

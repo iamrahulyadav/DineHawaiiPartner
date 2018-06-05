@@ -125,7 +125,7 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
             }
         });
 
-        dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("ASSIGN TO ALL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }

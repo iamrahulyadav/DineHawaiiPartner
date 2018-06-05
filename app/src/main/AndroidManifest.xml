@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.Manager.VendorHomeActivity"
+            android:name=".Activity.Manager.ManagerHomeActivity"
             android:label="@string/title_activity_vendor_home"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme" />
@@ -42,7 +42,6 @@
         <activity android:name=".Activity.Manager.ManageDriversActivity" />
         <activity android:name=".Activity.Manager.AddNewDriverActivity" />
         <activity android:name=".Activity.Manager.MCompletedOrderActivity" />
-        <activity android:name=".Activity.Manager.OrderDetailActivity" />
 
         <service
             android:name=".Services.LocationService"
@@ -73,7 +72,11 @@
         <activity
             android:name=".Activity.WebViewActivity"
             android:label="@string/title_activity_web_view"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Activity.ProfileActivity" />
+        <activity android:name=".Activity.Driver.DriverNewTripActivity" />
+        <activity android:name=".Activity.Manager.ManagerNewTripActivity" />
+        <activity android:name=".Activity.OrderDetailActivity"></activity>
     </application>
 
 </manifest>

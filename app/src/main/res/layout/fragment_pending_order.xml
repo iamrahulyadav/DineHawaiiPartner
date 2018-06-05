@@ -19,7 +19,7 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <com.dinehawaiipartner.CustomViews.CustomTextView
+    <TextView
         android:id="@+id/noOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,6 +32,5 @@
         android:paddingRight="@dimen/_10sdp"
         android:paddingTop="@dimen/_5sdp"
         android:text="No Orders"
-        android:visibility="gone"
-        app:edittextfont="Raleway-Regular.ttf" />
+        android:visibility="gone" />
 </RelativeLayout>

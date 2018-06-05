@@ -28,17 +28,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Name : "
-                    android:textStyle="bold"
-                    app:edittextfont="Raleway-Bold.ttf" />
+                     />
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     android:id="@+id/tvDrName"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
@@ -46,7 +45,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="NA"
-                    app:edittextfont="Raleway-Regular.ttf" />
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -55,16 +54,16 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="horizontal">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Email : "
-                    app:edittextfont="Raleway-Bold.ttf" />
+                     />
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     android:id="@+id/tvDrEmail"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
@@ -72,7 +71,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="NA"
-                    app:edittextfont="Raleway-Regular.ttf" />
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -81,16 +80,16 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="horizontal">
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Contact no : "
-                    app:edittextfont="Raleway-Bold.ttf" />
+                     />
 
-                <com.dinehawaiipartner.CustomViews.CustomTextView
+                <TextView
                     android:id="@+id/tvDrContact"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
@@ -98,7 +97,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="NA"
-                    app:edittextfont="Raleway-Regular.ttf" />
+                     />
             </LinearLayout>
         </LinearLayout>
 

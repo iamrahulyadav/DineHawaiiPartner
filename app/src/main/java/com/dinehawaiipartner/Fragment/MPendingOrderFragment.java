@@ -13,10 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinehawaiipartner.Adapter.MPendingOrderAdapter;
-import com.dinehawaiipartner.CustomViews.CustomTextView;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.Model.VendorAllDriversModel;
 import com.dinehawaiipartner.R;
@@ -44,14 +44,14 @@ import retrofit2.Response;
  */
 public class MPendingOrderFragment extends Fragment {
     public static ArrayList<DeliveryModel> ordersList = new ArrayList<DeliveryModel>();
-    ArrayList<VendorAllDriversModel> driverslist= new ArrayList<VendorAllDriversModel>();
+    ArrayList<VendorAllDriversModel> driverslist = new ArrayList<VendorAllDriversModel>();
     String TAG = "PendingOrders";
     Context context;
-    CustomTextView noOrders;
+    TextView noOrders;
+    SwipeRefreshLayout refreshLayout;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private MPendingOrderAdapter pendingAdapter;
-    SwipeRefreshLayout refreshLayout;
 
     public MPendingOrderFragment() {
         // Required empty public constructor
@@ -65,13 +65,13 @@ public class MPendingOrderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pending_order, container, false);
         context = getActivity();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        noOrders = (CustomTextView) view.findViewById(R.id.noOrder);
+        noOrders = (TextView) view.findViewById(R.id.noOrder);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PendingswipeRefresh);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(pendingAdapter);
-        pendingAdapter = new MPendingOrderAdapter(context, ordersList,driverslist);
+        pendingAdapter = new MPendingOrderAdapter(context, ordersList, driverslist);
         mRecyclerView.setAdapter(pendingAdapter);
         pendingAdapter.notifyDataSetChanged();
 
@@ -87,6 +87,7 @@ public class MPendingOrderFragment extends Fragment {
         });
         return view;
     }
+
     private void getAllPendingOrdersList() {
         final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
             @Override
@@ -146,16 +147,16 @@ public class MPendingOrderFragment extends Fragment {
         });
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
         if (ordersList != null) {
             ordersList.clear();
-            if (Functions.isNetworkAvailable(context)){
+            if (Functions.isNetworkAvailable(context)) {
                 getAllPendingOrdersList();
                 getAllDrivers();
-            }
-            else
+            } else
                 Toast.makeText(context, getActivity().getResources().getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
         }
     }

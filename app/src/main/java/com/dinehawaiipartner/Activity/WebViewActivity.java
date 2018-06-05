@@ -47,6 +47,7 @@ public class WebViewActivity extends AppCompatActivity {
         context = WebViewActivity.this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = this;
         if (!AppPreference.getUsername(context).equalsIgnoreCase(""))
             getSupportActionBar().setTitle(AppPreference.getUsername(context));
 
@@ -209,7 +210,6 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     private void init() {
-        context = this;
         webView = (WebView) findViewById(R.id.webView);
     }
 
