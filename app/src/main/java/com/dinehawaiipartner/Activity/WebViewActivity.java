@@ -152,63 +152,6 @@ public class WebViewActivity extends AppCompatActivity {
         });
     }
 
-    private void vendorLogoutMethodOld() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("method", AppConstants.OTHER_VENDOR_API.LOGOUT);
-        jsonObject.addProperty("user_id", AppPreference.getUserid(context));
-        //jsonObject.addProperty("user_type", AppPreference.getUsertypeid(context));
-        Log.e(TAG + "json", jsonObject.toString());
-        logoutApi(jsonObject);
-    }
-
-    private void logoutApi(JsonObject jsonObject) {
-        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-
-        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.other_vendor(jsonObject);
-        call.enqueue(new Callback<JsonObject>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, "logout response" + response.body().toString());
-                String resp = response.body().toString();
-                try {
-                    JSONObject jsonObject = new JSONObject(resp);
-                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
-                        AppPreference.clearPreference(context);
-                        Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        JSONObject object = jsonArray.getJSONObject(0);
-                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                progressHD.dismiss();
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "error :- " + Log.getStackTraceString(t));
-                progressHD.dismiss();
-                Toast.makeText(context, "Server not Responding", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void init() {
         webView = (WebView) findViewById(R.id.webView);
     }
@@ -313,4 +256,3 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 }
-//hjkkh
