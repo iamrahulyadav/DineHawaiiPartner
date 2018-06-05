@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.dinehawaiipartner.Activity.Driver.NewDeliveryActivity;
@@ -33,6 +34,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             String DRIVER_NEW_DELIVERY = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.DRIVER_NEW_DELIVERY);
             String MANAGER_NEW_DELIVERY = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_NEW_DELIVERY);
+            String MANAGER_DELIVERY_ACCEPTED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_ACCEPTED);
             String MANAGER_DELIVERY_COMPLETED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_COMPLETED);
             String MANAGER_DELIVERY_PICKEDUP = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_PICKEDUP);
 
@@ -54,6 +56,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else if (!MANAGER_DELIVERY_ACCEPTED.equalsIgnoreCase("null")) {
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("get_update"));
             } else if (!MANAGER_DELIVERY_COMPLETED.equalsIgnoreCase("null")) {
                 JSONObject jsonObject = null;
                 try {

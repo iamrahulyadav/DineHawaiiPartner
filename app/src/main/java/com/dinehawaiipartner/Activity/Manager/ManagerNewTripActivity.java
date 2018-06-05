@@ -1,9 +1,13 @@
 package com.dinehawaiipartner.Activity.Manager;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,6 +55,7 @@ public class ManagerNewTripActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
+        LocalBroadcastManager.getInstance(context).registerReceiver(new MyReciever(), new IntentFilter("get_update"));
         setTripAdapter();
     }
 
@@ -142,6 +147,15 @@ public class ManagerNewTripActivity extends AppCompatActivity {
             getAllPendingOrdersList();
         else {
             Toast.makeText(ManagerNewTripActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    class MyReciever extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "onReceive:");
+            onResume();
         }
     }
 }
