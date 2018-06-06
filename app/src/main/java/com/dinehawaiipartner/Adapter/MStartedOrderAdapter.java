@@ -36,11 +36,14 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final DeliveryModel model = ordersModelArrayList.get(position);
         holder.tvCustName.setText(model.getCustName());
-        holder.tvCustAddress.setText(model.getCustDeliveryAddress());
+        holder.tvDelAddress.setText(model.getCustDeliveryAddress());
+        holder.tvPickupAddr.setText(model.getBusAddress());
         holder.tvCustContact.setText(model.getCustPhone());
-        holder.tvorderId.setText("#" + model.getOrderId());
-        holder.tvbus_name.setText(model.getBusinessName());
+        holder.tvRestPhoneNo.setText(model.getBusPhone());
         holder.tvTotalAmt.setText("$" + model.getOrderAmount());
+        if (!model.getFood_prepare_time().equalsIgnoreCase(""))
+            holder.tvPrepareTime.setText("(Food ready in : " + model.getFood_prepare_time() + " mins)");
+
         if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0"))
             holder.assignDriver.setVisibility(View.GONE);
         else {
@@ -56,14 +59,17 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvCustName, tvCustAddress, tvCustContact, tvorderId, tvbus_name, tvTotalAmt, assignDriver;
+        TextView tvCustName, tvPrepareTime, tvDelAddress, tvPickupAddr, tvCustContact, tvRestPhoneNo, tvorderId, tvbus_name, tvTotalAmt, assignDriver;
         CardView cardDriver;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvCustName = itemView.findViewById(R.id.tvName);
-            tvCustAddress = itemView.findViewById(R.id.tvAddress);
-            tvCustContact = itemView.findViewById(R.id.tvPhoneNo);
+            tvPrepareTime = (TextView) itemView.findViewById(R.id.tvPrepareTime);
+            tvDelAddress = itemView.findViewById(R.id.tvDelAddress);
+            tvPickupAddr = itemView.findViewById(R.id.tvPickupAddr);
+            tvCustContact = itemView.findViewById(R.id.tvCustPhoneNo);
+            tvRestPhoneNo = itemView.findViewById(R.id.tvRestPhoneNo);
             tvorderId = itemView.findViewById(R.id.tvorder_id);
             tvbus_name = itemView.findViewById(R.id.tvbus_name);
             tvTotalAmt = itemView.findViewById(R.id.tvTotalAmt);

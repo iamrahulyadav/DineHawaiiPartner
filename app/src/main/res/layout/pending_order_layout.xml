@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/_8sdp"
     android:layout_marginRight="@dimen/_8sdp"
     android:layout_marginTop="@dimen/_8sdp"
+    android:animateLayoutChanges="true"
     app:contentPadding="@dimen/_8sdp">
 
     <LinearLayout
@@ -28,6 +30,16 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPrepareTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_toRightOf="@id/tvorder_id"
+                android:text=""
+                android:textColor="@color/colorRed" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardDriver"
@@ -54,7 +66,6 @@
                     android:textColor="@color/white" />
             </android.support.v7.widget.CardView>
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,16 +107,17 @@
                 android:textColor="@color/subhead" />
 
             <TextView
-                android:id="@+id/tvPhoneNo"
+                android:id="@+id/tvCustPhoneNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:autoLink="phone"
                 android:clickable="true"
+                android:drawableLeft="@drawable/ic_call_green_24dp"
                 android:fontFamily="@font/roboto"
                 android:text="+91 8988989889"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/mainhead" />
+                android:textColor="@color/colorPrimary" />
         </LinearLayout>
 
         <LinearLayout
@@ -118,34 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="Restaurant :"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/subhead" />
-
-            <TextView
-                android:id="@+id/tvbus_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:autoLink="phone"
-                android:clickable="true"
-                android:fontFamily="@font/roboto"
-                android:text="NA"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/mainhead" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto"
-                android:text="Total Amount :"
+                android:text="Order Amount :"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/subhead" />
 
@@ -154,8 +139,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_5sdp"
-                android:autoLink="phone"
-                android:clickable="true"
                 android:fontFamily="@font/roboto"
                 android:text="0"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -166,30 +149,123 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="Address :"
+                android:text="Delivery Address :"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/subhead" />
 
             <TextView
-                android:id="@+id/tvAddress"
+                android:id="@+id/tvDelAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:autoLink="map"
                 android:clickable="true"
                 android:fontFamily="@font/roboto"
                 android:text="Nath Mandir Road South Tukogant, RNT Marg Indore"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/mainhead" />
+
         </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/llOtherDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/dividerDark" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Restaurant :"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/subhead" />
+
+                <TextView
+                    android:id="@+id/tvbus_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:fontFamily="@font/roboto"
+                    android:text="NA"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/mainhead" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Contact No :"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/subhead" />
+
+                <TextView
+                    android:id="@+id/tvRestPhoneNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:autoLink="phone"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_call_green_24dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="+91 8988989889"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Pickup Address :"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/subhead" />
+
+                <TextView
+                    android:id="@+id/tvPickupAddr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="map"
+                    android:clickable="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="Nath Mandir Road South Tukogant, RNT Marg Indore"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/mainhead" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

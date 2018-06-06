@@ -112,7 +112,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     String orderId;
     LatLng source;
     Marker markerRestaurant = null, markerCustomer = null;
-    ImageView navigateRoute;
+    FloatingActionButton fabGetDirection;
     private GoogleMap map;
     private Marker markerCurrent;
     private View headerView;
@@ -269,7 +269,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private void initDeliveryView() {
         btnComplete = findViewById(R.id.btnComplete);
-        navigateRoute = findViewById(R.id.navigateRoute);
+        fabGetDirection = findViewById(R.id.fabGetDirection);
         btnStart = findViewById(R.id.btnStart);
         delivery_view = findViewById(R.id.delivery_view);
         llCustDetails = findViewById(R.id.llCustDetails);
@@ -282,7 +282,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         delivery_view.setVisibility(View.VISIBLE);
         delivery_view.setOnClickListener(this);
         btnComplete.setOnClickListener(this);
-        navigateRoute.setOnClickListener(this);
+        fabGetDirection.setOnClickListener(this);
         btnStart.setOnClickListener(this);
     }
 
@@ -358,7 +358,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_deliveries:
-                startActivity(new Intent(context, NewDeliveryActivity.class));
+                startActivity(new Intent(context, AcceptedDeliveryActivity.class));
             default:
                 break;
         }
@@ -396,14 +396,18 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_driver_logout:
                 showLogoutAlert();
                 break;
+            case R.id.nav_driver_new_deliveries:
+                startActivity(new Intent(context, DriverNewTripActivity.class));
+                break;
             case R.id.nav_driver_deliveries:
-                startActivity(new Intent(context, NewDeliveryActivity.class));
+                startActivity(new Intent(context, AcceptedDeliveryActivity.class));
                 break;
             case R.id.nav_driver_profile:
                 startActivity(new Intent(context, ProfileActivity.class));
                 break;
             case R.id.nav_driver_home:
                 startActivity(new Intent(context, DriverHomeActivity.class).setAction("").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                finish();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -593,7 +597,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.btnCallAdmin:
                 Toast.makeText(context, "Calling admin...", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.navigateRoute:
+            case R.id.fabGetDirection:
                 openNavigationMethod();
                 break;
             case R.id.btnStart:
@@ -656,7 +660,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         delivery_view.setVisibility(View.GONE);
                         btnComplete.setVisibility(View.GONE);
                         btnStart.setVisibility(View.GONE);
-                        startActivity(new Intent(context, NewDeliveryActivity.class));
+                        startActivity(new Intent(context, AcceptedDeliveryActivity.class));
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");

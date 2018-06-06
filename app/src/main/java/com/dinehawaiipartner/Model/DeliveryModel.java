@@ -58,6 +58,17 @@ public class DeliveryModel implements Serializable {
     @SerializedName("assign_driver")
     @Expose
     private String assignDriver;
+    @SerializedName("food_prepare_time")
+    @Expose
+    private String food_prepare_time;
+
+    public String getFood_prepare_time() {
+        return food_prepare_time;
+    }
+
+    public void setFood_prepare_time(String food_prepare_time) {
+        this.food_prepare_time = food_prepare_time;
+    }
 
     public String getOrderId() {
         return orderId;

@@ -38,8 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewDeliveryActivity extends AppCompatActivity {
-    String TAG = "NewDeliveryActivity";
+public class AcceptedDeliveryActivity extends AppCompatActivity {
+    String TAG = "AcceptedDeliveryActivity";
     ArrayList<DeliveryModel> list;
     TextView noOrder;
     private RecyclerView recycler_view;
@@ -57,7 +57,6 @@ public class NewDeliveryActivity extends AppCompatActivity {
         list = new ArrayList<DeliveryModel>();
         noOrder = findViewById(R.id.noOrder);
         setRecyclerView();
-
     }
 
     @Override

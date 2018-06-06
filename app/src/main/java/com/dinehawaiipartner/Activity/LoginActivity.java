@@ -184,6 +184,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         AppPreference.setVendorUrl(LoginActivity.this, jsonObject1.getString("VENDOR_ADMIN_Url"));
                         AppPreference.setUserid(LoginActivity.this, jsonObject1.getString("user_id"));
                         Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");

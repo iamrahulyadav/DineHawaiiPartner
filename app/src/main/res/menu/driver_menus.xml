@@ -6,7 +6,6 @@
     <item
         android:id="@+id/action_deliveries"
         android:orderInCategory="100"
-        android:title="New"
-        app:showAsAction="always">
-    </item>
+        android:title="Accepted"
+        app:showAsAction="always"></item>
 </menu>

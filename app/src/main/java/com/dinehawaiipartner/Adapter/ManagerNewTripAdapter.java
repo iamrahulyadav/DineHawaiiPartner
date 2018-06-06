@@ -59,6 +59,8 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
         holder.tvCustName.setText(model.getCustName());
         holder.tvCustPhoneNo.setText(model.getCustPhone());
         holder.tvDelAddress.setText(model.getCustDeliveryAddress());
+        if (!model.getFood_prepare_time().equalsIgnoreCase(""))
+            holder.tvPrepareTime.setText("(Food ready in : " + model.getFood_prepare_time() + " mins)");
 
         holder.imgHideShow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +189,7 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRestName, tvRestPhone, tvPickupAddr, tvCustName, tvCustPhoneNo, tvDelAddress, tvAccept, tvReject;
+        TextView tvRestName, tvPrepareTime, tvRestPhone, tvPickupAddr, tvCustName, tvCustPhoneNo, tvDelAddress, tvAccept, tvReject;
         ImageView imgHideShow;
         LinearLayout llOtherDetail;
 
@@ -196,6 +198,7 @@ public class ManagerNewTripAdapter extends RecyclerView.Adapter<ManagerNewTripAd
             imgHideShow = (ImageView) itemView.findViewById(R.id.imgHideShow);
             llOtherDetail = (LinearLayout) itemView.findViewById(R.id.llOtherDetail);
             tvRestName = (TextView) itemView.findViewById(R.id.tvRestName);
+            tvPrepareTime = (TextView) itemView.findViewById(R.id.tvPrepareTime);
             tvRestPhone = (TextView) itemView.findViewById(R.id.tvRestPhone);
             tvPickupAddr = (TextView) itemView.findViewById(R.id.tvPickupAddr);
             tvCustName = (TextView) itemView.findViewById(R.id.tvCustName);

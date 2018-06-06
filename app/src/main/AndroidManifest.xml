@@ -31,7 +31,6 @@
         <activity
             android:name=".Activity.Manager.ManagerHomeActivity"
             android:label="@string/title_activity_vendor_home"
-            android:launchMode="singleInstance"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Activity.Driver.DriverHomeActivity"
@@ -49,7 +48,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".Activity.Driver.NewDeliveryActivity"
+            android:name=".Activity.Driver.AcceptedDeliveryActivity"
             android:label="@string/title_activity_new_delivery"
             android:theme="@style/AppTheme" />
 
@@ -74,8 +73,8 @@
             android:label="@string/title_activity_web_view"
             android:theme="@style/AppTheme" />
         <activity android:name=".Activity.ProfileActivity" />
-        <activity android:name=".Activity.Driver.DriverNewTripActivity" />
         <activity android:name=".Activity.Manager.ManagerNewTripActivity" />
+        <activity android:name=".Activity.Driver.DriverNewTripActivity" />
         <activity android:name=".Activity.OrderDetailActivity"></activity>
     </application>
 

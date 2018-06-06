@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -62,11 +63,16 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final DeliveryModel model = ordersModelArrayList.get(position);
         holder.tvCustName.setText(model.getCustName());
-        holder.tvCustAddress.setText(model.getCustDeliveryAddress());
+        holder.tvDelAddress.setText(model.getCustDeliveryAddress());
+        holder.tvPickupAddr.setText(model.getBusAddress());
         holder.tvCustContact.setText(model.getCustPhone());
+        holder.tvRestPhoneNo.setText(model.getBusPhone());
         holder.tvorderId.setText("#" + model.getOrderId());
         holder.tvbus_name.setText(model.getBusinessName());
         holder.tvTotalAmt.setText("$" + model.getOrderAmount());
+        if (!model.getFood_prepare_time().equalsIgnoreCase(""))
+            holder.tvPrepareTime.setText("(Food ready in : " + model.getFood_prepare_time() + " mins)");
+
         if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0")) {
             holder.cardDriver.setCardBackgroundColor(context.getResources().getColor(R.color.colorRed));
             holder.assignDriver.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_link_black_24dp, 0, 0, 0);
@@ -86,6 +92,18 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
                     Toast.makeText(context, "No Drivers Available", Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.cardItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.llOtherDetail.getVisibility() == View.VISIBLE)
+                    holder.llOtherDetail.setVisibility(View.GONE);
+                else
+                    holder.llOtherDetail.setVisibility(View.VISIBLE);
+            }
+        });
+
+
     }
 
     private void selectDriverDialog(final String orderId, final ViewHolder holder) {
@@ -195,15 +213,21 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvCustName, tvCustAddress, tvCustContact, tvorderId, tvbus_name, tvTotalAmt, assignDriver;
-        CardView cardDriver;
+        TextView tvCustName, tvPrepareTime, tvDelAddress, tvPickupAddr, tvCustContact, tvRestPhoneNo, tvorderId, tvbus_name, tvTotalAmt, assignDriver;
+        CardView cardDriver, cardItem;
+        LinearLayout llOtherDetail;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            cardItem = itemView.findViewById(R.id.cardItem);
             cardDriver = itemView.findViewById(R.id.cardDriver);
+            llOtherDetail = itemView.findViewById(R.id.llOtherDetail);
             tvCustName = itemView.findViewById(R.id.tvName);
-            tvCustAddress = itemView.findViewById(R.id.tvAddress);
-            tvCustContact = itemView.findViewById(R.id.tvPhoneNo);
+            tvPrepareTime = (TextView) itemView.findViewById(R.id.tvPrepareTime);
+            tvDelAddress = itemView.findViewById(R.id.tvDelAddress);
+            tvPickupAddr = itemView.findViewById(R.id.tvPickupAddr);
+            tvCustContact = itemView.findViewById(R.id.tvCustPhoneNo);
+            tvRestPhoneNo = itemView.findViewById(R.id.tvRestPhoneNo);
             tvorderId = itemView.findViewById(R.id.tvorder_id);
             tvbus_name = itemView.findViewById(R.id.tvbus_name);
             tvTotalAmt = itemView.findViewById(R.id.tvTotalAmt);

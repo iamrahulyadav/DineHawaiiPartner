@@ -12,7 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.dinehawaiipartner.Activity.Driver.NewDeliveryActivity;
+import com.dinehawaiipartner.Activity.Driver.DriverNewTripActivity;
 import com.dinehawaiipartner.Activity.Manager.MCompletedOrderActivity;
 import com.dinehawaiipartner.Activity.Manager.ManagerHomeActivity;
 import com.dinehawaiipartner.Activity.Manager.ManagerNewTripActivity;
@@ -42,7 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(DRIVER_NEW_DELIVERY);
-                    Intent intent = new Intent(this, NewDeliveryActivity.class);
+                    Intent intent = new Intent(this, DriverNewTripActivity.class);
                     sendNewTripNotification(intent, jsonObject.getString("order_id"), jsonObject.getString("msg"), jsonObject.getString("delivery_adddress"));
                 } catch (JSONException e) {
                     e.printStackTrace();

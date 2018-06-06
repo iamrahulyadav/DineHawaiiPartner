@@ -32,20 +32,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/llBottom"
-        android:layout_margin="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
         android:elevation="0dp"
         android:src="@drawable/ic_my_location_white_24dp"
         app:elevation="0dp" />
 
-    <ImageView
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabGetDirection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:elevation="0dp"
         android:layout_alignParentEnd="true"
+        android:layout_above="@id/llBottom"
+        android:src="@drawable/ic_navigation_white_24dp"
+        app:elevation="0dp" />
+
+    <!--<ImageView
         android:id="@+id/navigateRoute"
-        android:layout_margin="@dimen/_5sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/progressBar"
-        android:src="@drawable/navigatebtn"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/_5sdp"
+        android:src="@drawable/navigatebtn" />-->
+
     <LinearLayout
         android:id="@+id/llBottom"
         android:layout_width="match_parent"
