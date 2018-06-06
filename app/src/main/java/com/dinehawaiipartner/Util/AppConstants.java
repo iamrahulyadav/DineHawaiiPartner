@@ -42,6 +42,8 @@ public class AppConstants {
         String GETCOMPLETEDDELIVERY = "getCompletedDeliveryOrders";
         String VENDOR_ACCEPT_DELIVERY = "vendor_accept_delivery";
         String VENDOR_REJECT_DELIVERY = "vendor_reject_delivery";
+        String DRIVER_DELIVERY_ACCEPTED = "driver_delivery_accepted";
+        String DRIVER_REJECT_DELIVERY = "driver_reject_delivery";
     }
 
     public interface DRIVER_METHODS {

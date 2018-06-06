@@ -102,8 +102,8 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
         });
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.VENDOR_ACCEPT_DELIVERY);
-        jsonObject.addProperty("vendor_id", AppPreference.getUserid(context));
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.DRIVER_DELIVERY_ACCEPTED);
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "acceptDelivery: Request >> " + jsonObject);
 
@@ -151,8 +151,8 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
         });
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.VENDOR_REJECT_DELIVERY);
-        jsonObject.addProperty("vendor_id", AppPreference.getUserid(context));
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.DRIVER_REJECT_DELIVERY);
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "rejectDelivery: Request >> " + jsonObject);
 
