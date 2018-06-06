@@ -200,12 +200,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void getStartedDelivery() {
-        /*final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                // TODO Auto-generated method stub
-            }
-        });*/
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.DRIVER_START_DELIVERIES);
