@@ -13,4 +13,5 @@
     <color name="dividerDark">#e7e7e7</color>
     <color name="tabDivider">#d9d9d9</color>
     <color name="colorRed">#ff0000</color>
+    <color name="colorBlue">#1180ff</color>
 </resources>
