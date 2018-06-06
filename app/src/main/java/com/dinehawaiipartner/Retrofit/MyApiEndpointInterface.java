@@ -21,6 +21,9 @@ public interface MyApiEndpointInterface {
     @POST(AppConstants.ENDPOINT.ORDERSURL)
     Call<JsonObject> orders_url(@Body JsonObject jsonObject);
 
+    @POST(AppConstants.ENDPOINT.GET_ORDERS_DRIVER_API)
+    Call<JsonObject> get_orders_driver_api(@Body JsonObject jsonObject);
+
     @POST(AppConstants.ENDPOINT.OTHER_VENDOR_URL)
     Call<JsonObject> other_vendor(@Body JsonObject jsonObject);
 }

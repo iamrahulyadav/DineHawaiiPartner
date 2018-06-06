@@ -108,7 +108,7 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
         Log.e(TAG, "acceptDelivery: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.orders_url(jsonObject);
+        Call<JsonObject> call = apiService.get_orders_driver_api(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @SuppressLint("LongLogTag")
@@ -157,7 +157,7 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
         Log.e(TAG, "rejectDelivery: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.orders_url(jsonObject);
+        Call<JsonObject> call = apiService.get_orders_driver_api(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @SuppressLint("LongLogTag")

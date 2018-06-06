@@ -35,6 +35,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String DRIVER_NEW_DELIVERY = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.DRIVER_NEW_DELIVERY);
             String MANAGER_NEW_DELIVERY = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_NEW_DELIVERY);
             String MANAGER_DELIVERY_ACCEPTED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_ACCEPTED);
+            String DRIVER_DELIVERY_ACCEPTED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.DRIVER_DELIVERY_ACCEPTED);
             String MANAGER_DELIVERY_COMPLETED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_COMPLETED);
             String MANAGER_DELIVERY_PICKEDUP = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_PICKEDUP);
 
@@ -57,6 +58,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     e.printStackTrace();
                 }
             } else if (!MANAGER_DELIVERY_ACCEPTED.equalsIgnoreCase("null")) {
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("get_update"));
+            } else if (!DRIVER_DELIVERY_ACCEPTED.equalsIgnoreCase("null")) {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("get_update"));
             } else if (!MANAGER_DELIVERY_COMPLETED.equalsIgnoreCase("null")) {
                 JSONObject jsonObject = null;

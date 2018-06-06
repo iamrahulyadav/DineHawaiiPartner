@@ -43,6 +43,7 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
     private final ArrayList<DeliveryModel> ordersModelArrayList;
     String driverName;
     private ArrayList<VendorAllDriversModel> driverslist = new ArrayList<>();
+    private ArrayList<String> list_id = new ArrayList<>();
     private String selectedDriverId;
 
     public MPendingOrderAdapter(Context context, ArrayList<DeliveryModel> details, ArrayList<VendorAllDriversModel> drivers) {
@@ -146,6 +147,13 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
         dialog.setNegativeButton("ASSIGN TO ALL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                ArrayList<String> items = new ArrayList<>();
+                for (int j = 0; j < driverslist.size(); j++) {
+                    items.add(driverslist.get(j).getDriverId());
+                }
+                Log.e(TAG, "onClick: ASSIGN TO ALL >>" + items.toString());
+                String ids = items.toString().replace("[", "").replace("]", "");
+                assignTripToDriver(ids, orderId, driverName, holder);
             }
         });
 

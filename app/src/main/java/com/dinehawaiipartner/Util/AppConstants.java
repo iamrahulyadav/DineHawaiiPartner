@@ -19,6 +19,7 @@ public class AppConstants {
         String LOGINURL = "Register_Vendor_Log.php";
         String DRIVERURL = "Vendor_Partner_Driver_Api.php";
         String ORDERSURL = "get_Orders_Api.php";
+        String GET_ORDERS_DRIVER_API = "get_Orders_Driver_Api.php";
 
         String OTHER_VENDOR_URL = "normal_user/register_log.php";
     }
@@ -66,6 +67,7 @@ public class AppConstants {
         public static final String MANAGER_DELIVERY_PICKEDUP = "manager_driver_picked";
         public static final String MANAGER_DELIVERY_COMPLETED = "manager_driver_completed";
         public static final String MANAGER_DELIVERY_ACCEPTED = "manager_delivery_accepted";
+        public static final String DRIVER_DELIVERY_ACCEPTED = "driver_delivery_accepted";
     }
 
     public class NOTIFICATION_ID {
