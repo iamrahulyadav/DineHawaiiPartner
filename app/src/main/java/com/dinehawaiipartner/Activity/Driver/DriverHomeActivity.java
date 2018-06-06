@@ -190,11 +190,10 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             return;
         }
 
-        if (this.data.getDeliveryStatus().equalsIgnoreCase("Pending")) {
+        if (this.data.getDeliveryStatus().equalsIgnoreCase("Pending") || this.data.getDeliveryStatus().equalsIgnoreCase("Accepted")) {
             btnStart.setVisibility(View.VISIBLE);
             btnComplete.setVisibility(View.GONE);
             makeRoute(source, restLatLng);
-
         } else if (this.data.getDeliveryStatus().equalsIgnoreCase("Started")) {
             btnStart.setVisibility(View.GONE);
             btnComplete.setVisibility(View.VISIBLE);
@@ -636,7 +635,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.COMPLETEDELIVERY);
         jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
-        Log.e(TAG, "startTripTask: Request >> " + jsonObject);
+        Log.e(TAG, "completeTripTask: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
         Call<JsonObject> call = apiService.orders_url(jsonObject);
@@ -646,7 +645,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 String resp = response.body().toString();
-                Log.e(TAG, "startTripTask: Response >> " + resp);
+                Log.e(TAG, "completeTripTask: Response >> " + resp);
                 try {
 
                     JSONObject jsonObject = new JSONObject(resp);
@@ -660,7 +659,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         delivery_view.setVisibility(View.GONE);
                         btnComplete.setVisibility(View.GONE);
                         btnStart.setVisibility(View.GONE);
-                        startActivity(new Intent(context, AcceptedDeliveryActivity.class));
+                        //startActivity(new Intent(context, AcceptedDeliveryActivity.class));
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("result");

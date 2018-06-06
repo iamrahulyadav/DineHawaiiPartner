@@ -37,6 +37,8 @@ public class DriverDeliveryAdapter extends RecyclerView.Adapter<DriverDeliveryAd
         DeliveryModel listModel = driverList.get(position);
         if (listModel.getDeliveryStatus().equalsIgnoreCase("Started"))
             holder.tvStatus.setText("Picked-up");
+        else
+            holder.tvStatus.setText(listModel.getDeliveryStatus());
         holder.tvDeliveryId.setText("#" + listModel.getOrderId());
         holder.tvName.setText(listModel.getCustName());
         holder.tvPhoneNo.setText(listModel.getCustPhone());
