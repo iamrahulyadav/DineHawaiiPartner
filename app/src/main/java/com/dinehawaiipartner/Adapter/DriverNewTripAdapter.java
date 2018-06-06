@@ -102,7 +102,7 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
         });
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.VENDOR_METHODS.DRIVER_DELIVERY_ACCEPTED);
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.DRIVER_DELIVERY_ACCEPTED);
         jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
         jsonObject.addProperty("order_id", orderId);
         Log.e(TAG, "acceptDelivery: Request >> " + jsonObject);

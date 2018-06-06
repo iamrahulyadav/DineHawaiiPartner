@@ -63,7 +63,7 @@ public class AcceptedDeliveryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (Functions.isNetworkAvailable(context))
-            getAllNewOrders();
+            getAllAcceptedOrders();
         else
             Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
     }
@@ -101,7 +101,7 @@ public class AcceptedDeliveryActivity extends AppCompatActivity {
         }));
     }
 
-    private void getAllNewOrders() {
+    private void getAllAcceptedOrders() {
         final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -110,19 +110,19 @@ public class AcceptedDeliveryActivity extends AppCompatActivity {
         });
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.NEWDELIVERIES);
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.GETACCEPTEDDELIVERIES);
         jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
-        Log.e(TAG, "getAllNewOrders: Request >> " + jsonObject);
+        Log.e(TAG, "getAllAcceptedOrders: Request >> " + jsonObject);
 
         MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
-        Call<JsonObject> call = apiService.orders_url(jsonObject);
+        Call<JsonObject> call = apiService.get_orders_driver_api(jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @SuppressLint("LongLogTag")
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 String resp = response.body().toString();
-                Log.e(TAG, "getAllNewOrders: Response >> " + resp);
+                Log.e(TAG, "getAllAcceptedOrders: Response >> " + resp);
                 try {
                     list.clear();
                     JSONObject jsonObject = new JSONObject(resp);
@@ -150,7 +150,7 @@ public class AcceptedDeliveryActivity extends AppCompatActivity {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "getAllNewOrders error :- " + Log.getStackTraceString(t));
+                Log.e(TAG, "getAllAcceptedOrders error :- " + Log.getStackTraceString(t));
                 progressHD.dismiss();
                 noOrder.setVisibility(View.VISIBLE);
                 Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();

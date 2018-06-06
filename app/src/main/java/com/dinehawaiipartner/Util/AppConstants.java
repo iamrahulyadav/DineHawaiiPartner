@@ -35,6 +35,7 @@ public class AppConstants {
         String ADD_DRIVER = "Add_New_Driver";
         String EDIT_DRIVER = "Edit_New_Driver";
         String GETALLPENDINGORDERS = "getDeliveryOrders";
+        String GETALLACCEPTEDORDERS = "getAcceptedOrders";
         String GETPENDINGDELIVERYORDERS = "getPendingDeliveryOrders";
         String ASSIGNORDER = "assignOrderToDriver";
         String LOGOUTVENDOR = "Logout_Vendor_Driver";
@@ -42,7 +43,6 @@ public class AppConstants {
         String GETCOMPLETEDDELIVERY = "getCompletedDeliveryOrders";
         String VENDOR_ACCEPT_DELIVERY = "vendor_accept_delivery";
         String VENDOR_REJECT_DELIVERY = "vendor_reject_delivery";
-        String DRIVER_DELIVERY_ACCEPTED = "driver_delivery_accepted";
         String DRIVER_REJECT_DELIVERY = "driver_reject_delivery";
     }
 
@@ -50,9 +50,12 @@ public class AppConstants {
         String UPDATELOG = "driver_log_update";
         String LOGOUTDRIVER = "Logout_Vendor_Driver";
         String NEWDELIVERIES = "get_new_deliveries";
+        String GETACCEPTEDDELIVERIES = "get_accepted_deliveries";
         String STARTDELIVERY = "start_trip";
         String COMPLETEDELIVERY = "complete_trip";
         String DRIVER_START_DELIVERIES = "driver_start_deliveries";
+        String DRIVER_DELIVERY_ACCEPTED = "driver_delivery_accepted";
+
     }
 
 

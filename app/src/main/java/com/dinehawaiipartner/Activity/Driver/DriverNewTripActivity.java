@@ -41,7 +41,7 @@ import retrofit2.Response;
 
 public class DriverNewTripActivity extends AppCompatActivity {
     Context context;
-    String TAG = "ManagerNewTrip";
+    String TAG = "DriverNewTripActivity";
     private ArrayList<DeliveryModel> list;
     private RecyclerView recycler_view;
     private DriverNewTripAdapter adapter;
@@ -99,9 +99,14 @@ public class DriverNewTripActivity extends AppCompatActivity {
                             list.clear();
                         }
                         adapter.notifyDataSetChanged();
+                        if (list.isEmpty()) {
+                            Toast.makeText(DriverNewTripActivity.this, "No pending deliveries available", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        }
                     } catch (JSONException e) {
                         Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
+                        onBackPressed();
                     }
                     progressHD.dismiss();
                 }
@@ -112,6 +117,7 @@ public class DriverNewTripActivity extends AppCompatActivity {
                     Log.e(TAG, "getAllNewOrders error :- " + Log.getStackTraceString(t));
                     progressHD.dismiss();
                     Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+                    onBackPressed();
                 }
             });
         } else {
