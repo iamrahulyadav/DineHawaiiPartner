@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dinehawaiipartner.Activity.Driver.DriverHomeActivity;
+import com.dinehawaiipartner.Activity.Driver.AcceptedDeliveryActivity;
 import com.dinehawaiipartner.Model.DeliveryModel;
 import com.dinehawaiipartner.R;
 import com.dinehawaiipartner.Retrofit.ApiClient;
@@ -120,7 +120,7 @@ public class DriverNewTripAdapter extends RecyclerView.Adapter<DriverNewTripAdap
                     JSONObject jsonObject = new JSONObject(resp);
                     if (jsonObject.getString("status").equalsIgnoreCase("200")) {
                         Toast.makeText(context, jsonObject.getJSONArray("result").getJSONObject(0).getString("msg"), Toast.LENGTH_SHORT).show();
-                        context.startActivity(new Intent(context, DriverHomeActivity.class));
+                        context.startActivity(new Intent(context, AcceptedDeliveryActivity.class));
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
                         Toast.makeText(context, jsonObject.getJSONArray("result").getJSONObject(0).getString("msg"), Toast.LENGTH_SHORT).show();
                     }
