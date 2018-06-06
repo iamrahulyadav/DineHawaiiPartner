@@ -129,7 +129,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private ProgressBar progressBar;
     private FloatingActionButton fabMyLocation;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,7 +154,6 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         setUpFused();
         init();
         new UpdateFCMTask().execute();
-
     }
 
     private void tripExist() {
