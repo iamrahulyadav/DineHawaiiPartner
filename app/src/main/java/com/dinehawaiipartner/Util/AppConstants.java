@@ -73,6 +73,7 @@ public class AppConstants {
         public static final String MANAGER_DELIVERY_COMPLETED = "manager_driver_completed";
         public static final String MANAGER_DELIVERY_ACCEPTED = "manager_delivery_accepted";
         public static final String DRIVER_DELIVERY_ACCEPTED = "driver_delivery_accepted";
+        public static final String DRIVER_FOOD_PREPARED = "driver_food_prepared";
     }
 
     public class NOTIFICATION_ID {

@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.dinehawaiipartner.Activity.Driver.AcceptedDeliveryActivity;
 import com.dinehawaiipartner.Activity.Driver.DriverNewTripActivity;
 import com.dinehawaiipartner.Activity.Manager.MCompletedOrderActivity;
 import com.dinehawaiipartner.Activity.Manager.ManagerHomeActivity;
@@ -38,6 +39,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String DRIVER_DELIVERY_ACCEPTED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.DRIVER_DELIVERY_ACCEPTED);
             String MANAGER_DELIVERY_COMPLETED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_COMPLETED);
             String MANAGER_DELIVERY_PICKEDUP = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.MANAGER_DELIVERY_PICKEDUP);
+            String DRIVER_FOOD_PREPARED = "" + remoteMessage.getData().get(AppConstants.NOTIFICATION_KEY.DRIVER_FOOD_PREPARED);
 
             if (!DRIVER_NEW_DELIVERY.equalsIgnoreCase("null")) {
                 JSONObject jsonObject = null;
@@ -75,6 +77,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 try {
                     jsonObject = new JSONObject(MANAGER_DELIVERY_PICKEDUP);
                     Intent intent = new Intent(this, ManagerHomeActivity.class);
+                    sendNotification(intent, jsonObject.getString("msg"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (!DRIVER_FOOD_PREPARED.equalsIgnoreCase("null")) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(DRIVER_FOOD_PREPARED);
+                    Intent intent = new Intent(this, AcceptedDeliveryActivity.class);
                     sendNotification(intent, jsonObject.getString("msg"));
                 } catch (JSONException e) {
                     e.printStackTrace();
