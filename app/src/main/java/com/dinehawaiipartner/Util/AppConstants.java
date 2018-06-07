@@ -52,6 +52,7 @@ public class AppConstants {
         String NEWDELIVERIES = "get_new_deliveries";
         String GETACCEPTEDDELIVERIES = "get_accepted_deliveries";
         String STARTDELIVERY = "start_trip";
+        String DRIVERARRIVED = "driver_arrived";
         String COMPLETEDELIVERY = "complete_trip";
         String DRIVER_START_DELIVERIES = "driver_start_deliveries";
         String DRIVER_DELIVERY_ACCEPTED = "driver_delivery_accepted";

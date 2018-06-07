@@ -107,7 +107,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
     private static final String TAG = "DriverHomeActivity";
     private static final long INTERVAL = 1000 * 1, FASTEST_INTERVAL = 1000 * 1;
-    TextView tvStatus, tvDeliveryId, tvName, tvPhoneNo, tvAddress;
+    TextView tvStatus, tvDeliveryId, tvName, tvPhoneNo, tvAddress, tvTitle;
     List<String> waypoints = new ArrayList<>();
     String orderId;
     LatLng source;
@@ -123,7 +123,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private TextView tvHideShow;
     private LinearLayout llCustDetails;
     private DeliveryModel data;
-    private CardView delivery_view, btnComplete, btnStart, btnCallAdmin;
+    private CardView delivery_view, btnComplete, btnStart, btnCallAdmin, btnArrive;
     private LatLng restLatLng;
     private LatLng custLatLng;
     private ProgressBar progressBar;
@@ -160,12 +160,20 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         initDeliveryView();
         Log.e(TAG, "onCreate: data " + this.data);
         orderId = this.data.getOrderId();
-        if (this.data.getDeliveryStatus().equalsIgnoreCase("Started"))
+        if (this.data.getDeliveryStatus().equalsIgnoreCase("Started")) {
+            tvTitle.setText("Customer : ");
             tvStatus.setText("Picked-up");
-        tvDeliveryId.setText("#" + this.data.getOrderId());
-        tvName.setText(this.data.getCustName());
-        tvPhoneNo.setText(this.data.getCustPhone());
-        tvAddress.setText(this.data.getCustDeliveryAddress());
+            tvDeliveryId.setText("#" + this.data.getOrderId());
+            tvName.setText(this.data.getCustName());
+            tvPhoneNo.setText(this.data.getCustPhone());
+            tvAddress.setText(this.data.getCustDeliveryAddress());
+        } else {
+            tvTitle.setText("Business : ");
+            tvDeliveryId.setText("#" + this.data.getOrderId());
+            tvName.setText(this.data.getBusinessName());
+            tvPhoneNo.setText(this.data.getBusPhone());
+            tvAddress.setText(this.data.getBusAddress());
+        }
 
         if (!AppPreference.getCurLat(context).equalsIgnoreCase("0") && !AppPreference.getCurLat(context).equalsIgnoreCase("")) {
             source = new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(new Double(AppPreference.getCurLong(context)).doubleValue()));
@@ -190,12 +198,32 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
 
         if (this.data.getDeliveryStatus().equalsIgnoreCase("Pending") || this.data.getDeliveryStatus().equalsIgnoreCase("Accepted")) {
             btnStart.setVisibility(View.VISIBLE);
+            btnArrive.setVisibility(View.GONE);
             btnComplete.setVisibility(View.GONE);
             makeRoute(source, restLatLng);
+            fabGetDirection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                            Uri.parse("google.navigation:q=" + restLatLng.latitude
+                                    + "," + restLatLng.longitude + ""));
+                    startActivity(intent);
+                }
+            });
         } else if (this.data.getDeliveryStatus().equalsIgnoreCase("Started")) {
             btnStart.setVisibility(View.GONE);
+            btnArrive.setVisibility(View.GONE);
             btnComplete.setVisibility(View.VISIBLE);
             makeRoute(source, custLatLng);
+            fabGetDirection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                            Uri.parse("google.navigation:q=" + custLatLng.latitude
+                                    + "," + custLatLng.longitude + ""));
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -259,9 +287,11 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     }
 
     private void initDeliveryView() {
+        tvTitle = findViewById(R.id.tvTitle);
         btnComplete = findViewById(R.id.btnComplete);
         fabGetDirection = findViewById(R.id.fabGetDirection);
         btnStart = findViewById(R.id.btnStart);
+        btnArrive = findViewById(R.id.btnArrive);
         delivery_view = findViewById(R.id.delivery_view);
         llCustDetails = findViewById(R.id.llCustDetails);
         tvHideShow = findViewById(R.id.tvHideShow);
@@ -271,10 +301,11 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         tvPhoneNo = findViewById(R.id.tvPhoneNo);
         tvAddress = findViewById(R.id.tvAddress);
         delivery_view.setVisibility(View.VISIBLE);
+        fabGetDirection.setVisibility(View.VISIBLE);
         delivery_view.setOnClickListener(this);
         btnComplete.setOnClickListener(this);
-        fabGetDirection.setOnClickListener(this);
         btnStart.setOnClickListener(this);
+        btnArrive.setOnClickListener(this);
     }
 
     private void setUpFused() {
@@ -483,9 +514,11 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     public void onResume() {
         super.onResume();
         if (getIntent().getAction().equalsIgnoreCase("Delivery")) {
+            Log.e(TAG, "onResume: >> getaction" );
             data = (DeliveryModel) getIntent().getSerializableExtra("data");
             tripExist();
         } else {
+            Log.e(TAG, "onResume: >> getStartedDelivery" );
             getStartedDelivery();
         }
         if (mGoogleApiClient.isConnected()) {
@@ -588,18 +621,21 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             case R.id.btnCallAdmin:
                 Toast.makeText(context, "Calling admin...", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.fabGetDirection:
-                openNavigationMethod();
-                break;
             case R.id.btnStart:
                 if (Functions.isNetworkAvailable(context))
-                    startTripTask();
+                    startTripDialog();
                 else
                     Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnComplete:
                 if (Functions.isNetworkAvailable(context))
-                    completeTripTask();
+                    completeTripDialog();
+                else
+                    Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnArrive:
+                if (Functions.isNetworkAvailable(context))
+                    arriveTripDialog();
                 else
                     Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                 break;
@@ -607,14 +643,119 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-    private void openNavigationMethod() {
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("google.navigation:q=" + restLatLng.latitude
-                        + "," + restLatLng.longitude + ""));
+    private void startTripDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false);
+        builder.setMessage("Are you sure you picked up the order?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startTripTask();
 
-        startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        if (!DriverHomeActivity.this.isFinishing())
+            builder.show();
     }
 
+    private void completeTripDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false);
+        builder.setMessage("Are you sure you want to complete this Trip?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                completeTripTask();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        if (!DriverHomeActivity.this.isFinishing())
+            builder.show();
+    }
+
+    private void arriveTripDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false);
+        builder.setMessage("Are you sure you want to complete this Trip?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                arriveTripTask();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        if (!DriverHomeActivity.this.isFinishing())
+            builder.show();
+    }
+
+    private void arriveTripTask() {
+        final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // TODO Auto-generated method stub
+            }
+        });
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(AppConstants.KEY_METHOD, AppConstants.DRIVER_METHODS.DRIVERARRIVED);
+        jsonObject.addProperty("driver_id", AppPreference.getUserid(context));
+        jsonObject.addProperty("order_id", orderId);
+        Log.e(TAG, "arriveTripTask: Request >> " + jsonObject);
+
+        MyApiEndpointInterface apiService = ApiClient.getClient().create(MyApiEndpointInterface.class);
+        Call<JsonObject> call = apiService.orders_url(jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String resp = response.body().toString();
+                Log.e(TAG, "arriveTripTask: Response >> " + resp);
+                try {
+
+                    JSONObject jsonObject = new JSONObject(resp);
+                    if (jsonObject.getString("status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        btnArrive.setVisibility(View.GONE);
+                        btnComplete.setVisibility(View.VISIBLE);
+                    } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        JSONObject object = jsonArray.getJSONObject(0);
+                        Toast.makeText(context, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    progressHD.dismiss();
+                    e.printStackTrace();
+                }
+                progressHD.dismiss();
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                progressHD.dismiss();
+                Log.e(TAG, "logoutDriverApi error :- " + Log.getStackTraceString(t));
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void completeTripTask() {
         final ProgressHUD progressHD = ProgressHUD.show(context, "Please wait...", true, false, new DialogInterface.OnCancelListener() {
@@ -650,7 +791,9 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         markerCustomer = null;
                         delivery_view.setVisibility(View.GONE);
                         btnComplete.setVisibility(View.GONE);
+                        btnArrive.setVisibility(View.GONE);
                         btnStart.setVisibility(View.GONE);
+                        fabGetDirection.setVisibility(View.GONE);
                         //startActivity(new Intent(context, AcceptedDeliveryActivity.class));
 
                     } else if (jsonObject.getString("status").equalsIgnoreCase("400")) {
@@ -711,9 +854,25 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         markerRestaurant = null;
                         btnStart.setVisibility(View.GONE);
                         btnComplete.setVisibility(View.VISIBLE);
+                        tvTitle.setText("Customer : ");
+                        tvStatus.setText("Picked-up");
+                        tvDeliveryId.setText("#" + data.getOrderId());
+                        tvName.setText(data.getCustName());
+                        tvPhoneNo.setText(data.getCustPhone());
+                        tvAddress.setText(data.getCustDeliveryAddress());
+                        data.setDeliveryStatus("Started");
                         if (!data.getCustLatitude().equalsIgnoreCase("0") && !data.getCustLatitude().equalsIgnoreCase("")) {
                             LatLng destination = new LatLng(new Double(data.getCustLatitude()).doubleValue(), new Double(data.getCustLongitude()).doubleValue());
                             makeRoute(new LatLng(new Double(AppPreference.getCurLat(context)).doubleValue(), new Double(AppPreference.getCurLong(context)).doubleValue()), destination);
+                            fabGetDirection.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                            Uri.parse("google.navigation:q=" + custLatLng.latitude
+                                                    + "," + custLatLng.longitude + ""));
+                                    startActivity(intent);
+                                }
+                            });
                         } else {
                             Toast.makeText(context, "Can't fetch route, customer address not found", Toast.LENGTH_SHORT).show();
                             return;
