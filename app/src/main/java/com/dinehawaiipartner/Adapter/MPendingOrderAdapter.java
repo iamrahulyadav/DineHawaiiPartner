@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,6 +74,7 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
         holder.tvbus_name.setText(model.getBusinessName());
         holder.tvTotalAmt.setText("$" + model.getOrderAmount());
         if (!model.getFood_prepare_time().equalsIgnoreCase(""))
+           // startCountDownTimer(model.getFood_prepare_time(),holder);
             holder.tvPrepareTime.setText("(Food ready in : " + model.getFood_prepare_time() + " mins)");
 
         if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0")) {
@@ -105,6 +108,27 @@ public class MPendingOrderAdapter extends RecyclerView.Adapter<MPendingOrderAdap
         });
 
 
+    }
+
+    private void startCountDownTimer(String food_prepare_time, final ViewHolder holder) {
+        Log.e(TAG, "startCountDownTimer: >>>>>"+ TimeUnit.MINUTES.toMillis(Long.parseLong(food_prepare_time)));
+        long milliTime = TimeUnit.MINUTES.toMillis(Long.parseLong(food_prepare_time));
+        new CountDownTimer(milliTime, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished);
+                millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes);
+
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
+
+                holder.tvPrepareTime.setText( minutes + "::" + seconds); //You can compute the millisUntilFinished on hours/minutes/seconds
+            }
+
+            public void onFinish() {
+
+                holder.tvPrepareTime.setText("Order might be prepared"); //On finish change timer text
+                // countDownTimer = null;//set CountDownTimer to null
+            }
+        }.start();
     }
 
     private void selectDriverDialog(final String orderId, final ViewHolder holder) {

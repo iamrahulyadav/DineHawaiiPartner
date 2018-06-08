@@ -212,8 +212,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
             });
         } else if (this.data.getDeliveryStatus().equalsIgnoreCase("Started")) {
             btnStart.setVisibility(View.GONE);
-            btnArrive.setVisibility(View.GONE);
-            btnComplete.setVisibility(View.VISIBLE);
+            btnArrive.setVisibility(View.VISIBLE);
+            btnComplete.setVisibility(View.GONE);
             makeRoute(source, custLatLng);
             fabGetDirection.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -687,7 +687,7 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
     private void arriveTripDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false);
-        builder.setMessage("Are you sure you want to complete this Trip?");
+        builder.setMessage("Are you sure you arrived at customer's location?");
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -853,7 +853,8 @@ public class DriverHomeActivity extends AppCompatActivity implements NavigationV
                         markerCustomer = null;
                         markerRestaurant = null;
                         btnStart.setVisibility(View.GONE);
-                        btnComplete.setVisibility(View.VISIBLE);
+                        btnComplete.setVisibility(View.GONE);
+                        btnArrive.setVisibility(View.VISIBLE);
                         tvTitle.setText("Customer : ");
                         tvStatus.setText("Picked-up");
                         tvDeliveryId.setText("#" + data.getOrderId());
