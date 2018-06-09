@@ -85,8 +85,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(DRIVER_FOOD_PREPARED);
-                    Intent intent = new Intent(this, AcceptedDeliveryActivity.class);
-                    sendNotification(intent, jsonObject.getString("msg"));
+                    sendNotification(new Intent(), jsonObject.getString("msg"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
