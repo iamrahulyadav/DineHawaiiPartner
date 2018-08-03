@@ -12,7 +12,7 @@ public class AppConstants {
     public static String KEY_USER_ID = "user_id";
 
     public interface BASEURL {
-        String URL = "http://take007.co.in/Projects-Work/Hawaii/APP/Partner_App/";
+        String URL = "https://take007.co.in/Projects-Work/Hawaii/APP/Partner_App/";
     }
 
     public interface ENDPOINT {
