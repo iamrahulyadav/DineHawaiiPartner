@@ -41,8 +41,10 @@ public class MStartedOrderAdapter extends RecyclerView.Adapter<MStartedOrderAdap
         holder.tvCustContact.setText(model.getCustPhone());
         holder.tvRestPhoneNo.setText(model.getBusPhone());
         holder.tvTotalAmt.setText("$" + model.getOrderAmount());
-        if (!model.getFood_prepare_time().equalsIgnoreCase(""))
-            holder.tvPrepareTime.setText("(Food ready in : " + model.getFood_prepare_time() + " mins)");
+
+        if (model.getFood_prepare_time() != null)
+            if (!model.getFood_prepare_time().equalsIgnoreCase(""))
+                holder.tvPrepareTime.setText("(Food ready in : " + model.getFood_prepare_time() + " mins)");
 
         if (model.getAssignStatus().equalsIgnoreCase("") || model.getAssignStatus().equalsIgnoreCase("0"))
             holder.assignDriver.setVisibility(View.GONE);
